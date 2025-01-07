@@ -1,10 +1,11 @@
 import express from "express";
 const router = express.Router();
+// Define Your API Routes Here
 
 router.use((req, res, next) => {
   next();
 });
-
+// Define item-related routes
 import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
 
