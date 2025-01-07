@@ -1,14 +1,14 @@
-// to make the file a module and avoid the TypeScript error
-export type {};
-
+// Declare global namespace for Express
 declare global {
   namespace Express {
     export interface Request {
       /* ************************************************************************* */
-      // Add your custom properties here, for example:
-      //
-      // user?: { ... }
+      // Extend Express Request with custom properties
+      user?: IUser;
       /* ************************************************************************* */
     }
   }
 }
+
+// This export makes the file a module
+export {};
