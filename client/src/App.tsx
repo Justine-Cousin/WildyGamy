@@ -1,11 +1,21 @@
+import { Link, Outlet } from "react-router-dom";
 import "./App.css";
-import Games from "./pages/Games";
 
 function App() {
   return (
-    <>
-      <Games />
-    </>
+    <div>
+      <header>
+        <nav>
+          <Link to="/">Accueil</Link>
+          <Link to="/prizes">Récompenses</Link>
+          <Link to="/games">Jeux</Link>
+        </nav>
+      </header>
+
+      <main>
+        <Outlet />
+      </main>
+    </div>
   );
 }
 

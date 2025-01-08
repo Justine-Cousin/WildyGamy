@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 import App from "./App";
+import Games from "./pages/Games";
 import PrizePage from "./pages/prizePage";
 
 // Import additional components for new routes
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
         path: "prizes",
         element: <PrizePage />,
       },
+      { path: "games", element: <Games /> },
     ],
   },
 ]);

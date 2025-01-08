@@ -1,55 +1,71 @@
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import "../styles/games.css";
-import galaga from "../assets/images/galaga.png";
-import pacMan from "../assets/images/pac-man.png";
-import spaceInvaders from "../assets/images/space-invaders.png";
-import streetFighterII from "../assets/images/street-fighterII.png";
+import { useEffect, useState } from "react";
 import GameCard from "../components/GameCard";
 
-interface Game {
-  id: number;
-  image: string;
-  name: string;
-  description: string;
-  price: string;
-}
-
-const games: Game[] = [
-  {
-    id: 1,
-    image: pacMan,
-    name: "Pac man",
-    description:
-      "Pac-Man est un jeu d'arcade emblématique où vous dirigez un personnage jaune dans un labyrinthe. ",
-    price: "1C",
-  },
-  {
-    id: 2,
-    image: streetFighterII,
-    name: "Street Fighter",
-    description:
-      "Street Fighter est un jeu de combat légendaire où deux combattants s'affrontent en duel dans des arènes du monde entier. ",
-    price: "2C",
-  },
-  {
-    id: 3,
-    image: galaga,
-    name: "Galaga",
-    description:
-      "Galaga est un shoot'em up spatial où vous pilotez un vaisseau spatial qui doit défendre la Terre contre des vagues d'insectes extraterrestres. ",
-    price: "2C",
-  },
-  {
-    id: 4,
-    image: spaceInvaders,
-    name: "Space Invaders",
-    description:
-      "Space Invaders est le shoot'em up pionnier des jeux d'arcade où vous défendez la Terre contre des vagues d'aliens qui descendent inexorablement vers vous. ",
-    price: "1C",
-  },
-];
-
 const Games = () => {
+  interface Game {
+    id: number;
+    image: string;
+    name: string;
+    description: string;
+    price: string;
+  }
+
+  const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/games`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setGames(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des jeux:", error);
+        setError(
+          error instanceof Error ? error.message : "Une erreur est survenue",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="games-page">
+        <div className="games-page__loading">Chargement...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="games-page">
+        <div className="games-page__error">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <img className="games-logo" src={logoWG} alt="Logo" />

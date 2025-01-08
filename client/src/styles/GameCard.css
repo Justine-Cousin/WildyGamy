@@ -12,6 +12,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .gamecard-content:hover {
@@ -21,24 +22,13 @@
     rgba(139, 92, 246, 0.2);
 }
 
-.gamecard-header {
-  display: flex;
-  align-items: flex-start;
-}
-
 .gamecard-image {
   height: 60px;
-  width: auto;
+  width: 60%;
   object-fit: contain;
   filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.4));
   transition: transform 0.3s ease;
   align-items: center;
-}
-
-.gamecard-image[alt="Pac man"] {
-  height: 75px;
-  justify-content: center;
-  width: auto;
 }
 
 .gamecard-content:hover .gamecard-image {
