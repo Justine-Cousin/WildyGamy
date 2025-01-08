@@ -1,11 +1,20 @@
+import { Link, Outlet } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home";
 
 function App() {
   return (
-    <>
-      <Home />
-    </>
+    <div>
+      <header>
+        <nav>
+          <Link to="/">Accueil</Link>
+          <Link to="/prizes">Récompenses</Link>
+        </nav>
+      </header>
+
+      <main>
+        <Outlet />
+      </main>
+    </div>
   );
 }
 
