@@ -54,12 +54,12 @@ VALUES
 ('Lopez', 'Carlos', 'carlos.lopez@example.com', 'clopez', '$2y$10$abcdef1234567890klmno', '0689456712', 'profile5.jpg', 150, 120);
 
 INSERT INTO game (name, description, image, price) VALUES
-('Pac-Man', 'Le célèbre jeu de labyrinthe où vous devez manger tous les points tout en évitant les fantômes', 'game1.jpg', '1'),
-('Street-Fighter 2', 'Le jeu de combat légendaire avec des personnages emblématiques du monde entier', 'game2.jpg', '2'),
-('Donkey Kong', 'Aidez Mario à sauver Pauline en évitant les tonneaux lancés par Donkey Kong', 'game3.jpg', '1'),
-('Galaga', "Affrontez des vagues d'ennemis dans l'espace dans ce shoot'em up classique", 'game4.jpg', '1'),
-('Asteroids', "Détruisez les astéroïdes et les soucoupes volantes dans l'espace", 'game5.jpg', '1'),
-('Space Invaders', "Détruisez les vagues d'aliens avant qu'ils n'atteignent le bas de l'écran", 'game6.jpg', '1');
+('Pac-Man', 'Le célèbre jeu de labyrinthe où vous devez manger tous les points tout en évitant les fantômes', 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736340064/pngegg_4_d98jgg.png', '1'),
+('Street-Fighter 2', 'Le jeu de combat légendaire avec des personnages emblématiques du monde entier', 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736331126/street-fighterII_xseiad.png', '2'),
+('Donkey Kong', 'Aidez Mario à sauver Pauline en évitant les tonneaux lancés par Donkey Kong', 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736339485/Donkey_kong_s06sml.png', '1'),
+('Galaga', "Affrontez des vagues d'ennemis dans l'espace dans ce shoot'em up classique", 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736331125/galaga_h8etpt.png', '1'),
+('Asteroids', "Détruisez les astéroïdes et les soucoupes volantes dans l'espace", 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736339904/PikPng.com_asteroids-png_1599597_mjlrgl.png', '1'),
+('Space Invaders', "Détruisez les vagues d'aliens avant qu'ils n'atteignent le bas de l'écran", 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736331124/space-invaders_uz0pta.png', '1');
 
 INSERT INTO Prize (name, description, image, exchange_price) VALUES
 ('T-shirt', 'Un t-shirt aux couleurs de votre jeu préféré', 'prize1.jpg',60 ),
