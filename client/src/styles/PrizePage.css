@@ -1,8 +1,8 @@
 .prizes-page__title {
-  color: white;
-  font-size: 1.75rem;
+  color: C3B0EA;
+  font-size: 2rem;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
@@ -15,28 +15,30 @@
 
 .prizes-page__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 2fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
-  gap: 2rem;
 }
 
 .prize-card {
   position: relative;
   aspect-ratio: 1;
-  aspect-ratio: 1;
   background-color: #1d1729;
-  border-radius: 0.75rem;
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 0.75rem;
-  border: 3px solid rgba(142, 91, 245, 0.2);
-  min-width: 140px;
+  border: 2px solid rgba(142, 91, 245, 0.2);
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.prize-card:hover {
+  transform: scale(1.05);
 }
 
 .prize-card__content {
@@ -61,29 +63,30 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: invert(70%) sepia(50%) saturate(500%) hue-rotate(220deg);
+  filter: invert(70%) sepia(50%) saturate(500%) hue-rotate(220deg)
+    brightness(1.2);
 }
 
 .prize-card__title {
   color: white;
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-align: center;
   margin-top: auto;
 }
 
 .prize-card__points {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 7.5rem;
+  right: -1.2rem;
   background: transparent;
-  color: #8e5bf5;
+  color: white;
   padding: 0.25rem;
   font-size: 0.75rem;
   font-weight: bold;
   border-radius: 50%;
   border: 1px solid rgba(142, 91, 245, 0.3);
-  min-width: 2rem;
-  min-height: 2.2rem;
+  min-width: 1.8rem;
+  min-height: 1.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +96,7 @@
   position: absolute;
   inset: 0;
   background: rgba(29, 23, 41, 0.95);
-  border-radius: 0.75rem;
+  border-radius: 50%;
   padding: 1rem;
   opacity: 0;
   display: flex;
@@ -120,26 +123,24 @@
   padding: 1rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .prizes-page__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 
   .prize-card__title {
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
 
   .prize-card__points {
-    font-size: 0.875rem;
-    min-width: 2rem;
-    min-height: 2rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (min-width: 1024px) {
   .prizes-page__grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
 }
