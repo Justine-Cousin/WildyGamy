@@ -8,6 +8,7 @@ function App() {
         <nav>
           <Link to="/">Accueil</Link>
           <Link to="/prizes">Récompenses</Link>
+          <Link to="/games">Jeux</Link>
         </nav>
       </header>
 
