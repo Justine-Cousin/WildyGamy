@@ -11,14 +11,17 @@ const PrizePage = () => {
   useEffect(() => {
     const fetchPrizes = async () => {
       try {
-        const response = await fetch("http://localhost:3311/api/prizes", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/prizes`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
           },
-          credentials: "include",
-        });
+        );
 
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
