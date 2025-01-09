@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+.room-container {
+  position: relative;
+  max-width: 400px;
+  min-height: 100%;
+  padding: 20px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #6403a9, #4b0280);
+  color: #c3b0ea;
+  box-shadow: 0 0 20px rgba(100, 3, 169, 0.3);
+  border: 1px solid rgba(100, 3, 169, 0.2);
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.room-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  filter: brightness(0.8) saturate(1.2);
+}
+
+.room-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #c3b0ea;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: "Phosphate", "Impact", sans-serif;
+  text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
+    rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
+}
+
+.room-container p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #c3b0ea;
+  font-family: "Inter", sans-serif;
+}
+
+.room-container p:last-child {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(195, 176, 234, 0.2);
+  font-weight: 500;
+}
+
+/* Animation néon subtile */
+.room-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 15px;
+  padding: 2px;
+  background: linear-gradient(
+    45deg,
+    rgba(195, 176, 234, 0.5),
+    rgba(100, 3, 169, 0.5)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
