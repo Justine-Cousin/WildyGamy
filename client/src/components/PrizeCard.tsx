@@ -1,3 +1,4 @@
+import coin from "../assets/images/coin.svg";
 import type { Prize } from "../services/types";
 
 const PrizeCard = ({ prize }: { prize: Prize }) => {
@@ -17,9 +18,7 @@ const PrizeCard = ({ prize }: { prize: Prize }) => {
           <span className="prize-card__points-value">
             {prize.exchange_price}
           </span>
-          <div className="prize-card__points-circle">
-            <span>Pts</span>
-          </div>
+          <img src={coin} className="prize-coin" alt="coin" />
         </div>
       </div>
 
