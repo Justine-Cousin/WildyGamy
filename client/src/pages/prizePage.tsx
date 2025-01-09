@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PrizeCard from "../components/PrizeCard";
 import type { Prize } from "../services/types";
 import "../styles/prizePage.css";
+import logoWG from "../assets/images/logo_wildy_gamy.png";
 
 const PrizePage = () => {
   const [prizes, setPrizes] = useState<Prize[]>([]);
@@ -60,9 +61,9 @@ const PrizePage = () => {
 
   return (
     <div className="prizes-page">
+      <img className="prize-logo" src={logoWG} alt="Logo" />
       <div className="prizes-page__container">
         <h1 className="prizes-page__title">RÉCOMPENSES</h1>
-
         <div className="prizes-page__grid">
           {prizes.map((prize) => (
             <PrizeCard key={prize.id} prize={prize} />
