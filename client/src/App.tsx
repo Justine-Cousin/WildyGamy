@@ -9,6 +9,7 @@ function App() {
           <Link to="/">Accueil</Link>
           <Link to="/prizes">Récompenses</Link>
           <Link to="/games">Jeux</Link>
+          <Link to="/login">Connexion</Link>
         </nav>
       </header>
 
