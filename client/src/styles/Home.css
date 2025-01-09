@@ -1,3 +1,8 @@
+.home-container {
+  padding: 1rem;
+  padding-bottom: 100px;
+}
+
 .home-header {
   display: flex;
   flex-direction: column;
@@ -46,6 +51,11 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 10px;
 }
 
 .wildy-gamy-home-container::before {
@@ -64,6 +74,25 @@
   mask-composite: exclude;
 }
 
+.home-wildy-gamy-text {
+  font-family: "Inter", sans-serif;
+  font-size: 3vw;
+  text-align: start;
+}
+
+.home-play-online-text {
+  font-family: "Inter", sans-serif;
+  font-size: 3vw;
+  text-align: start;
+  color: black;
+}
+
+.home-game-list-text {
+  font-family: "Inter", sans-serif;
+  font-size: 3vw;
+  text-align: start;
+}
+
 .play-online-home-container {
   grid-area: play-online;
   border-radius: 12px;
@@ -77,6 +106,11 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 10px;
 }
 
 .play-online-home-container::before {
@@ -108,6 +142,11 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 10px;
 }
 
 .game-list-home-container::before {
@@ -139,6 +178,11 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 10px;
 }
 
 .prizes-home-container::before {
@@ -159,4 +203,35 @@
 
 .home-bottom-container {
   display: contents;
+}
+
+.home_grid-containers {
+  position: relative;
+  font-family: var(--font-title-phosphate);
+  font-weight: 400;
+  font-style: normal;
+  color: var(--font-title-color);
+  font-size: 6vw;
+}
+
+.play-online-home-container {
+  color: black;
+}
+
+.blue-arrow-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+.purple-arrow-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+.pink-arrow-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 }

@@ -1,0 +1,125 @@
+.nav-bar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  height: 80px;
+  background: linear-gradient(135deg, #694fa6, #281e40, #281e40, #694fa6);
+  border-radius: 50px;
+  border: 2px solid #c3b0ea;
+  position: fixed;
+  bottom: 10px;
+  width: calc(100% - 2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 auto;
+  z-index: 1000;
+  box-shadow: 0px 0px 15px #c3b0ea;
+}
+
+.nav-bar-link {
+  color: #c3b0ea;
+  text-decoration: none;
+}
+
+.burger-menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  width: 35px;
+  height: 24px;
+}
+
+.burger-bar {
+  width: 100%;
+  height: 3px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.burger-menu-dropdown {
+  position: absolute;
+  top: -120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(40, 30, 64, 0.95);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2000;
+}
+
+.burger-menu-link {
+  color: #c3b0ea;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.burger-menu-link:hover {
+  color: #ffffff;
+}
+
+.burger-menu-button.open .burger-bar:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.burger-menu-button.open .burger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-menu-button.open .burger-bar:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+.burger-bar {
+  width: 100%;
+  height: 3px;
+  background-color: #c3b0ea;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.burger-menu-button-text {
+  all: unset;
+  cursor: pointer;
+  color: #c3b0ea;
+  font: inherit;
+  line-height: 1;
+}
+
+.nav-bar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-bar-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 20%;
+}
+
+.nav-bar-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 20%;
+}
+
+.login-icon,
+.home-icon {
+  width: 35px;
+  height: 35px;
+}
