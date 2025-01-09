@@ -62,16 +62,16 @@ INSERT INTO game (name, description, image, price) VALUES
 ('Space Invaders', "Détruisez les vagues d'aliens avant qu'ils n'atteignent le bas de l'écran", 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736331124/space-invaders_uz0pta.png', '1');
 
 INSERT INTO Prize (name, description, image, exchange_price) VALUES
-('T-shirt', 'Un t-shirt aux couleurs de votre jeu préféré', 'prize1.jpg',60 ),
-('Mug', 'Un mug pour boire votre café ou thé en pensant à votre jeu préféré', 'prize2.jpg', 40),
-('Stickers', 'Des stickers pour décorer votre ordinateur ou votre téléphone', 'prize3.jpg', 20),
-('Peluche', 'Une peluche de votre personnage préféré', 'prize4.jpg', 80),
-('Figurine', 'Une figurine de votre personnage préféré', 'prize5.jpg', 100),
-('Poster', 'Un poster pour décorer votre chambre ou votre bureau', 'prize6.jpg', 20),
-('Porte-clés', 'Un porte-clés pour emmener votre personnage préféré partout avec vous', 'prize7.jpg', 25),
-('Crédit de jeu', 'Un crédit de jeu pour continuer à jouer sans dépenser', 'prize8.jpg', 10),
-('Snack', 'Un snack pour vous rebooster', 'prize9.jpg', 15),
-('Boisson soft', 'Une boisson pour vous désaltérer', 'prize10.jpg', 15);
+('T-shirt', 'Un t-shirt aux couleurs de votre jeu préféré', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351540/tshirt_rp3v7a.png',60 ),
+('Mug', 'Un mug pour boire votre café ou thé en pensant à votre jeu préféré', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351534/mug_lxdcqc.png', 40),
+('Stickers', 'Des stickers pour décorer votre ordinateur ou votre téléphone', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351542/sticker_sjntwm.png', 20),
+('Peluche', 'Une peluche de votre personnage préféré', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351525/peluche_ozmgl0.png', 80),
+('Figurine', 'Une figurine de votre personnage préféré', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351526/figurine_f96gqr.png', 100),
+('Poster', 'Un poster pour décorer votre chambre ou votre bureau', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351529/poster_ewqcdb.png', 20),
+('Porte-clés', 'Un porte-clés pour emmener votre personnage préféré partout avec vous', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351531/porte-cl%C3%A9s_ysjhpc.png', 25),
+('Crédit de jeu', 'Un crédit de jeu pour continuer à jouer sans dépenser', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351528/partie-offerte_m8zwwy.png', 10),
+('Snack', 'Un snack pour vous rebooster', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351537/snack_s2pfxr.png', 15),
+('Boisson soft', 'Une boisson pour vous désaltérer', 'https://res.cloudinary.com/doh3k7alc/image/upload/v1736351532/soft_p9kfgy.png', 15);
 
 INSERT INTO prize_acquired (user_id, prize_id) VALUES
 (2, 1),
