@@ -1,3 +1,5 @@
+@import "./assets/fonts/fonts.css";
+
 * {
   margin: 0;
   padding: 0;
@@ -10,6 +12,7 @@ body {
   line-height: 1.7;
   color: #eee;
   margin: 0;
+<<<<<<< HEAD
   min-height: 100vh;
 }
 
@@ -26,4 +29,25 @@ body {
 
 .logo {
   width: 20%;
+=======
+  background-color: #0a0a13;
+}
+
+:root {
+  height: 100vh;
+  background-color: #0b0812;
+  --font-title-phosphate: "PhosphateInline", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  --font-title-size: 28px;
+  --font-title-color: #c3b0ea;
+}
+
+.phosphate-text {
+  font-family: var(--font-title-phosphate);
+  font-size: var(--font-title-size);
+
+  color: var(--font-title-color);
+  letter-spacing: 0.05em; /* Pour plus d'espacement entre les lettres */
+>>>>>>> db81c3de3a5acd21362c7a7168861b014e0b9e9b
 }
