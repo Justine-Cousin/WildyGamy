@@ -32,3 +32,7 @@ body {
   color: var(--font-title-color);
   letter-spacing: 0.05em; /* Pour plus d'espacement entre les lettres */
 }
+
+.logo {
+  width: 20%;
+}
