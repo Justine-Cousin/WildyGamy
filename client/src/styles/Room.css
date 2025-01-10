@@ -1,9 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
+.room-logo {
+  width: 20%;
+  position: relative;
+  left: 0;
+}
+
+.room-page {
+  padding-bottom: 100px;
+}
+
 .room-container {
   position: relative;
   max-width: 400px;
   min-height: 100%;
+  margin: 20px;
   padding: 20px;
   border-radius: 15px;
   background: linear-gradient(145deg, #6403a9, #4b0280);
@@ -30,8 +41,8 @@
   margin-bottom: 15px;
   color: #c3b0ea;
   text-transform: uppercase;
-  font-weight: bold;
-  font-family: "Phosphate", "Impact", sans-serif;
+  font-weight: 400;
+  font-family: var(--font-title-phosphate);
   text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
     rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
 }
@@ -51,7 +62,6 @@
   font-weight: 500;
 }
 
-/* Animation néon subtile */
 .room-container::before {
   content: "";
   position: absolute;
@@ -71,4 +81,121 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+/*CARROUSEL*/
+
+.room-titlecarousel {
+  font-size: 1.5rem;
+  color: #c3b0ea;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: var(--font-title-phosphate);
+  text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
+    rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
+}
+
+.room-carousel {
+  padding: 20px;
+  background-color: transparent;
+}
+
+.room-carouselcontainer {
+  display: flex;
+  overflow-x: auto;
+  gap: 35px;
+}
+
+.room-gamecard {
+  min-width: 200px;
+  position: relative;
+}
+
+.room-gameimage {
+  width: 110%;
+  height: 200px;
+  border-radius: 10px;
+  border: #c3b0ea 1px solid;
+}
+
+.room-gametitle {
+  color: #c3b0ea;
+  font-family: "Inter", sans-serif;
+  font-size: 1.2rem;
+}
+
+.room-carouselcontainer::-webkit-scrollbar {
+  display: none;
+}
+
+.room-carouselcontainer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/*JEUX EN LIGNE*/
+
+.room-titlegameonline {
+  font-size: 1.8rem;
+  color: #000;
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: var(--font-title-phosphate);
+  text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
+    rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.room-gameonline {
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  grid-area: play-online;
+  padding: 20px;
+  margin: 20px;
+  position: relative;
+  background-image: linear-gradient(
+      to left,
+      rgba(221, 87, 210, 1),
+      rgba(221, 87, 210, 1),
+      rgba(255, 255, 255, 0)
+    ), url("../assets/images/room-game-online.png");
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
+  border-radius: 15px;
+  overflow: hidden;
+  min-height: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+}
+
+.room-gameonline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: linear-gradient(to bottom, #fe00ea, #f7a1f1) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+.room-textgameonline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.room-emptydiv {
+  width: 47%;
 }

@@ -1,7 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
 import "./App.css";
-import logo from "./assets/images/logo_wildy_gamy.png";
-import Room from "./pages/Room";
 
 function App() {
   return (
@@ -11,6 +9,7 @@ function App() {
           <Link to="/">Accueil</Link>
           <Link to="/prizes">Récompenses</Link>
           <Link to="/games">Jeux</Link>
+          <Link to="/room">La Salle</Link>
         </nav>
       </header>
 

@@ -12,24 +12,6 @@ body {
   line-height: 1.7;
   color: #eee;
   margin: 0;
-<<<<<<< HEAD
-  min-height: 100vh;
-}
-
-#root {
-  min-height: 100vh;
-  background-color: #0b0812;
-  background-size: cover;
-  background-position: top;
-  align-content: start;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.logo {
-  width: 20%;
-=======
   background-color: #0a0a13;
 }
 
@@ -49,5 +31,4 @@ body {
 
   color: var(--font-title-color);
   letter-spacing: 0.05em; /* Pour plus d'espacement entre les lettres */
->>>>>>> db81c3de3a5acd21362c7a7168861b014e0b9e9b
 }
