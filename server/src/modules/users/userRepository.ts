@@ -1,5 +1,7 @@
 import client from "../../../database/client";
 
+import type { Result, Rows } from "../../../database/client";
+
 interface UserData {
   name: string;
   firstname: string;
@@ -28,7 +30,8 @@ const userRepository = {
   },
 
   createUser: async (userData: UserData) => {
-    const query = `
+    const [query] = await client.query<Result>(
+      `
       INSERT INTO user (
         name, 
         firstname, 
@@ -41,19 +44,21 @@ const userRepository = {
         current_points
       ) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    const values = [
-      userData.name,
-      userData.firstname,
-      userData.email,
-      userData.username,
-      userData.password_hash,
-      userData.phone_number || null,
-      userData.profile_pic || null,
-      userData.total_points,
-      userData.current_points,
-    ];
-    return client.query(query, values);
+    `,
+      [
+        userData.name,
+        userData.firstname,
+        userData.email,
+        userData.username,
+        userData.password_hash,
+        userData.phone_number || null,
+        userData.profile_pic || null,
+        userData.total_points,
+        userData.current_points,
+      ],
+    );
+
+    return query;
   },
 };
 

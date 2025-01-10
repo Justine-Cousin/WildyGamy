@@ -15,41 +15,42 @@ const userActions = {
     }
   },
 
-  create: async (req: Request, res: Response) => {
+  create: async (req: Request, res: Response): Promise<void> => {
     try {
       const { username, email, password, profilePicture, ...otherData } =
         req.body;
 
       const [existingEmail] = await userRepository.getUserByEmail(email);
-      if (existingEmail) {
-        return res.status(400).json({ message: "Cet email est déjà utilisé" });
+
+      if (existingEmail === email) {
+        res.status(400).json({ message: "Cet email est déjà utilisé" });
+        return;
       }
 
       const [existingUsername] =
         await userRepository.getUserByUsername(username);
-      if (existingUsername) {
-        return res
+      if (existingUsername === username) {
+        res
           .status(400)
           .json({ message: "Ce nom d'utilisateur est déjà utilisé" });
+        return;
       }
-
-      const hashedPassword = await hash(password, 10);
 
       const newUser = {
         ...otherData,
         username,
         email,
-        password_hash: hashedPassword,
+        password_hash: password,
         profile_pic: profilePicture || null,
         total_points: 0,
         current_points: 0,
       };
 
-      const [result] = await userRepository.createUser(newUser);
+      const result = await userRepository.createUser(newUser);
 
       res.status(201).json({
         message: "Utilisateur créé avec succès",
-        user: { ...newUser, password_hash: undefined },
+        user: { ...newUser, id: result.insertId },
       });
     } catch (error) {
       console.error("Erreur dans create:", error);
