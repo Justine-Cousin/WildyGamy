@@ -1,10 +1,12 @@
 import "../styles/Home.css";
+import { useNavigate } from "react-router-dom";
 import blueArrow from "../assets/images/blue-arrow-icon.svg";
 import logo from "../assets/images/logo_wildy_gamy.png";
 import pinkArrow from "../assets/images/pink-arrow-icon.svg";
 import purpleArrow from "../assets/images/purple-arrow-icon.svg";
 
 export default function Home() {
+  const navigation = useNavigate();
   return (
     <>
       <div className="home-container">
@@ -17,7 +19,15 @@ export default function Home() {
           </p>
         </header>
         <main className="home-main">
-          <div className="wildy-gamy-home-container home_grid-containers">
+          <div
+            onClick={() => {
+              navigation("/about_us");
+            }}
+            onKeyDown={() => {
+              navigation("/about_us");
+            }}
+            className="wildy-gamy-home-container home_grid-containers"
+          >
             WILDY GAMY
             <p className="home-wildy-gamy-text">
               Besoin d'info, des questions?
@@ -28,7 +38,15 @@ export default function Home() {
           </div>
 
           <div className="home-bottom-container">
-            <div className="play-online-home-container home_grid-containers">
+            <div
+              onClick={() => {
+                navigation("/play");
+              }}
+              onKeyDown={() => {
+                navigation("/play");
+              }}
+              className="play-online-home-container home_grid-containers"
+            >
               JEU EN LIGNE
               <p className="home-play-online-text">
                 Jouez
@@ -39,7 +57,15 @@ export default function Home() {
               </p>
               <img src={pinkArrow} alt="" className="pink-arrow-icon" />
             </div>
-            <div className="game-list-home-container home_grid-containers">
+            <div
+              onClick={() => {
+                navigation("/games");
+              }}
+              onKeyDown={() => {
+                navigation("/games");
+              }}
+              className="game-list-home-container home_grid-containers"
+            >
               LISTE DES JEUX
               <p className="home-game-list-text">
                 Toutes nos bornes
@@ -48,7 +74,16 @@ export default function Home() {
               </p>
               <img src={blueArrow} alt="" className="blue-arrow-icon" />
             </div>
-            <div className="prizes-home-container home_grid-containers">
+
+            <div
+              onClick={() => {
+                navigation("/prizes");
+              }}
+              onKeyDown={() => {
+                navigation("/prizes");
+              }}
+              className="prizes-home-container home_grid-containers"
+            >
               RÉCOMPENSES
               <p className="home-game-list-text">
                 Échangez vos points

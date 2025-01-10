@@ -45,16 +45,20 @@ export default function NavBar() {
         </Link>
       </div>
 
-      {isMenuOpen && (
-        <div className="burger-menu-dropdown">
-          <Link className="burger-menu-link" to="/prizes" onClick={toggleMenu}>
-            Récompenses
-          </Link>
-          <Link className="burger-menu-link" to="/games" onClick={toggleMenu}>
-            Jeux
-          </Link>
-        </div>
-      )}
+      <div className={`burger-menu-dropdown ${isMenuOpen ? "active" : ""}`}>
+        <Link className="burger-menu-link" to="/about_us" onClick={toggleMenu}>
+          About Us
+        </Link>
+        <Link className="burger-menu-link" to="/play" onClick={toggleMenu}>
+          Jeu en ligne
+        </Link>
+        <Link className="burger-menu-link" to="/games" onClick={toggleMenu}>
+          Liste des jeux
+        </Link>
+        <Link className="burger-menu-link" to="/prizes" onClick={toggleMenu}>
+          Récompenses
+        </Link>
+      </div>
     </nav>
   );
 }

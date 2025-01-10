@@ -15,6 +15,9 @@
 
 .home-welcome-text {
   text-align: center;
+  color: #c3b0ea;
+  padding-bottom: 12px;
+  font-size: 1rem;
 }
 
 .home-main {
@@ -218,19 +221,9 @@
   color: black;
 }
 
-.blue-arrow-icon {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-}
-
+.blue-arrow-icon,
+.pink-arrow-icon,
 .purple-arrow-icon {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-}
-
-.pink-arrow-icon {
   position: absolute;
   bottom: 0px;
   right: 0px;
