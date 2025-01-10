@@ -1,7 +1,7 @@
 .prize-logo {
   width: 20%;
   position: relative;
-  left: 0;
+  padding: 20px 0 0 20px;
 }
 .prizes-page__title {
   font-family: var(--font-title-phosphate);
