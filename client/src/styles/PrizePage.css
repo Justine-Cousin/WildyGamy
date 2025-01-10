@@ -1,7 +1,7 @@
 .prize-logo {
   width: 20%;
   position: relative;
-  left: 0;
+  padding: 20px 0 0 20px;
 }
 .prizes-page__title {
   font-family: var(--font-title-phosphate);
@@ -19,6 +19,7 @@
   padding: 0;
   max-width: 1200px;
   margin: 0 auto;
+  padding-bottom: 150px;
 }
 
 .prizes-page__grid {
