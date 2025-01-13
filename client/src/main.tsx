@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 import App from "./App";
+import AdminHome from "./pages/AdminHome";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "games", element: <Games /> },
       { path: "about_us", element: <Room /> },
       { path: "login", element: <LoginPage /> },
+      { path: "admin", element: <AdminHome /> },
     ],
   },
 ]);
