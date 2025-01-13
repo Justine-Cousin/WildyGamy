@@ -1,35 +1,29 @@
-import type { Request, Response } from "express";
+import type { Request, RequestHandler, Response } from "express";
 import gamesRepository from "./gamesRepository";
 
-const gamesActions = {
-  browse: async (req: Request, res: Response) => {
-    try {
-      const [results] = await gamesRepository.getAllGames();
-      res.json(results);
-    } catch (error) {
-      console.error("Erreur dans browse:", error);
-      res
-        .status(500)
-        .json({ message: "Erreur lors de la récupération des jeux" });
-    }
-  },
+const browse: RequestHandler = async (req, res, next) => {
+  try {
+    const games = await gamesRepository.readAll();
 
-  read: async (req: Request, res: Response) => {
-    try {
-      const [results] = await gamesRepository.getGamesID(Number(req.params.id));
-
-      if (!Array.isArray(results) || results.length === 0) {
-        res.status(404).json({ message: "Jeu non trouvé" });
-      } else {
-        res.json(results[0]);
-      }
-    } catch (error) {
-      console.error("Erreur dans read:", error);
-      res
-        .status(500)
-        .json({ message: "Erreur lors de la récupération du jeu" });
-    }
-  },
+    res.json(games);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export default gamesActions;
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const gamesId = Number(req.params.id);
+    const games = await gamesRepository.read(gamesId);
+
+    if (games == null) {
+      res.sendStatus(404);
+    } else {
+      res.json(games);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read };
