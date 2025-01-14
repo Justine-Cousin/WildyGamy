@@ -1,80 +1,21 @@
-import { Menu, X } from "lucide-react";
+import "../../styles/AdminHome.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Users from "../assets/images/Users.svg";
-import game from "../assets/images/game.svg";
-import logoWG from "../assets/images/logo_wildy_gamy.png";
-import logout from "../assets/images/logout.svg";
-import price from "../assets/images/price.svg";
-import "../styles/AdminHome.css";
-
-const menuItems = [
-  {
-    id: 1,
-    title: "Utilisateurs",
-    icon: <img src={Users} alt="Users" />,
-    link: "/admin/users",
-  },
-  {
-    id: 2,
-    title: "Jeux",
-    icon: <img src={game} alt="game" />,
-    link: "/admin/Games",
-  },
-  {
-    id: 3,
-    title: "Lots",
-    icon: <img src={price} alt="price" />,
-    link: "/admin/price",
-  },
-];
+import Users from "../../assets/images/Users.svg";
+import game from "../../assets/images/game.svg";
+import logoWG from "../../assets/images/logo_wildy_gamy.png";
+import price from "../../assets/images/price.svg";
+import SliderBarAdmin from "../../components/SliderBarAdmin";
 
 function AdminHome() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleLogout = () => {
-    // Implement logout functionality here
-    alert("logout");
+  const handleSidebarToggle = (open: boolean) => {
+    setIsOpen(open);
   };
+
   return (
     <div className="adminhome-container">
       <img src={logoWG} alt="logo" className="adminhome-logo" />
-      <div
-        className={`adminhome-sidebar ${isOpen ? "adminhome-sidebar-open" : "adminhome-sidebar-close"}`}
-      >
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="adminhome-button"
-        >
-          {isOpen ? (
-            <X className="button-close" />
-          ) : (
-            <Menu className="button-open" />
-          )}
-        </button>
-
-        <div className="adminhome-menu">
-          {menuItems.map((item) => (
-            <Link key={item.id} to={item.link} className="menu-item">
-              {item.icon}
-              <span
-                className={`menu-item-text ${!isOpen && "menu-item-text-hidden"}`}
-              >
-                {item.title}
-              </span>
-            </Link>
-          ))}
-        </div>
-        <button type="button" onClick={handleLogout} className="logout-button">
-          <img src={logout} alt="Déconnexion" />
-          <span
-            className={`menu-item-text ${!isOpen && "menu-item-text-hidden"}`}
-          >
-            Déconnexion
-          </span>
-        </button>
-      </div>
-
+      <SliderBarAdmin isOpen={isOpen} onToggle={handleSidebarToggle} />
       <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
         <div className="welcome-container">
           <h1 className="welcome-title">
