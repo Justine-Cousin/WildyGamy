@@ -6,7 +6,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 import App from "./App";
-import AdminHome from "./pages/AdminHome";
+import AdminHome from "./pages/Admin/AdminHome";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
