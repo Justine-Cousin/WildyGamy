@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import AdminGames from "./pages/Admin/AdminGames";
 import AdminHome from "./pages/Admin/AdminHome";
+import AdminPrize from "./pages/Admin/AdminPrizes";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "admin", element: <AdminHome /> },
       { path: "admin/games", element: <AdminGames /> },
+      { path: "admin/prizes", element: <AdminPrize /> },
     ],
   },
 ]);

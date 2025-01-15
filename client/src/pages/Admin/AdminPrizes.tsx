@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import AdminGrid from "../../components/AdminGrid";
 import SliderBarAdmin from "../../components/SliderBarAdmin";
-import type { Game } from "../../services/types";
-import "../../styles/AdminGames.css";
+import type { Prize } from "../../services/types";
 
-const AdminGames = () => {
-  const [games, setGames] = useState<Game[]>([]);
+const AdminPrizes = () => {
+  const [prices, setPrices] = useState<Prize[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -15,10 +14,10 @@ const AdminGames = () => {
   };
 
   useEffect(() => {
-    const fetchGames = async () => {
+    const fetchPrices = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/games`,
+          `${import.meta.env.VITE_API_URL}/api/prices`,
           {
             method: "GET",
             headers: {
@@ -34,9 +33,9 @@ const AdminGames = () => {
         }
 
         const data = await response.json();
-        setGames(data);
+        setPrices(data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des jeux:", error);
+        console.error("Erreur lors de la récupération des prix:", error);
         setError(
           error instanceof Error ? error.message : "Une erreur est survenue",
         );
@@ -45,14 +44,14 @@ const AdminGames = () => {
       }
     };
 
-    fetchGames();
+    fetchPrices();
   }, []);
 
   if (loading) {
     return (
-      <div className="games-page">
-        <div className="games-page__loading">
-          Motivation des fantômes de Pac-Man...
+      <div className="prices-page">
+        <div className="prices-page__loading">
+          Ouverture du coffre au trésor... 🎁
         </div>
       </div>
     );
@@ -60,33 +59,34 @@ const AdminGames = () => {
 
   if (error) {
     return (
-      <div className="games-page">
-        <div className="games-page__error">{error}</div>
+      <div className="prices-page">
+        <div className="prices-page__error">
+          <p>Erreur lors de la récupération des prix:</p>
+          <p>{error}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="admingames-container">
-      <img src={logoWG} alt="logo" className="admingames-logo" />
+    <div className="adminprices-container">
+      <img src={logoWG} alt="logo" className="adminprices-logo" />
       <SliderBarAdmin isOpen={isOpen} onToggle={handleSidebarToggle} />
-      <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
-        <div className="admingames-content">
-          <div className="admingrid-card">
-            {games.map((game) =>
-              game.image && game.name ? (
-                <AdminGrid
-                  key={game.id}
-                  type="game"
-                  game={{ image: game.image, name: game.name }}
-                />
-              ) : null,
-            )}
-          </div>
+      <div className="adminprices-content">
+        <div className="admingrid-card">
+          {prices.map((price) =>
+            price.image && price.name ? (
+              <AdminGrid
+                key={price.id}
+                type="price"
+                price={{ image: price.image, name: price.name }}
+              />
+            ) : null,
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminGames;
+export default AdminPrizes;
