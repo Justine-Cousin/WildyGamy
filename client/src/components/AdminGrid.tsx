@@ -1,4 +1,4 @@
-import { Eye, EyeClosed, PencilLine } from "lucide-react";
+import { Eye, EyeClosed, PencilLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
 import "../styles/AdminGrid.css";
@@ -21,6 +21,7 @@ type AdminGridProps = {
     id: number,
     data: { name: string; description: string; image: string; price: string },
   ) => void;
+  onDelete: (id: number) => void;
 };
 
 const AdminGrid: React.FC<AdminGridProps> = ({
@@ -29,9 +30,24 @@ const AdminGrid: React.FC<AdminGridProps> = ({
   price,
   onAvailabilityChange,
   onUpdate,
+  onDelete,
 }) => {
   const [isavailable, setIsAvailable] = useState(game?.is_available ?? true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (
+      window.confirm(
+        "🎮 Suppression de jeu - Cette action est irréversible. Confirmer ?",
+      )
+    ) {
+      if (game) {
+        onDelete(game.id);
+      }
+    }
+  };
 
   switch (type) {
     case "game":
@@ -45,23 +61,6 @@ const AdminGrid: React.FC<AdminGridProps> = ({
         >
           {game && (
             <div className="admincard-availability">
-              <button
-                type="button"
-                onClick={() => {
-                  const newAvailability = !isavailable;
-                  setIsAvailable(newAvailability);
-                  if (game) {
-                    onAvailabilityChange(game.id, newAvailability);
-                  }
-                }}
-                className="admincard-button"
-              >
-                {isavailable ? (
-                  <Eye className="admingrid-eye" />
-                ) : (
-                  <EyeClosed className="admingrid-eye" />
-                )}
-              </button>
               <div className="admincard-content-info">
                 <img
                   className="gamecard-image"
@@ -74,35 +73,61 @@ const AdminGrid: React.FC<AdminGridProps> = ({
               </div>
             </div>
           )}
-          <button
-            type="button"
-            className="admincard-button edit-button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsEditModalOpen(true);
-            }}
-          >
-            <PencilLine className="admingrid-pencil" />
-          </button>
-          {isEditModalOpen && game && (
-            <EditModalAdminGame
-              isOpen={isEditModalOpen}
-              onClose={() => setIsEditModalOpen(false)}
-              gameData={{
-                name: game.name,
-                description: game.description,
-                image: game.image,
-                price: game.price,
-              }}
-              onSave={(updatedData) => {
-                if (onUpdate) {
-                  onUpdate(game.id, updatedData);
+          <div className="admincard-buttons">
+            <button
+              type="button"
+              onClick={() => {
+                const newAvailability = !isavailable;
+                setIsAvailable(newAvailability);
+                if (game) {
+                  onAvailabilityChange(game.id, newAvailability);
                 }
-                setIsEditModalOpen(false);
               }}
-            />
-          )}
+              className="admincard-button"
+            >
+              {isavailable ? (
+                <Eye className="admingrid-eye" />
+              ) : (
+                <EyeClosed className="admingrid-eye" />
+              )}
+            </button>
+            <button
+              type="button"
+              className="admincard-button edit-button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsEditModalOpen(true);
+              }}
+            >
+              <PencilLine className="admingrid-pencil" />
+            </button>
+            {isEditModalOpen && game && (
+              <EditModalAdminGame
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                gameData={{
+                  name: game.name,
+                  description: game.description,
+                  image: game.image,
+                  price: game.price,
+                }}
+                onSave={(updatedData) => {
+                  if (onUpdate) {
+                    onUpdate(game.id, updatedData);
+                  }
+                  setIsEditModalOpen(false);
+                }}
+              />
+            )}
+            <button
+              type="button"
+              className="admincard-button trash-button"
+              onClick={handleDelete}
+            >
+              <Trash2 className="admingrid-trash" />
+            </button>
+          </div>
         </div>
       );
 

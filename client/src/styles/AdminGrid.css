@@ -3,22 +3,23 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 10px 10px;
   border-radius: 10px;
   background: linear-gradient(45deg, #9001f5, #c3b0ea);
   position: relative;
+  min-height: 200px;
 }
 
 .admincard-availability {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .admincard-content-info {
-  margin-bottom: 30px;
+  width: 100%;
 }
 
 .admincard-button {
@@ -26,12 +27,20 @@
   border: none;
   cursor: pointer;
   padding: 5px;
+  transition: transform 0.2s ease;
 }
 
-.edit-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
+.admincard-button:hover {
+  transform: scale(1.1);
+}
+
+.admincard-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: auto;
+  padding: 10px 0;
 }
 
 .admincard-content-unavailable {
@@ -49,7 +58,8 @@
   color: #ff0178;
 }
 
-.admingrid-pencil {
+.admingrid-pencil,
+.admingrid-trash {
   width: 20px;
   height: 20px;
   color: #ff0178;
@@ -61,7 +71,9 @@
 
 .gamecard-image {
   width: 50%;
+  padding-top: 15px;
 }
+
 .pricecard-img {
   width: 30%;
 }
@@ -70,6 +82,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #f3f4f6;
+  margin-bottom: 10px;
 }
 
 .prizecard-content {
@@ -82,4 +95,23 @@
   border-radius: 10px;
   background: linear-gradient(45deg, #9001f5, #c3b0ea);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admingrid-eye:hover,
+.admingrid-pencil:hover,
+.admingrid-trash:hover {
+  color: #ff4d9e;
+}
+
+.admincard-button:active {
+  transform: scale(0.95);
+}
+
+.admincard-content {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.admincard-content:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }

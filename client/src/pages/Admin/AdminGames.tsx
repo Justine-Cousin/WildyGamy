@@ -171,6 +171,9 @@ const AdminGames = () => {
                       is_available: game.is_available,
                     })
                   }
+                  onDelete={() => {
+                    // Add your delete logic here
+                  }}
                 />
               ) : null,
             )}

@@ -84,6 +84,7 @@ const AdminPrizes = () => {
                   type="price"
                   price={{ image: prize.image, name: prize.name }}
                   onAvailabilityChange={() => {}}
+                  onDelete={() => {}}
                 />
               ) : null,
             )}
