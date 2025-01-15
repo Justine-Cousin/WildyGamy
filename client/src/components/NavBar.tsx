@@ -58,6 +58,13 @@ export default function NavBar() {
         <Link className="burger-menu-link" to="/prizes" onClick={toggleMenu}>
           Récompenses
         </Link>
+        <Link
+          className="burger-menu-link"
+          to="/UserStatHeader"
+          onClick={toggleMenu}
+        >
+          Classement
+        </Link>
       </div>
     </nav>
   );
