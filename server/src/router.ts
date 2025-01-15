@@ -19,5 +19,6 @@ router.get("/api/prizes/:id", prizeActions.read);
 
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
+router.patch("/api/games/:id/availability", gameActions.updateAvailability);
 
 export default router;

@@ -1,3 +1,4 @@
+import { log } from "node:console";
 import type { Request, RequestHandler, Response } from "express";
 import gamesRepository from "./gamesRepository";
 
@@ -26,4 +27,17 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read };
+const updateAvailability: RequestHandler = async (req, res, next) => {
+  try {
+    const gamesId = Number(req.params.id);
+    const isAvailable = req.body.isAvailable;
+
+    await gamesRepository.updateAvailability(gamesId, isAvailable);
+
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, updateAvailability };

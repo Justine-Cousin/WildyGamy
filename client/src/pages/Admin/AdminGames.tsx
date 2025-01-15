@@ -66,6 +66,35 @@ const AdminGames = () => {
     );
   }
 
+  const updateGameAvailability = async (id: number, isAvailable: boolean) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/games/${id}/availability`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ isAvailable }),
+        },
+      );
+
+      if (response.ok) {
+        setGames(
+          games.map((game) =>
+            game.id === id ? { ...game, is_available: isAvailable } : game,
+          ),
+        );
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour:", error);
+      setError(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
+    }
+  };
+
   return (
     <div className="admingames-container">
       <img src={logoWG} alt="logo" className="admingames-logo" />
@@ -77,8 +106,15 @@ const AdminGames = () => {
               game.image && game.name ? (
                 <AdminGrid
                   key={game.id}
+                  id={game.id}
                   type="game"
-                  game={{ image: game.image, name: game.name }}
+                  game={{
+                    id: game.id,
+                    image: game.image,
+                    name: game.name,
+                    is_available: game.is_available,
+                  }}
+                  onAvailabilityChange={updateGameAvailability}
                 />
               ) : null,
             )}

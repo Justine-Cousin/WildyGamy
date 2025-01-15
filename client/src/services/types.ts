@@ -17,6 +17,7 @@ export interface Game {
   description?: string;
   image?: string;
   price: number;
+  is_available: boolean;
 }
 
 export interface Prize {

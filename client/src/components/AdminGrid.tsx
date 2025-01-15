@@ -5,15 +5,20 @@ import "../styles/AdminGrid.css";
 
 type AdminGridProps = {
   type: string;
-  game?: { image: string; name: string };
+  id: number;
+  game?: { id: number; image: string; name: string; is_available: boolean };
   price?: { image: string; name: string };
+  onAvailabilityChange: (id: number, isAvailable: boolean) => void;
 };
 
-const AdminGrid: React.FC<AdminGridProps> = ({ type, game, price }) => {
-  const [isavailable, setIsAvailable] = useState(true);
-  const handleAvailability = () => {
-    setIsAvailable((prev) => !prev);
-  };
+const AdminGrid: React.FC<AdminGridProps> = ({
+  type,
+  game,
+  price,
+  onAvailabilityChange,
+}) => {
+  const [isavailable, setIsAvailable] = useState(game?.is_available ?? true);
+
   switch (type) {
     case "game":
       return (
@@ -24,7 +29,13 @@ const AdminGrid: React.FC<AdminGridProps> = ({ type, game, price }) => {
             <div className="admincard-availability">
               <button
                 type="button"
-                onClick={handleAvailability}
+                onClick={() => {
+                  const newAvailability = !isavailable;
+                  setIsAvailable(newAvailability);
+                  if (game) {
+                    onAvailabilityChange(game.id, newAvailability);
+                  }
+                }}
                 className="admincard-button"
               >
                 {isavailable ? (
