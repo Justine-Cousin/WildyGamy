@@ -40,11 +40,3 @@ export interface PrizeAcquired {
   prize_id: number;
   acquisition_date: Date;
 }
-
-export interface Game {
-  id: number;
-  profile_pic: string;
-  name: string;
-  firstname: string;
-  phone_number: string;
-}

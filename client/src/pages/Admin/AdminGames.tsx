@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
+import AddButton from "../../components/AddButton";
 import AdminGrid from "../../components/AdminGrid";
 import SliderBarAdmin from "../../components/SliderBarAdmin";
 import type { Game } from "../../services/types";
@@ -12,6 +13,17 @@ const AdminGames = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleSidebarToggle = (open: boolean) => {
     setIsOpen(open);
+  };
+  const handleAddGame = () => {
+    const newGame = {
+      id: Date.now(),
+      image: "",
+      name: "",
+      is_available: true,
+      description: "",
+      price: 0,
+    };
+    setGames([...games, newGame]);
   };
 
   useEffect(() => {
@@ -212,6 +224,7 @@ const AdminGames = () => {
           </div>
         </div>
       </div>
+      <AddButton onClick={handleAddGame} />
     </div>
   );
 };
