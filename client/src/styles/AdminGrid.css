@@ -7,7 +7,6 @@
   padding: 10px 10px;
   border-radius: 10px;
   background: linear-gradient(45deg, #9001f5, #c3b0ea);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -16,6 +15,10 @@
   flex-direction: column;
   text-align: center;
   align-items: flex-end;
+}
+
+.admincard-content-info {
+  margin-bottom: 30px;
 }
 
 .admincard-button {

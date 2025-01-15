@@ -2,13 +2,26 @@ import { Eye, EyeClosed, PencilLine } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
 import "../styles/AdminGrid.css";
+import EditModalAdminGame from "./EditModalAdminGame";
 
 type AdminGridProps = {
   type: string;
   id: number;
-  game?: { id: number; image: string; name: string; is_available: boolean };
+  game?: {
+    id: number;
+    image: string;
+    name: string;
+    is_available: boolean;
+    description: string;
+    price: string;
+  };
   price?: { image: string; name: string };
   onAvailabilityChange: (id: number, isAvailable: boolean) => void;
+  onUpdate?: (
+    type: string,
+    id: number,
+    data: { name: string; description: string; image: string; price: string },
+  ) => void;
 };
 
 const AdminGrid: React.FC<AdminGridProps> = ({
@@ -16,14 +29,20 @@ const AdminGrid: React.FC<AdminGridProps> = ({
   game,
   price,
   onAvailabilityChange,
+  onUpdate,
 }) => {
   const [isavailable, setIsAvailable] = useState(game?.is_available ?? true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   switch (type) {
     case "game":
       return (
         <div
-          className={`admincard-content ${isavailable ? "admincard-content-available" : "admincard-content-unavailable"}`}
+          className={`admincard-content ${
+            isavailable
+              ? "admincard-content-available"
+              : "admincard-content-unavailable"
+          }`}
         >
           {game && (
             <div className="admincard-availability">
@@ -43,11 +62,8 @@ const AdminGrid: React.FC<AdminGridProps> = ({
                 ) : (
                   <EyeClosed className="admingrid-eye" />
                 )}
-                <button type="button" className="admincard-button edit-button">
-                  <PencilLine className="admingrid-pencil" />
-                </button>
               </button>
-              <div className="adminCard-info-container">
+              <div className="admincard-content-info">
                 <img
                   className="gamecard-image"
                   src={game.image}
@@ -58,6 +74,35 @@ const AdminGrid: React.FC<AdminGridProps> = ({
                 </div>
               </div>
             </div>
+          )}
+          <button
+            type="button"
+            className="admincard-button edit-button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsEditModalOpen(true);
+            }}
+          >
+            <PencilLine className="admingrid-pencil" />
+          </button>
+          {isEditModalOpen && game && (
+            <EditModalAdminGame
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              gameData={{
+                name: game.name,
+                description: game.description,
+                image: game.image,
+                price: game.price,
+              }}
+              onSave={(updatedData) => {
+                if (onUpdate) {
+                  onUpdate(type, game.id, updatedData);
+                }
+                setIsEditModalOpen(false);
+              }}
+            />
           )}
         </div>
       );

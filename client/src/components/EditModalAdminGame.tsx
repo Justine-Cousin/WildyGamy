@@ -1,0 +1,189 @@
+import { useState } from "react";
+import "../styles/EditModalAdminGame.css";
+
+type EditModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  gameData: {
+    name: string;
+    description: string;
+    image: string;
+    price: string;
+  };
+  onSave: (updatedData: {
+    name: string;
+    description: string;
+    image: string;
+    price: string;
+  }) => void;
+};
+
+type Errors = {
+  name?: string;
+  description?: string;
+  image?: string;
+  price?: string;
+};
+
+const EditModalAdminGame: React.FC<EditModalProps> = ({
+  isOpen,
+  onClose,
+  gameData,
+  onSave,
+}) => {
+  const [name, setName] = useState(gameData.name);
+  const [description, setDescription] = useState(gameData.description);
+  const [image, setImage] = useState(gameData.image);
+  const [price, setPrice] = useState(gameData.price);
+  const [errors, setErrors] = useState<Errors>({});
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+
+  const validateForm = (): boolean => {
+    const newErrors: Errors = {};
+
+    if (!name.trim()) {
+      newErrors.name = "Le nom est requis";
+    }
+
+    if (!description.trim()) {
+      newErrors.description = "La description est requise";
+    }
+
+    if (!image.trim()) {
+      newErrors.image = "L'URL de l'image est requise";
+    }
+
+    if (!price.trim()) {
+      newErrors.price = "Le prix est requis";
+    } else if (!/^\d+$/.test(price.trim())) {
+      newErrors.price = "Le prix doit être un nombre";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = () => {
+    if (validateForm()) {
+      onSave({ name, description, image, price });
+      onClose();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      onKeyUp={(e) => e.key === "Escape" && onClose()}
+    >
+      <div
+        className="modal-container"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.key === "Enter" && e.stopPropagation()}
+      >
+        <div className="edit-modal">
+          <h2 className="edit-modal-title">MODIFIER LE JEU</h2>
+          <div className="edit-modal-content">
+            <div className="form-group">
+              <label htmlFor="name" className="edit-modal-label">
+                Nom <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
+              />
+              {errors.name && (
+                <span className="error-message">{errors.name}</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description" className="edit-modal-label">
+                Description <span className="required">*</span>
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
+              />
+              {errors.description && (
+                <span className="error-message">{errors.description}</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="image" className="edit-modal-label">
+                Image URL <span className="required">*</span>
+              </label>
+              <div className="image-input-container">
+                <input
+                  type="text"
+                  id="image"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  className={`edit-modal-input ${errors.image ? "input-error" : ""}`}
+                />
+                <button
+                  type="button"
+                  className="preview-button"
+                  onClick={() => setIsPreviewVisible(!isPreviewVisible)}
+                >
+                  {isPreviewVisible ? "Cacher" : "Prévisualiser"}
+                </button>
+              </div>
+              {errors.image && (
+                <span className="error-message">{errors.image}</span>
+              )}
+              {isPreviewVisible && image && (
+                <div className="image-preview">
+                  <img src={image} alt="Prévisualisation" />
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="price" className="edit-modal-label">
+                Prix <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className={`edit-modal-input ${errors.price ? "input-error" : ""}`}
+              />
+              {errors.price && (
+                <span className="error-message">{errors.price}</span>
+              )}
+            </div>
+
+            <div className="edit-modal-buttons">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="edit-modal-save"
+              >
+                Enregistrer
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="edit-modal-cancel"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditModalAdminGame;

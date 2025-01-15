@@ -113,6 +113,8 @@ const AdminGames = () => {
                     image: game.image,
                     name: game.name,
                     is_available: game.is_available,
+                    description: game.description || "",
+                    price: game.price.toString(),
                   }}
                   onAvailabilityChange={updateGameAvailability}
                 />
