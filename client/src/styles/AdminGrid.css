@@ -3,10 +3,39 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
-  padding: 15px 10px;
+  padding: 10px 10px;
   border-radius: 10px;
   background: linear-gradient(45deg, #9001f5, #c3b0ea);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admincard-availability {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: flex-end;
+}
+
+.admincard-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.admincard-content-unavailable {
+  background: linear-gradient(45deg, #8f01f55d, #c3b0ea4b);
+  order: 1;
+}
+
+.admincard-content-available {
+  order: 0;
+}
+
+.admingrid-eye {
+  width: 20px;
+  height: 20px;
+  color: #ff0178;
 }
 
 .gamecard-image {
