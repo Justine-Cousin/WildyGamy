@@ -6,11 +6,13 @@
   overflow: hidden;
   border-radius: 34px;
 }
-
+.login-container {
+  padding-bottom: 23px;
+}
 .blur-circle {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   background-color: #b54cff;
   border-radius: 50%;
   filter: blur(30px);
