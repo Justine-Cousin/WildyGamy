@@ -1,13 +1,30 @@
-import client from "../../../database/client";
+import databaseClient from "../../../database/client";
 
-const gamesRepository = {
-  getAllGames: async () => {
-    return client.query("SELECT * FROM game");
-  },
+import type { Result, Rows } from "../../../database/client";
 
-  getGamesID: async (id: number) => {
-    return client.query("SELECT * FROM game WHERE id = ?", [id]);
-  },
+type game = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
 };
 
-export default gamesRepository;
+class gamesRepository {
+  async read(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from game where id = ?",
+      [id],
+    );
+
+    return rows[0] as game;
+  }
+
+  async readAll() {
+    const [rows] = await databaseClient.query<Rows>("select * from game");
+
+    return rows as game[];
+  }
+}
+
+export default new gamesRepository();
