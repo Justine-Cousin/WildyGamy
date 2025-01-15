@@ -71,4 +71,21 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, browseAvailable, read, updateAvailability, edit };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const gamesId = Number(req.params.id);
+    await gamesRepository.delete(gamesId);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default {
+  browse,
+  browseAvailable,
+  read,
+  updateAvailability,
+  edit,
+  destroy,
+};

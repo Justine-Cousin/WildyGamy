@@ -57,6 +57,14 @@ class gamesRepository {
 
     return result.affectedRows;
   }
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "delete from game where id = ?",
+      [id],
+    );
+
+    return result.affectedRows;
+  }
 }
 
 export default new gamesRepository();

@@ -131,6 +131,32 @@ const AdminGames = () => {
     }
   };
 
+  const deleteGame = async (id: number) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/games/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      setGames(games.filter((game) => game.id !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+      setError(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
+    }
+  };
+
   return (
     <div className="admingames-container">
       <img src={logoWG} alt="logo" className="admingames-logo" />
@@ -172,7 +198,13 @@ const AdminGames = () => {
                     })
                   }
                   onDelete={() => {
-                    // Add your delete logic here
+                    if (
+                      window.confirm(
+                        "🎮 Suppression de jeu - Cette action est irréversible. Confirmer ?",
+                      )
+                    ) {
+                      deleteGame(game.id);
+                    }
                   }}
                 />
               ) : null,
