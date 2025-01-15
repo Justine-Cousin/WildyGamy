@@ -8,6 +8,7 @@ type game = {
   description: string;
   price: number;
   image: string;
+  is_available: boolean;
 };
 
 class gamesRepository {
@@ -39,6 +40,22 @@ class gamesRepository {
       "update game set is_available = ? where id = ?",
       [isAvailable, id],
     );
+  }
+
+  async update(game: game) {
+    const [result] = await databaseClient.query<Result>(
+      "update game set name = ?, description = ?, price = ?, image = ?, is_available = ? where id = ?",
+      [
+        game.name,
+        game.description,
+        game.price,
+        game.image,
+        game.is_available,
+        game.id,
+      ],
+    );
+
+    return result.affectedRows;
   }
 }
 

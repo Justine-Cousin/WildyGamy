@@ -95,6 +95,42 @@ const AdminGames = () => {
     }
   };
 
+  const updateGame = async (
+    id: number,
+    gameData: {
+      name: string;
+      description: string;
+      image: string;
+      price: number;
+      is_available: boolean;
+    },
+  ) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/games/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(gameData),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      setGames(games.map((g) => (g.id === id ? { ...g, ...gameData } : g)));
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour:", error);
+      setError(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
+    }
+  };
+
   return (
     <div className="admingames-container">
       <img src={logoWG} alt="logo" className="admingames-logo" />
@@ -117,6 +153,24 @@ const AdminGames = () => {
                     price: game.price.toString(),
                   }}
                   onAvailabilityChange={updateGameAvailability}
+                  onUpdate={(
+                    id: number,
+                    data: {
+                      name: string;
+                      description: string;
+                      image: string;
+                      price: string;
+                    },
+                  ) =>
+                    updateGame(id, {
+                      ...game,
+                      name: data.name,
+                      description: data.description,
+                      image: data.image,
+                      price: Number.parseInt(data.price, 10),
+                      is_available: game.is_available,
+                    })
+                  }
                 />
               ) : null,
             )}

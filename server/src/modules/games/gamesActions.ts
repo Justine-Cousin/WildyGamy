@@ -1,4 +1,3 @@
-import { log } from "node:console";
 import type { Request, RequestHandler, Response } from "express";
 import gamesRepository from "./gamesRepository";
 
@@ -50,4 +49,26 @@ const updateAvailability: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, browseAvailable, read, updateAvailability };
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const games = {
+      id: Number(req.params.id),
+      name: req.body.name,
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      image: req.body.image,
+      is_available: req.body.is_available,
+    };
+    const affectedRows = await gamesRepository.update(games);
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, browseAvailable, read, updateAvailability, edit };

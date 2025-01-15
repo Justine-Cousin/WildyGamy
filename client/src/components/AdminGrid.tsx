@@ -18,7 +18,6 @@ type AdminGridProps = {
   price?: { image: string; name: string };
   onAvailabilityChange: (id: number, isAvailable: boolean) => void;
   onUpdate?: (
-    type: string,
     id: number,
     data: { name: string; description: string; image: string; price: string },
   ) => void;
@@ -98,7 +97,7 @@ const AdminGrid: React.FC<AdminGridProps> = ({
               }}
               onSave={(updatedData) => {
                 if (onUpdate) {
-                  onUpdate(type, game.id, updatedData);
+                  onUpdate(game.id, updatedData);
                 }
                 setIsEditModalOpen(false);
               }}
