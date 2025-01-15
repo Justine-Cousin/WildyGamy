@@ -17,6 +17,7 @@ router.post("/api/items", itemActions.add);
 router.get("/api/prizes", prizeActions.browse);
 router.get("/api/prizes/:id", prizeActions.read);
 
+router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
 router.patch("/api/games/:id/availability", gameActions.updateAvailability);
