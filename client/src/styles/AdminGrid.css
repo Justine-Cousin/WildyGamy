@@ -3,10 +3,12 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
+  justify-content: flex-end;
   padding: 10px 10px;
   border-radius: 10px;
   background: linear-gradient(45deg, #9001f5, #c3b0ea);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .admincard-availability {
@@ -23,6 +25,12 @@
   padding: 5px;
 }
 
+.edit-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
 .admincard-content-unavailable {
   background: linear-gradient(45deg, #8f01f55d, #c3b0ea4b);
   order: 1;
@@ -36,6 +44,16 @@
   width: 20px;
   height: 20px;
   color: #ff0178;
+}
+
+.admingrid-pencil {
+  width: 20px;
+  height: 20px;
+  color: #ff0178;
+}
+
+.adminCard-info-container {
+  margin-bottom: 30px;
 }
 
 .gamecard-image {

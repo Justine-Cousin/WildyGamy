@@ -1,4 +1,4 @@
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, PencilLine } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
 import "../styles/AdminGrid.css";
@@ -43,8 +43,11 @@ const AdminGrid: React.FC<AdminGridProps> = ({
                 ) : (
                   <EyeClosed className="admingrid-eye" />
                 )}
+                <button type="button" className="admincard-button edit-button">
+                  <PencilLine className="admingrid-pencil" />
+                </button>
               </button>
-              <div>
+              <div className="adminCard-info-container">
                 <img
                   className="gamecard-image"
                   src={game.image}
