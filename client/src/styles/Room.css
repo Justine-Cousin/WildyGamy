@@ -37,7 +37,7 @@
 }
 
 .room-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 15px;
   color: #c3b0ea;
   text-transform: uppercase;
@@ -86,7 +86,7 @@
 /*CARROUSEL*/
 
 .room-titlecarousel {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #c3b0ea;
   text-transform: uppercase;
   font-weight: 400;
@@ -147,6 +147,7 @@
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+  line-height: 1;
 }
 
 .room-gameonline {
@@ -198,4 +199,85 @@
 
 .room-emptydiv {
   width: 47%;
+}
+
+.form-title {
+  font-size: 1.8rem;
+  color: #c3b0ea;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: var(--font-title-phosphate);
+  text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
+    rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
+}
+
+.form-container {
+  width: 95%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+
+.form-group label {
+  color: #c3b0ea;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 25px;
+  border: 1px solid #694fa6;
+  background-color: #221834;
+  color: #9b9b9b;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.form-button {
+  width: 80%;
+  display: block;
+  margin: 20px auto;
+  background-color: #6403a9;
+  color: #c3b0ea;
+  font-size: 1rem;
+  padding: 12px 0;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 0 15px rgba(144, 1, 245, 0.5);
+  transition: all 0.3s ease;
+}
+
+.form-button:hover {
+  background-color: #7504c4;
+  box-shadow: 0 0 20px rgba(144, 1, 245, 0.7);
+}
+
+.error {
+  color: #ff4646;
+  font-size: 0.8rem;
+  margin-top: 5px;
 }
