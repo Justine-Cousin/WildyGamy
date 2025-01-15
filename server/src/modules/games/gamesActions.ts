@@ -1,4 +1,5 @@
 import type { Request, RequestHandler, Response } from "express";
+import type { CreateGame } from "./gamesRepository";
 import gamesRepository from "./gamesRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
@@ -81,6 +82,22 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const games: CreateGame = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      image: req.body.image,
+      is_available: req.body.is_available,
+    };
+    const insertId = await gamesRepository.create(games);
+    res.status(201).json({ id: insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   browse,
   browseAvailable,
@@ -88,4 +105,5 @@ export default {
   updateAvailability,
   edit,
   destroy,
+  add,
 };

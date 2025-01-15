@@ -2,7 +2,7 @@ import { Eye, EyeClosed, PencilLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
 import "../styles/AdminGrid.css";
-import EditModalAdminGame from "./EditModalAdminGame";
+import EditModalAdminGame from "./ModalAdminGame";
 
 type AdminGridProps = {
   type: string;
@@ -17,6 +17,14 @@ type AdminGridProps = {
   };
   price?: { image: string; name: string };
   onAvailabilityChange: (id: number, isAvailable: boolean) => void;
+  onEdit?: (game: {
+    id: number;
+    image: string;
+    name: string;
+    is_available: boolean;
+    description: string;
+    price: string;
+  }) => void; // Ajout de la prop onEdit
   onUpdate?: (
     id: number,
     data: { name: string; description: string; image: string; price: string },
@@ -30,6 +38,7 @@ const AdminGrid: React.FC<AdminGridProps> = ({
   price,
   onAvailabilityChange,
   onUpdate,
+  onEdit,
   onDelete,
 }) => {
   const [isavailable, setIsAvailable] = useState(game?.is_available ?? true);
@@ -97,7 +106,11 @@ const AdminGrid: React.FC<AdminGridProps> = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsEditModalOpen(true);
+                if (game && onEdit) {
+                  onEdit(game);
+                } else {
+                  setIsEditModalOpen(true);
+                }
               }}
             >
               <PencilLine className="admingrid-pencil" />

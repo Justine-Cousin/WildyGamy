@@ -14,8 +14,8 @@ export interface User {
 export interface Game {
   id: number;
   name: string;
-  description?: string;
-  image?: string;
+  description: string;
+  image: string;
   price: number;
   is_available: boolean;
 }

@@ -2,7 +2,7 @@ import databaseClient from "../../../database/client";
 
 import type { Result, Rows } from "../../../database/client";
 
-type game = {
+type Game = {
   id: number;
   name: string;
   description: string;
@@ -11,6 +11,8 @@ type game = {
   is_available: boolean;
 };
 
+export type CreateGame = Omit<Game, "id">;
+
 class gamesRepository {
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
@@ -18,13 +20,13 @@ class gamesRepository {
       [id],
     );
 
-    return rows[0] as game;
+    return rows[0] as Game;
   }
 
   async readAll() {
     const [rows] = await databaseClient.query<Rows>("select * from game");
 
-    return rows as game[];
+    return rows as Game[];
   }
 
   async readAllAvailable() {
@@ -32,7 +34,7 @@ class gamesRepository {
       "select * from game where is_available = 1",
     );
 
-    return rows as game[];
+    return rows as Game[];
   }
 
   async updateAvailability(id: number, isAvailable: boolean) {
@@ -42,7 +44,7 @@ class gamesRepository {
     );
   }
 
-  async update(game: game) {
+  async update(game: CreateGame & { id: number }) {
     const [result] = await databaseClient.query<Result>(
       "update game set name = ?, description = ?, price = ?, image = ?, is_available = ? where id = ?",
       [
@@ -52,11 +54,12 @@ class gamesRepository {
         game.image,
         game.is_available,
         game.id,
-      ],
+      ], // Ajout de game.id
     );
 
     return result.affectedRows;
   }
+
   async delete(id: number) {
     const [result] = await databaseClient.query<Result>(
       "delete from game where id = ?",
@@ -64,6 +67,15 @@ class gamesRepository {
     );
 
     return result.affectedRows;
+  }
+
+  async create(game: CreateGame) {
+    const [result] = await databaseClient.query<Result>(
+      "insert into game (name, description, price, image, is_available) values (?, ?, ?, ?, ?)",
+      [game.name, game.description, game.price, game.image, game.is_available],
+    );
+
+    return result.insertId;
   }
 }
 

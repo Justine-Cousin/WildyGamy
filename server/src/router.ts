@@ -40,6 +40,7 @@ router.get("/api/prizes/:id", prizeActions.read);
 router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
+router.post("/api/games", gameActions.add);
 router.patch("/api/games/:id/availability", gameActions.updateAvailability);
 router.put("/api/games/:id", gameActions.edit);
 router.delete("/api/games/:id", gameActions.destroy);

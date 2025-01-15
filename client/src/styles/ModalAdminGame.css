@@ -13,7 +13,8 @@
 
 .modal-container {
   width: 90%;
-  max-width: 600px;
+  max-width: 800px;
+  max-height: 90vh;
   background: rgb(21, 20, 43, 0.61);
   border-radius: 34px;
   border: 2px solid transparent;
@@ -23,7 +24,26 @@
     ), linear-gradient(to bottom, #281e40, #694fa6);
   background-origin: border-box;
   background-clip: padding-box, border-box;
-  padding: 20px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.modal-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-container::-webkit-scrollbar-track {
+  background: rgba(34, 24, 52, 0.8);
+  border-radius: 4px;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+  background: #9001f5;
+  border-radius: 4px;
+}
+
+.modal-container::-webkit-scrollbar-thumb:hover {
+  background: #6403a9;
 }
 
 .edit-modal-title {
@@ -38,9 +58,10 @@
 }
 
 .edit-modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
 }
 
 .form-group {
@@ -52,6 +73,13 @@
   font-weight: 600;
   font-size: 16px;
   padding-bottom: 10px;
+}
+
+.form-section {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .edit-modal-label {
@@ -89,6 +117,13 @@
   font-weight: 200;
 }
 
+.image-section {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .image-input-container {
   display: flex;
   gap: 10px;
@@ -116,6 +151,10 @@
 }
 
 .image-preview {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 10px;
   padding: 10px;
   border-radius: 20px;
@@ -131,12 +170,12 @@
   max-width: 100%;
   max-height: 200px;
   object-fit: contain;
-  border-radius: 10px;
 }
 
 .edit-modal-buttons {
   display: flex;
   justify-content: center;
+  grid-column: 1 / -1;
   gap: 15px;
   margin-top: 20px;
   padding-top: 20px;
