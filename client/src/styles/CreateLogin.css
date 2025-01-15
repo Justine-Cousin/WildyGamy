@@ -27,9 +27,9 @@
 
 .login-form-title {
   font-family: var(--font-title-phosphate);
+  color: var(--font-title-color);
   font-weight: 400;
   font-style: normal;
-  color: var(--font-title-color);
   font-size: 7vw;
   text-align: center;
   padding-bottom: 10px;

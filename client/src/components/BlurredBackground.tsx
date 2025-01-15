@@ -6,7 +6,7 @@ interface BlurredBackgroundProps {
 
 const BlurredBackground: React.FC<BlurredBackgroundProps> = ({ children }) => {
   return (
-    <div className="background-container">
+    <div className="background-container login">
       <div className="blur-circle circle-top" />
       <div className="blur-circle circle-right" />
       <div className="blur-circle circle-bottom" />
