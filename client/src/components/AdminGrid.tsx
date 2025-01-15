@@ -11,7 +11,7 @@ const AdminGrid: React.FC<AdminGridProps> = ({ type, game, price }) => {
   switch (type) {
     case "game":
       return (
-        <div className="adminCard-content">
+        <div className="admincard-content">
           {game && (
             <>
               <img
@@ -29,7 +29,7 @@ const AdminGrid: React.FC<AdminGridProps> = ({ type, game, price }) => {
 
     case "price":
       return (
-        <div className="adminCard-content">
+        <div className="admincard-content prizecard-content">
           {price && (
             <>
               <img

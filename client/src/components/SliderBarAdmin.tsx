@@ -28,7 +28,7 @@ const menuItems = [
     id: 3,
     title: "Lots",
     icon: <img src={price} alt="price" />,
-    link: "/admin/price",
+    link: "/admin/prizes",
   },
 ];
 

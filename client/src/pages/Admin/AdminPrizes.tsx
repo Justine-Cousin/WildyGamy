@@ -3,9 +3,10 @@ import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import AdminGrid from "../../components/AdminGrid";
 import SliderBarAdmin from "../../components/SliderBarAdmin";
 import type { Prize } from "../../services/types";
+import "../../styles/AdminPrizes.css";
 
 const AdminPrizes = () => {
-  const [prices, setPrices] = useState<Prize[]>([]);
+  const [prizes, setPrizes] = useState<Prize[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -14,10 +15,10 @@ const AdminPrizes = () => {
   };
 
   useEffect(() => {
-    const fetchPrices = async () => {
+    const fetchPrizes = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/prices`,
+          `${import.meta.env.VITE_API_URL}/api/prizes`,
           {
             method: "GET",
             headers: {
@@ -33,7 +34,7 @@ const AdminPrizes = () => {
         }
 
         const data = await response.json();
-        setPrices(data);
+        setPrizes(data);
       } catch (error) {
         console.error("Erreur lors de la récupération des prix:", error);
         setError(
@@ -44,13 +45,13 @@ const AdminPrizes = () => {
       }
     };
 
-    fetchPrices();
+    fetchPrizes();
   }, []);
 
   if (loading) {
     return (
-      <div className="prices-page">
-        <div className="prices-page__loading">
+      <div className="prizes-page">
+        <div className="prizes-page__loading">
           Ouverture du coffre au trésor... 🎁
         </div>
       </div>
@@ -59,8 +60,8 @@ const AdminPrizes = () => {
 
   if (error) {
     return (
-      <div className="prices-page">
-        <div className="prices-page__error">
+      <div className="prizes-page">
+        <div className="prizes-page__error">
           <p>Erreur lors de la récupération des prix:</p>
           <p>{error}</p>
         </div>
@@ -69,20 +70,22 @@ const AdminPrizes = () => {
   }
 
   return (
-    <div className="adminprices-container">
-      <img src={logoWG} alt="logo" className="adminprices-logo" />
+    <div className="adminprizes-container">
+      <img src={logoWG} alt="logo" className="adminprizes-logo" />
       <SliderBarAdmin isOpen={isOpen} onToggle={handleSidebarToggle} />
-      <div className="adminprices-content">
-        <div className="admingrid-card">
-          {prices.map((price) =>
-            price.image && price.name ? (
-              <AdminGrid
-                key={price.id}
-                type="price"
-                price={{ image: price.image, name: price.name }}
-              />
-            ) : null,
-          )}
+      <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
+        <div className="adminprizes-content ">
+          <div className="admingrid-card">
+            {prizes.map((prize) =>
+              prize.image && prize.name ? (
+                <AdminGrid
+                  key={prize.id}
+                  type="price"
+                  price={{ image: prize.image, name: prize.name }}
+                />
+              ) : null,
+            )}
+          </div>
         </div>
       </div>
     </div>
