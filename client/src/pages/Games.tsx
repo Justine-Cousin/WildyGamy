@@ -55,7 +55,9 @@ const Games = () => {
   if (loading) {
     return (
       <div className="games-page">
-        <div className="games-page__loading">Chargement...</div>
+        <div className="games-page__loading">
+          Scan des bornes d'arcade en cours...
+        </div>
       </div>
     );
   }

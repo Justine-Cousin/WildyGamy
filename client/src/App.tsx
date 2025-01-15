@@ -1,16 +1,21 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
 
 function App() {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith("/admin");
+
   return (
     <div>
       <main>
         <Outlet />
       </main>
-      <header>
-        <NavBar />
-      </header>
+      {!isAdminPage && (
+        <header>
+          <NavBar />
+        </header>
+      )}
     </div>
   );
 }
