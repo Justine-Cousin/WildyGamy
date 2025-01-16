@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bin from "../assets/images/bin.svg";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/CreateLogin.css";
@@ -16,8 +16,18 @@ export default function CreateLogin() {
   });
 
   const [profilePic, setProfilePic] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,13 +50,29 @@ export default function CreateLogin() {
         e.target.value = "";
         return;
       }
+
+      if (!file.type.startsWith("image/")) {
+        setError("Veuillez sélectionner une image valide");
+        e.target.value = "";
+        return;
+      }
+
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
       setProfilePic(file);
       setError("");
     }
   };
 
   const clearProfilePic = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
     setProfilePic(null);
+    setPreviewUrl(null);
     const fileInput = document.getElementById("profile_pic");
     if (fileInput) (fileInput as HTMLInputElement).value = "";
   };
@@ -54,70 +80,69 @@ export default function CreateLogin() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
-    if (
-      !formData.name.trim() ||
-      !formData.firstname.trim() ||
-      !formData.email.trim() ||
-      !formData.username.trim() ||
-      !formData.password ||
-      !formData.confirm_password
-    ) {
-      setError("Veuillez remplir tous les champs obligatoires");
-      return;
-    }
-
-    if (formData.password !== formData.confirm_password) {
-      setError("Les mots de passe ne correspondent pas");
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Le mot de passe doit contenir au moins 6 caractères");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError("Format d'email invalide");
-      return;
-    }
-
-    const submitData = new FormData();
-    for (const key of Object.keys(formData) as (keyof typeof formData)[]) {
-      if (key !== "confirm_password") {
-        submitData.append(key, formData[key]);
-      }
-    }
-    if (profilePic) {
-      submitData.append("profile_pic", profilePic);
-    }
+    setIsLoading(true);
 
     try {
+      if (
+        !formData.name.trim() ||
+        !formData.firstname.trim() ||
+        !formData.email.trim() ||
+        !formData.username.trim() ||
+        !formData.password ||
+        !formData.confirm_password ||
+        !profilePic
+      ) {
+        setError("Veuillez remplir tous les champs obligatoires");
+        setIsLoading(false);
+        return;
+      }
+
+      if (formData.password !== formData.confirm_password) {
+        setError("Les mots de passe ne correspondent pas");
+        setIsLoading(false);
+        return;
+      }
+
+      if (formData.password.length < 6) {
+        setError("Le mot de passe doit contenir au moins 6 caractères");
+        setIsLoading(false);
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        setError("Format d'email invalide");
+        setIsLoading(false);
+        return;
+      }
+
+      const submitData = new FormData();
+      for (const key of Object.keys(formData) as (keyof typeof formData)[]) {
+        if (key !== "confirm_password") {
+          submitData.append(key, formData[key]);
+        }
+      }
+
+      if (profilePic) {
+        submitData.append("profile_pic", profilePic);
+      }
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
         credentials: "include",
         body: submitData,
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const contentType = response.headers.get("content-type");
-        if (contentType?.includes("application/json")) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.error ||
-              "Une erreur est survenue lors de la création du compte",
-          );
-        }
-        throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        throw new Error(
+          data.error ||
+            data.details ||
+            "Une erreur est survenue lors de la création du compte",
+        );
       }
 
-      await response.json();
       setSuccess(true);
-
       setTimeout(() => {
         window.location.href = "/login";
       }, 2000);
@@ -128,6 +153,8 @@ export default function CreateLogin() {
       } else {
         setError("Une erreur inconnue est survenue");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -163,6 +190,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Lassalle"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -181,6 +209,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Jean"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -198,6 +227,7 @@ export default function CreateLogin() {
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 placeholder="ex: 06 12 34 56 78"
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -214,8 +244,9 @@ export default function CreateLogin() {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="ex: jean.lassalle@lebergerdesespyrenees.fr"
+                placeholder="ex: jean.lassalle@example.fr"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -232,8 +263,9 @@ export default function CreateLogin() {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                placeholder="ex: lebergerdesPyrénées"
+                placeholder="ex: jlassalle"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -252,19 +284,28 @@ export default function CreateLogin() {
                   accept="image/*"
                   onChange={handleFileChange}
                   required
+                  disabled={isLoading}
                 />
               </div>
-              {profilePic && (
-                <button
-                  type="button"
-                  className="login-bin-button"
-                  onClick={clearProfilePic}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      clearProfilePic();
-                    }
-                  }}
-                />
+              {previewUrl && (
+                <div className="preview-container">
+                  <img
+                    src={previewUrl}
+                    alt="Prévisualisation"
+                    className="profile-preview"
+                  />
+                  <button
+                    type="button"
+                    className="login-bin-button"
+                    onClick={clearProfilePic}
+                    disabled={isLoading}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === "") {
+                        clearProfilePic();
+                      }
+                    }}
+                  />
+                </div>
               )}
               <img src={bin} alt="supprimer" className="login-bin" />
             </div>
@@ -285,6 +326,7 @@ export default function CreateLogin() {
                 placeholder="Minimum 6 caractères"
                 required
                 minLength={6}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -305,6 +347,7 @@ export default function CreateLogin() {
                 placeholder="Confirmez votre mot de passe"
                 required
                 minLength={6}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -312,9 +355,9 @@ export default function CreateLogin() {
           <button
             className="login-submit-button"
             type="submit"
-            disabled={success}
+            disabled={isLoading || success}
           >
-            Créer mon compte
+            {isLoading ? "Création en cours..." : "Créer mon compte"}
           </button>
         </form>
       </BlurredBackground>
