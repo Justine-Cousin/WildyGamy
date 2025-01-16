@@ -14,9 +14,10 @@ export interface User {
 export interface Game {
   id: number;
   name: string;
-  description?: string;
-  image?: string;
+  description: string;
+  image: string;
   price: number;
+  is_available: boolean;
 }
 
 export interface Prize {
@@ -38,12 +39,4 @@ export interface PrizeAcquired {
   user_id: number;
   prize_id: number;
   acquisition_date: Date;
-}
-
-export interface Game {
-  id: number;
-  profile_pic: string;
-  name: string;
-  firstname: string;
-  phone_number: string;
 }

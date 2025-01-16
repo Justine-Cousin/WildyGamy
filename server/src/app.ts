@@ -23,7 +23,7 @@ import cors from "cors";
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
     credentials: true,
   }),
@@ -47,10 +47,10 @@ app.use(
 
 // Uncomment one or more of these options depending on the format of the data sent by your client:
 
-// app.use(express.json());
-// app.use(express.urlencoded());
-// app.use(express.text());
-// app.use(express.raw());
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.text());
+app.use(express.raw());
 
 /* ************************************************************************* */
 

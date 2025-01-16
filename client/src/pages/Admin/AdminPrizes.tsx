@@ -80,8 +80,11 @@ const AdminPrizes = () => {
               prize.image && prize.name ? (
                 <AdminGrid
                   key={prize.id}
+                  id={prize.id}
                   type="price"
                   price={{ image: prize.image, name: prize.name }}
+                  onAvailabilityChange={() => {}}
+                  onDelete={() => {}}
                 />
               ) : null,
             )}
