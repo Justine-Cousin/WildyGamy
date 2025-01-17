@@ -45,8 +45,8 @@ class prizeRepository {
       "update prize set name = ?, description = ?,  image = ?, exchange_price = ?, is_available = ? where id = ?",
       [
         prize.name,
-        prize.image,
         prize.description,
+        prize.image,
         prize.exchange_price,
         prize.is_available,
         prize.id,

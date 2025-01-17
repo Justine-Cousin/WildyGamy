@@ -33,6 +33,7 @@ const AdminPrizes = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPrize, setSelectedPrize] = useState<Prize>(DEFAULT_PRIZE);
   const [modalMode, setModalMode] = useState<"edit" | "add">("add");
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const handleEditClick = (prize: Prize) => {
     setModalMode("edit");
@@ -58,24 +59,25 @@ const AdminPrizes = () => {
     exchange_price?: string;
   }) => {
     try {
+      const formatteData = {
+        name: prizeData.name,
+        description: prizeData.description,
+        image: prizeData.image,
+        exchange_price: Number(prizeData.exchange_price),
+        is_available: true,
+      };
+
       if (modalMode === "add") {
-        const newPrize = {
-          ...DEFAULT_PRIZE,
-          ...prizeData,
-          exchange_price: Number(prizeData.exchange_price),
-          is_available: true,
-        };
-        await addItem(newPrize);
+        await addItem(formatteData);
       } else {
-        const updatedPrize = {
-          ...prizeData,
-          exchange_price: Number(prizeData.exchange_price),
-        };
-        await updateItem(selectedPrize.id, updatedPrize);
+        await updateItem(selectedPrize.id, formatteData);
       }
       setIsModalOpen(false);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
+      setLocalError(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
     }
   };
 
@@ -89,7 +91,7 @@ const AdminPrizes = () => {
     );
   }
 
-  if (error) {
+  if (error || localError) {
     return (
       <div className="admin-loading-page">
         <div className="admin-error-message">{error}</div>
@@ -108,8 +110,8 @@ const AdminPrizes = () => {
       <div className="admingrid-card">
         {prizes?.map((prize) => (
           <AdminItemGrid
-            id={prize.id}
             key={prize.id}
+            id={prize.id}
             type="prize"
             prize={prize}
             onAvailabilityChange={updateAvailability}

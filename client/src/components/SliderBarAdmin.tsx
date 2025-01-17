@@ -1,9 +1,5 @@
-import { Menu, X } from "lucide-react";
+import { Joystick, LogOut, Menu, Trophy, Users, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import Users from "../assets/images/Users.svg";
-import game from "../assets/images/game.svg";
-import logout from "../assets/images/logout.svg";
-import price from "../assets/images/price.svg";
 import "../styles/SliderBarAdmin.css";
 
 interface SliderBarAdminProps {
@@ -15,26 +11,25 @@ const menuItems = [
   {
     id: 1,
     title: "Utilisateurs",
-    icon: <img src={Users} alt="Users" />,
+    icon: <Users className="iconItem" />,
     link: "/admin/users",
   },
   {
     id: 2,
     title: "Jeux",
-    icon: <img src={game} alt="game" />,
+    icon: <Joystick className="iconItem" />,
     link: "/admin/games",
   },
   {
     id: 3,
     title: "Lots",
-    icon: <img src={price} alt="price" />,
+    icon: <Trophy className="iconItem" />,
     link: "/admin/prizes",
   },
 ];
 
 function SliderBarAdmin({ isOpen, onToggle }: SliderBarAdminProps) {
   const handleLogout = () => {
-    // Implement logout functionality here
     alert("logout");
   };
 
@@ -67,7 +62,7 @@ function SliderBarAdmin({ isOpen, onToggle }: SliderBarAdminProps) {
         ))}
       </div>
       <button type="button" onClick={handleLogout} className="logout-button">
-        <img src={logout} alt="Déconnexion" />
+        <LogOut className="iconItem" />
         <span
           className={`menu-item-text ${!isOpen && "menu-item-text-hidden"}`}
         >

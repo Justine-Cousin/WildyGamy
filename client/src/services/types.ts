@@ -24,8 +24,6 @@ export interface Game extends BaseItem {
 }
 
 export interface Prize extends BaseItem {
-  description?: string;
-  image?: string;
   exchange_price: number;
 }
 

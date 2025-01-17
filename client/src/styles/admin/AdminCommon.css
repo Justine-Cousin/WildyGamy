@@ -135,7 +135,8 @@
   .admingrid-trash {
     width: 22px;
     height: 22px;
-    color: #ff0178;
+    color: #e9d5ff;
+    filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
     transition: color 0.2s ease;
   }
 

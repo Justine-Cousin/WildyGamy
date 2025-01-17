@@ -101,7 +101,7 @@ const ModalAdminPrize: React.FC<ModalProps> = ({
                     id="image"
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
-                    className={`edit-modal-input ${errors.image ? "input-error" : ""}`}
+                    className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
                   />
                   <button
                     type="button"

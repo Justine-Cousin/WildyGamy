@@ -13,7 +13,7 @@ const PrizePage = () => {
     const fetchPrizes = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/prizes`,
+          `${import.meta.env.VITE_API_URL}/api/prizes/available`,
           {
             method: "GET",
             headers: {
@@ -61,15 +61,13 @@ const PrizePage = () => {
   }
 
   return (
-    <div className="prizes-page">
+    <div>
       <img className="prize-logo" src={logoWG} alt="Logo" />
-      <div className="prizes-page__container">
-        <h1 className="prizes-page__title">RÉCOMPENSES</h1>
-        <div className="prizes-page__grid">
-          {prizes.map((prize) => (
-            <PrizeCard key={prize.id} prize={prize} />
-          ))}
-        </div>
+      <h1 className="prizes-page__title">RÉCOMPENSES</h1>
+      <div className="prizes-page__grid">
+        {prizes.map((prize) => (
+          <PrizeCard key={prize.id} prize={prize} />
+        ))}
       </div>
     </div>
   );

@@ -1,9 +1,7 @@
 import "../../styles/AdminHome.css";
+import { Joystick, Trophy, Users } from "lucide-react";
 import { useState } from "react";
-import Users from "../../assets/images/Users.svg";
-import game from "../../assets/images/game.svg";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import price from "../../assets/images/price.svg";
 import SliderBarAdmin from "../../components/SliderBarAdmin";
 
 function AdminHome() {
@@ -25,7 +23,7 @@ function AdminHome() {
           <div className="welcome-content">
             <div className="features-list">
               <div className="feature-item">
-                <img src={Users} alt="Users" className="feature-icon" />
+                <Users className="feature-icon" />
                 <h2>Utilisateurs</h2>
                 <p>Gérez les comptes utilisateurs :</p>
                 <ul>
@@ -36,7 +34,7 @@ function AdminHome() {
               </div>
 
               <div className="feature-item">
-                <img src={game} alt="Games" className="feature-icon" />
+                <Joystick className="feature-icon" />
                 <h2>Jeux</h2>
                 <p>Administration des jeux :</p>
                 <ul>
@@ -47,7 +45,7 @@ function AdminHome() {
               </div>
 
               <div className="feature-item">
-                <img src={price} alt="Prices" className="feature-icon" />
+                <Trophy className="feature-icon" />
                 <h2>Lots</h2>
                 <p>Gestion des lots à gagner :</p>
                 <ul>

@@ -33,6 +33,7 @@ const AdminGames = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"edit" | "add">("add");
   const [selectedGame, setSelectedGame] = useState<Game>(DEFAULT_GAME);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const handleEditClick = (game: Game) => {
     setModalMode("edit");
@@ -58,24 +59,25 @@ const AdminGames = () => {
     price?: string;
   }) => {
     try {
+      const formattedData = {
+        name: gameData.name,
+        description: gameData.description,
+        image: gameData.image,
+        price: Number(gameData.price),
+        is_available: true,
+      };
+
       if (modalMode === "add") {
-        const newGame = {
-          ...DEFAULT_GAME,
-          ...gameData,
-          price: Number(gameData.price),
-          is_available: true,
-        };
-        await addItem(newGame);
+        await addItem(formattedData);
       } else {
-        const updatedGame = {
-          ...gameData,
-          price: Number(gameData.price),
-        };
-        await updateItem(selectedGame.id, updatedGame);
+        await updateItem(selectedGame.id, formattedData);
       }
       setIsModalOpen(false);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
+      setLocalError(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
     }
   };
 
@@ -89,10 +91,10 @@ const AdminGames = () => {
     );
   }
 
-  if (error) {
+  if (error || localError) {
     return (
       <div className="admin-loading-page">
-        <div className="admin-error-message">{error}</div>
+        <div className="admin-error-message">{error || localError}</div>
       </div>
     );
   }

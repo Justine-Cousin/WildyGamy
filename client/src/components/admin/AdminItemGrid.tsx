@@ -4,22 +4,32 @@ import { useState } from "react";
 import type { Game, Prize } from "../../services/types";
 import "../../styles/admin/AdminCommon.css";
 
-interface AdminItemGridProps {
+interface AdminItemGridProps<T> {
   id: number;
   type: "game" | "prize";
-  game?: Omit<Game, "description" | "image"> & {
-    description?: string;
-    image?: string;
-  };
-  prize?: Prize;
+  game?: T extends Game
+    ? Omit<T, "description" | "image"> & {
+        description?: string;
+        image?: string;
+      }
+    : never;
+  prize?: T extends Prize ? T : never;
   onAvailabilityChange?: (id: number, isAvailable: boolean) => void;
-  onEdit?: EditHandler<Game> | EditHandler<Prize>;
+  onEdit?: (item: T) => void;
+  onUpdate?: (
+    id: number,
+    data: {
+      name: string;
+      description: string;
+      image: string;
+      price?: string;
+      exchange_price?: string;
+    },
+  ) => void;
   onDelete?: (id: number) => void;
 }
 
-type EditHandler<T> = (item: NonNullable<T>) => void;
-
-const AdminItemGrid: React.FC<AdminItemGridProps> = ({
+const AdminItemGrid = <T extends Game | Prize>({
   id,
   type,
   game,
@@ -27,7 +37,7 @@ const AdminItemGrid: React.FC<AdminItemGridProps> = ({
   onAvailabilityChange,
   onEdit,
   onDelete,
-}) => {
+}: AdminItemGridProps<T>) => {
   const item = type === "game" ? game : prize;
   const [isAvailable, setIsAvailable] = useState(item?.is_available ?? true);
   if (!item) return null;
@@ -50,11 +60,7 @@ const AdminItemGrid: React.FC<AdminItemGridProps> = ({
     e.preventDefault();
     e.stopPropagation();
     if (onEdit && item) {
-      if (type === "game" && game) {
-        (onEdit as EditHandler<typeof game>)(game);
-      } else if (type === "prize" && prize) {
-        (onEdit as EditHandler<typeof prize>)(prize);
-      }
+      onEdit(item as T);
     }
   };
 
