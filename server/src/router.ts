@@ -9,6 +9,7 @@ import gameActions from "./modules/games/gamesActions";
 // Define item-related routes
 import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
+import usersActions from "./modules/users/usersActions";
 
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
@@ -19,5 +20,7 @@ router.get("/api/prizes/:id", prizeActions.read);
 
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
+router.get("/api/users", usersActions.browse);
+router.get("/api/users/:id", usersActions.read);
 
 export default router;

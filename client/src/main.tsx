@@ -12,6 +12,7 @@ import AdminPrize from "./pages/Admin/AdminPrizes";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
+import RankingPage from "./pages/RankingPage";
 import Room from "./pages/Room";
 import PrizePage from "./pages/prizePage";
 
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
       { path: "admin", element: <AdminHome /> },
       { path: "admin/games", element: <AdminGames /> },
       { path: "admin/prizes", element: <AdminPrize /> },
+      { path: "ranking", element: <RankingPage /> },
     ],
   },
 ]);
