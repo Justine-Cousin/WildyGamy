@@ -190,7 +190,6 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Lassalle"
                 required
-                disabled={isLoading}
               />
             </div>
           </div>
@@ -294,17 +293,18 @@ export default function CreateLogin() {
                     alt="Prévisualisation"
                     className="profile-preview"
                   />
-                  <button
-                    type="button"
+
+                  <div
                     className="login-bin-button"
                     onClick={clearProfilePic}
-                    disabled={isLoading}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === "") {
                         clearProfilePic();
                       }
                     }}
-                  />
+                  >
+                    ×
+                  </div>
                 </div>
               )}
               <img src={bin} alt="supprimer" className="login-bin" />
