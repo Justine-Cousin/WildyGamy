@@ -48,11 +48,11 @@ CREATE TABLE prize_acquired (
 
 INSERT INTO user (name, firstname, email, username, password_hash, phone_number, profile_pic, total_points, current_points)
 VALUES
-('Dupont', 'Jean', 'jean.dupont@example.com', 'jdupont', '$2y$10$abcdefghij1234567890', '0612345678', 'profile1.jpg', 300, 150),
-('Martin', 'Claire', 'claire.martin@example.com', 'cmartin', '$2y$10$klmnopqrst0987654321', '0698765432', 'profile2.jpg', 400, 200),
-('Diop', 'Mamadou', 'mamadou.diop@example.com', 'mdiop', '$2y$10$uvwxyzabcdef1234567890', '0778543210', 'profile3.jpg', 500, 320),
-('Nguyen', 'Linh', 'linh.nguyen@example.com', 'lnguyen', '$2y$10$mnopqrstuv9876543210', '0654789632', 'profile4.jpg', 200, 90),
-('Lopez', 'Carlos', 'carlos.lopez@example.com', 'clopez', '$2y$10$abcdef1234567890klmno', '0689456712', 'profile5.jpg', 150, 120);
+('Dupont', 'Jean', 'jean.dupont@example.com', 'jdupont', '$2y$10$abcdefghij1234567890', '0612345678', 'https://res.cloudinary.com/dpyuhkx1p/image/upload/v1737103513/user1_hpvocy.jpg', 300, 150),
+('Martin', 'Claire', 'claire.martin@example.com', 'cmartin', '$2y$10$klmnopqrst0987654321', '0698765432', 'https://res.cloudinary.com/dpyuhkx1p/image/upload/v1737103518/user2_x5jhqv.jpg', 400, 200),
+('Diop', 'Mamadou', 'mamadou.diop@example.com', 'mdiop', '$2y$10$uvwxyzabcdef1234567890', '0778543210', 'https://res.cloudinary.com/dpyuhkx1p/image/upload/v1737103730/user5_d3zljt.jpg', 500, 320),
+('Nguyen', 'Linh', 'linh.nguyen@example.com', 'lnguyen', '$2y$10$mnopqrstuv9876543210', '0654789632', 'https://res.cloudinary.com/dpyuhkx1p/image/upload/v1737103731/user3_t18hte.jpg', 200, 90),
+('Lopez', 'Carlos', 'carlos.lopez@example.com', 'clopez', '$2y$10$abcdef1234567890klmno', '0689456712', 'https://res.cloudinary.com/dpyuhkx1p/image/upload/v1737103731/user4_ohye2f.jpg', 150, 120);
 
 INSERT INTO game (name, description, image, price) VALUES
 ('Pac-Man', 'Le célèbre jeu de labyrinthe où vous devez manger tous les points tout en évitant les fantômes', 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736340064/pngegg_4_d98jgg.png', '1'),
