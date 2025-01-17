@@ -1,5 +1,6 @@
 // Load the express module to create a web application
 import express from "express";
+import fileUpload from "express-fileupload";
 
 const app = express();
 // Configure it
@@ -22,7 +23,7 @@ import cors from "cors";
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
     credentials: true,
   }),
@@ -46,10 +47,10 @@ app.use(
 
 // Uncomment one or more of these options depending on the format of the data sent by your client:
 
-// app.use(express.json());
-// app.use(express.urlencoded());
-// app.use(express.text());
-// app.use(express.raw());
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.text());
+app.use(express.raw());
 
 /* ************************************************************************* */
 
@@ -57,6 +58,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /* ************************************************************************* */
+app.use(
+  fileUpload({
+    createParentPath: true,
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB limite
+    },
+    abortOnLimit: true,
+    debug: true,
+    parseNested: true,
+  }),
+);
+const uploadDir = path.join(__dirname, "../../public/uploads/profile_pics");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../../public/uploads")),
+);
+
 // Import the API router
 import router from "./router";
 app.use(router);
@@ -93,9 +115,12 @@ import type { ErrorRequestHandler } from "express";
 // Log the error to the console for debugging purposes
 // Pass the error to the next middleware in the stack
 const logErrors: ErrorRequestHandler = (err, req, res, next) => {
-  console.error(err);
-  console.error("on req:", req.method, req.path);
-
+  console.error("Erreur détaillée:", {
+    message: err.message,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    path: req.path,
+    method: req.method,
+  });
   next(err);
 };
 // Mount the logErrors middleware globally

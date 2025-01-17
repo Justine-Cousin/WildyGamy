@@ -1,14 +1,34 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
+import gameActions from "./modules/games/gamesActions";
+import itemActions from "./modules/item/itemActions";
+import prizeActions from "./modules/prize/prizeActions";
+import userActions from "./modules/user/userActions";
+
 const router = express.Router();
+
 // Define Your API Routes Here
 
 router.use((req, res, next) => {
   next();
 });
-import gameActions from "./modules/games/gamesActions";
+
+router.post("/api/user", async (req: Request, res: Response) => {
+  try {
+    await userActions.add(req, res);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/api/user/:username", async (req: Request, res: Response) => {
+  try {
+    await userActions.read(req, res);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Define item-related routes
-import itemActions from "./modules/item/itemActions";
-import prizeActions from "./modules/prize/prizeActions";
 import usersActions from "./modules/users/usersActions";
 
 router.get("/api/items", itemActions.browse);
@@ -18,9 +38,14 @@ router.post("/api/items", itemActions.add);
 router.get("/api/prizes", prizeActions.browse);
 router.get("/api/prizes/:id", prizeActions.read);
 
+router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
 router.get("/api/users", usersActions.browse);
 router.get("/api/users/:id", usersActions.read);
+router.post("/api/games", gameActions.add);
+router.patch("/api/games/:id/availability", gameActions.updateAvailability);
+router.put("/api/games/:id", gameActions.edit);
+router.delete("/api/games/:id", gameActions.destroy);
 
 export default router;
