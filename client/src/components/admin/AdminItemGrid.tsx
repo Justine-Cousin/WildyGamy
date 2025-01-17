@@ -28,13 +28,8 @@ const AdminItemGrid: React.FC<AdminItemGridProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const [isAvailable, setIsAvailable] = useState(
-    type === "game"
-      ? (game?.is_available ?? true)
-      : (prize?.is_available ?? true),
-  );
-
   const item = type === "game" ? game : prize;
+  const [isAvailable, setIsAvailable] = useState(item?.is_available ?? true);
   if (!item) return null;
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,10 +58,14 @@ const AdminItemGrid: React.FC<AdminItemGridProps> = ({
     }
   };
 
-  const handleAvailabilityChange = () => {
+  const handleAvailabilityChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     const newAvailability = !isAvailable;
     setIsAvailable(newAvailability);
-    onAvailabilityChange?.(id, newAvailability);
+    if (onAvailabilityChange) {
+      onAvailabilityChange(id, newAvailability);
+    }
   };
 
   return (

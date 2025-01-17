@@ -56,7 +56,6 @@ const AdminGames = () => {
     description: string;
     image: string;
     price?: string;
-    exchange_price?: string;
   }) => {
     try {
       if (modalMode === "add") {

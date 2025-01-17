@@ -55,7 +55,6 @@ const AdminPrizes = () => {
     name: string;
     description: string;
     image: string;
-    price?: string;
     exchange_price?: string;
   }) => {
     try {
@@ -107,19 +106,17 @@ const AdminPrizes = () => {
       logoClassName="adminprizes-logo"
     >
       <div className="admingrid-card">
-        {prizes.map((prize) =>
-          prize.image && prize.name ? (
-            <AdminItemGrid
-              id={prize.id}
-              key={prize.id}
-              type="prize"
-              prize={prize}
-              onAvailabilityChange={updateAvailability}
-              onEdit={handleEditClick}
-              onDelete={deleteItem}
-            />
-          ) : null,
-        )}
+        {prizes?.map((prize) => (
+          <AdminItemGrid
+            id={prize.id}
+            key={prize.id}
+            type="prize"
+            prize={prize}
+            onAvailabilityChange={updateAvailability}
+            onEdit={handleEditClick}
+            onDelete={deleteItem}
+          />
+        ))}
       </div>
 
       <ModalAdminPrize

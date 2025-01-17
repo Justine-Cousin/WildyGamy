@@ -38,7 +38,7 @@ router.get("/api/prizes", prizeActions.browseAvailable);
 router.get("/api/prizes", prizeActions.browse);
 router.get("/api/prizes/:id", prizeActions.read);
 router.post("/api/prizes", prizeActions.add);
-router.patch("/api/prize/:id/availability", prizeActions.updateAvailability);
+router.patch("/api/prizes/:id/availability", prizeActions.updateAvailability);
 router.put("/api/prizes/:id", prizeActions.edit);
 router.delete("/api/prizes/:id", prizeActions.destroy);
 

@@ -146,12 +146,12 @@
   }
 
   /* États des cartes */
-  .admincard-content-unavailable {
-    background: linear-gradient(45deg, #8f01f55d, #c3b0ea4b);
+  .admincard-content.admincard-content-unavailable {
+    background: linear-gradient(45deg, #8f01f55d, #c3b0ea4b) !important;
     order: 1;
   }
 
-  .admincard-content-available {
+  .admincard-content.admincard-content-available {
     order: 0;
   }
 
