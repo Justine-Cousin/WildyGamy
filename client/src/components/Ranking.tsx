@@ -1,4 +1,4 @@
-import defaultProfilePic from "../assets/images/coin-prize.png";
+import defaultProfilePic from "../assets/images/logo_wildy_gamy.png";
 import scoreIcon from "../assets/images/score.png";
 import type { User } from "../services/types";
 
