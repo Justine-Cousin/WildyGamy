@@ -12,6 +12,8 @@ import AdminPrize from "./pages/Admin/AdminPrizes";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
+import Play from "./pages/Play";
+import RankingPage from "./pages/RankingPage";
 import Room from "./pages/Room";
 import PrizePage from "./pages/prizePage";
 
@@ -40,11 +42,13 @@ const router = createBrowserRouter([
         element: <PrizePage />,
       },
       { path: "games", element: <Games /> },
+      { path: "play", element: <Play /> },
       { path: "about_us", element: <Room /> },
       { path: "login", element: <LoginPage /> },
       { path: "admin", element: <AdminHome /> },
       { path: "admin/games", element: <AdminGames /> },
       { path: "admin/prizes", element: <AdminPrize /> },
+      { path: "ranking", element: <RankingPage /> },
     ],
   },
 ]);
