@@ -34,7 +34,8 @@ CREATE TABLE prize (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     image VARCHAR(255),
-    exchange_price INT NOT NULL
+    exchange_price INT NOT NULL, 
+     is_available BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE prize_acquired (

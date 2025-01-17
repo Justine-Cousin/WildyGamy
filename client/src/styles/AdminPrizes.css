@@ -1,24 +1,21 @@
-.adminprizes-logo {
-  width: 16%;
+.adminprizes-container {
+  min-height: 100vh;
+  background-color: none;
   position: relative;
-  padding: 20px;
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 
-.adminprizes-content {
+.prizes-page {
   display: flex;
-  padding: 2rem;
-  margin-top: 150px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: none;
 }
 
-.admingrid-card {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  width: 100%;
+.prizes-page__loading,
+.prizes-page__error {
+  font-size: 1.5rem;
+  color: #9001f5;
+  text-align: center;
+  padding: 2rem;
 }

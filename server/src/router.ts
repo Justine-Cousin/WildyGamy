@@ -34,8 +34,13 @@ router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
+router.get("/api/prizes", prizeActions.browseAvailable);
 router.get("/api/prizes", prizeActions.browse);
 router.get("/api/prizes/:id", prizeActions.read);
+router.post("/api/prizes", prizeActions.add);
+router.patch("/api/prize/:id/availability", prizeActions.updateAvailability);
+router.put("/api/prizes/:id", prizeActions.edit);
+router.delete("/api/prizes/:id", prizeActions.destroy);
 
 router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);

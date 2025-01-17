@@ -1,37 +1,107 @@
-import type { Request, Response } from "express";
+import type { Request, RequestHandler, Response } from "express";
+import type { CreatePrize } from "./prizeRepository";
 import prizeRepository from "./prizeRepository";
 
-const prizeActions = {
-  browse: async (req: Request, res: Response) => {
-    try {
-      const [results] = await prizeRepository.getAllPrizes();
-      res.json(results);
-    } catch (error) {
-      console.error("Erreur dans browse:", error);
-      res
-        .status(500)
-        .json({ message: "Erreur lors de la récupération des prix" });
-    }
-  },
+const browse: RequestHandler = async (req, res, next) => {
+  try {
+    const prizes = await prizeRepository.readAll();
 
-  read: async (req: Request, res: Response) => {
-    try {
-      const [results] = await prizeRepository.getPrizeById(
-        Number(req.params.id),
-      );
-
-      if (!Array.isArray(results) || results.length === 0) {
-        res.status(404).json({ message: "Prix non trouvé" });
-      } else {
-        res.json(results[0]);
-      }
-    } catch (error) {
-      console.error("Erreur dans read:", error);
-      res
-        .status(500)
-        .json({ message: "Erreur lors de la récupération du prix" });
-    }
-  },
+    res.json(prizes);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export default prizeActions;
+const browseAvailable: RequestHandler = async (req, res, next) => {
+  try {
+    const prizes = await prizeRepository.readAllAvailable();
+
+    res.json(prizes);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const prizesId = Number(req.params.id);
+    const prizes = await prizeRepository.read(prizesId);
+
+    if (prizes == null) {
+      res.sendStatus(404);
+    } else {
+      res.json(prizes);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateAvailability: RequestHandler = async (req, res, next) => {
+  try {
+    const prizesId = Number(req.params.id);
+    const isAvailable = req.body.isAvailable;
+
+    await prizeRepository.updateAvailability(prizesId, isAvailable);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const prizes = {
+      id: Number(req.params.id),
+      name: req.body.name,
+      description: req.body.description,
+      image: req.body.image,
+      exchange_price: req.body.exchange_price,
+      is_available: req.body.is_available,
+    };
+    const affectedRows = await prizeRepository.update(prizes);
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const prizeId = Number(req.params.id);
+    await prizeRepository.delete(prizeId);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const prizes: CreatePrize = {
+      name: req.body.name,
+      description: req.body.description,
+      image: req.body.image,
+      exchange_price: req.body.exchange_price,
+      is_available: req.body.is_available,
+    };
+    const insertId = await prizeRepository.create(prizes);
+    res.status(201).json({ id: insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default {
+  browse,
+  browseAvailable,
+  read,
+  updateAvailability,
+  edit,
+  destroy,
+  add,
+};

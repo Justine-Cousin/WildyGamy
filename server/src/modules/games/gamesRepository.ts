@@ -1,5 +1,4 @@
 import databaseClient from "../../../database/client";
-
 import type { Result, Rows } from "../../../database/client";
 
 type Game = {
@@ -54,7 +53,7 @@ class gamesRepository {
         game.image,
         game.is_available,
         game.id,
-      ], // Ajout de game.id
+      ],
     );
 
     return result.affectedRows;

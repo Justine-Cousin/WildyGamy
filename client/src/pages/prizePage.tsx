@@ -29,6 +29,7 @@ const PrizePage = () => {
         }
 
         const data = await response.json();
+
         setPrizes(data);
       } catch (error) {
         console.error("Erreur lors de la récupération des prix:", error);

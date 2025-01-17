@@ -1,25 +1,21 @@
-.admingames-logo {
-  width: 16%;
+.admingames-container {
+  min-height: 100vh;
+  background-color: #0b0812;
   position: relative;
-  padding: 20px;
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 
-.admingames-content {
-  padding: 2rem;
-  margin-top: 150px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.admingrid-card {
+.games-page {
   display: flex;
-  flex-direction: column;
-  padding: 15px 10px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #0b0812;
+}
+
+.games-page__loading,
+.games-page__error {
+  font-size: 1.5rem;
+  color: #9001f5;
+  text-align: center;
+  padding: 2rem;
 }
