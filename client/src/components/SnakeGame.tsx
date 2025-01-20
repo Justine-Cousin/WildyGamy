@@ -42,7 +42,7 @@ const POWER_UPS = {
   shrink: {
     icon: <Scissors className="power-up-icons" size={16} />,
     color: "powerup-shrink",
-    duration: 5000,
+    duration: 1,
   },
   invincible: {
     icon: <Shield className="power-up-icons" size={16} />,

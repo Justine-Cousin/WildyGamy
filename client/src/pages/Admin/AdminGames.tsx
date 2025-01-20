@@ -92,7 +92,7 @@ const AdminGames = () => {
           credentials: "include",
           body: JSON.stringify({
             ...gameData,
-            price: Number(gameData.price),
+            price: gameData.price,
             is_available: true,
           }),
         });

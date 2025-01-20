@@ -21,30 +21,23 @@ const userActions = {
 
   read: async (req: Request, res: Response) => {
     try {
-      res.setHeader("Content-Type", "application/json");
-      const { username } = req.params;
+      const { id } = req.params;
 
-      if (!username) {
-        return res.status(400).json({
-          error: "Le nom d'utilisateur est requis",
-        });
+      if (!id) {
+        return res.status(400).json({ error: "ID is required" });
       }
 
-      const user = await UserRepository.readByUsername(username);
+      const user = await UserRepository.readById(Number(id));
 
       if (!user) {
-        return res.status(404).json({
-          error: "Utilisateur non trouvé",
-        });
+        return res.status(404).json({ error: "User not found" });
       }
 
       const { password_hash, ...userWithoutPassword } = user;
       res.status(200).json(userWithoutPassword);
     } catch (error) {
-      console.error("Erreur lors de la lecture de l'utilisateur:", error);
-      res.status(500).json({
-        error: "Erreur lors de la récupération de l'utilisateur",
-      });
+      console.error("Error reading user:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   },
 

@@ -48,11 +48,11 @@ CREATE TABLE prize_acquired (
 
 INSERT INTO user (name, firstname, email, username, password_hash, phone_number, profile_pic, total_points, current_points)
 VALUES
-('Dupont', 'Jean', 'jean.dupont@example.com', 'jdupont', '$2y$10$abcdefghij1234567890', '0612345678', 'profile1.jpg', 300, 150),
-('Martin', 'Claire', 'claire.martin@example.com', 'cmartin', '$2y$10$klmnopqrst0987654321', '0698765432', 'profile2.jpg', 400, 200),
-('Diop', 'Mamadou', 'mamadou.diop@example.com', 'mdiop', '$2y$10$uvwxyzabcdef1234567890', '0778543210', 'profile3.jpg', 500, 320),
-('Nguyen', 'Linh', 'linh.nguyen@example.com', 'lnguyen', '$2y$10$mnopqrstuv9876543210', '0654789632', 'profile4.jpg', 200, 90),
-('Lopez', 'Carlos', 'carlos.lopez@example.com', 'clopez', '$2y$10$abcdef1234567890klmno', '0689456712', 'profile5.jpg', 150, 120);
+('Dupont', 'Jean', 'jean.dupont@example.com', 'jdupont', '$2y$10$abcdefghij1234567890', '0612345678', 'https://www.shareicon.net/data/512x512/2016/07/24/801178_user_512x512.png', 300, 150),
+('Martin', 'Claire', 'claire.martin@example.com', 'cmartin', '$2y$10$klmnopqrst0987654321', '0698765432', 'https://www.shareicon.net/data/512x512/2016/07/05/791225_man_512x512.png', 400, 200),
+('Diop', 'Mamadou', 'mamadou.diop@example.com', 'mdiop', '$2y$10$uvwxyzabcdef1234567890', '0778543210', 'https://www.shareicon.net/data/512x512/2016/07/24/801175_user_512x512.png', 500, 320),
+('Nguyen', 'Linh', 'linh.nguyen@example.com', 'lnguyen', '$2y$10$mnopqrstuv9876543210', '0654789632', 'https://www.shareicon.net/data/512x512/2016/07/24/801197_user_512x512.png', 200, 90),
+('Lopez', 'Carlos', 'carlos.lopez@example.com', 'clopez', '$2y$10$abcdef1234567890klmno', '0689456712', 'https://www.shareicon.net/data/512x512/2016/07/24/801192_user_512x512.png', 150, 120);
 
 INSERT INTO game (name, description, image, price) VALUES
 ('Pac-Man', 'Le célèbre jeu de labyrinthe où vous devez manger tous les points tout en évitant les fantômes', 'https://res.cloudinary.com/dl1errlyl/image/upload/v1736340064/pngegg_4_d98jgg.png', '1'),
@@ -83,4 +83,12 @@ INSERT INTO prize_acquired (user_id, prize_id) VALUES
 (5, 6),
 (5, 7),
 (5, 8);
+
+INSERT INTO favorite (user_id, game_id) VALUES
+(1, 1),
+(1, 2), 
+(2, 3), 
+(3, 1), 
+(4, 5), 
+(5, 6);
 

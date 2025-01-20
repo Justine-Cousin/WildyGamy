@@ -1,16 +1,20 @@
 import "../styles/GameCard.css";
 import coin from "../assets/images/coin.svg";
 
-interface Game {
+export interface Game {
   id: number;
+
   image: string;
+
   name: string;
+
   description: string;
+
   price: string;
 }
 
 interface GamesCardProps {
-  game: Game;
+  game: Game & { price: string };
 }
 
 export default function GamesCard({ game }: GamesCardProps) {

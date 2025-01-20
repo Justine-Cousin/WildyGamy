@@ -10,13 +10,12 @@ body {
   font-family: "Lato", sans-serif;
   font-size: 16px;
   line-height: 1.7;
-  color: #eee;
+  color: #c3b0ea;
   margin: 0;
   background-color: #0a0a13;
 }
 
 :root {
-  height: 100vh;
   background-color: #0b0812;
   --font-title-phosphate: "PhosphateInline", sans-serif;
   font-weight: 400;

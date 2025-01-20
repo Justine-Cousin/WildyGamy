@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from "express";
+import favoritesActions from "./modules/favorites/favoritesActions";
 import gameActions from "./modules/games/gamesActions";
 import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
@@ -20,7 +21,7 @@ router.post("/api/user", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/api/user/:username", async (req: Request, res: Response) => {
+router.get("/api/user/:id", async (req: Request, res: Response) => {
   try {
     await userActions.read(req, res);
   } catch (error) {
@@ -44,5 +45,7 @@ router.post("/api/games", gameActions.add);
 router.patch("/api/games/:id/availability", gameActions.updateAvailability);
 router.put("/api/games/:id", gameActions.edit);
 router.delete("/api/games/:id", gameActions.destroy);
+
+router.get("/api/user/:id/favorites", favoritesActions.getUserFavorites);
 
 export default router;
