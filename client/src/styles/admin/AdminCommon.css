@@ -1,0 +1,268 @@
+.admin-dashboard {
+  /* Grille spécifique à l'admin */
+  .admingrid-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .admingames-container,
+  .adminprizes-container {
+    min-height: 100vh;
+    background-color: #0b0812;
+    position: relative;
+    padding-top: 120px;
+  }
+
+  .admingames-logo,
+  .adminprizes-logo {
+    width: 14%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 20px;
+    z-index: 1000;
+  }
+
+  .admingames-content,
+  .adminprizes-content {
+    padding: 2rem;
+    margin-top: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .main-content {
+    transition: margin-left 0.3s ease;
+  }
+
+  .main-content-shifted {
+    margin-left: 240px;
+  }
+
+  /* Cards */
+  .admincard-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #9001f5, #c3b0ea);
+    position: relative;
+    min-height: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .admincard-content:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .admincard-content-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
+  }
+
+  /* Images */
+  .gamecard-image {
+    width: 50%;
+    padding-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .pricecard-img {
+    width: 30%;
+    margin-bottom: 15px;
+  }
+
+  .adminCard-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin-bottom: 10px;
+  }
+
+  /* prix */
+  .adminCard-prices {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    z-index: 1;
+  }
+
+  .adminCard-prices-game,
+  .adminCard-prices-prize {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: white;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .adminCard-prices-game span,
+  .adminCard-prices-prize span {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #9001f5; /* Couleur assortie au thème */
+  }
+
+  .adminCard-prices-game svg,
+  .adminCard-prices-prize svg {
+    color: #9001f5; /* Couleur assortie au thème */
+  }
+
+  /* Boutons de la carte */
+  .admincard-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+    margin-top: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  .admincard-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admincard-button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .admincard-button:active {
+    transform: scale(0.95);
+  }
+
+  .admingrid-eye,
+  .admingrid-pencil,
+  .admingrid-trash {
+    width: 22px;
+    height: 22px;
+    color: #e9d5ff;
+    filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
+    transition: color 0.2s ease;
+  }
+
+  .admingrid-eye:hover,
+  .admingrid-pencil:hover,
+  .admingrid-trash:hover {
+    color: #ff4d9e;
+  }
+
+  /* États des cartes */
+  .admincard-content.admincard-content-unavailable {
+    background: linear-gradient(45deg, #8f01f55d, #c3b0ea4b) !important;
+    order: 1;
+  }
+
+  .admincard-content.admincard-content-available {
+    order: 0;
+  }
+
+  /* Style spécifique pour les prix */
+  .prizecard-content {
+    background: linear-gradient(45deg, #9001f5, #c3b0ea);
+    min-height: 180px;
+    justify-content: center;
+  }
+
+  /* Modales admin */
+  .admin-modal-content {
+    padding: 20px;
+  }
+
+  .admin-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .admin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .admin-form-label {
+    color: #f3f4f6;
+    font-weight: 500;
+  }
+
+  .admin-form-input {
+    padding: 8px 12px;
+    border: 1px solid #4a4a4a;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #f3f4f6;
+  }
+
+  /* Boutons de modale */
+  .admin-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .admin-modal-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .admin-modal-button-save {
+    background: linear-gradient(45deg, #9001f5, #c3b0ea);
+    color: white;
+  }
+
+  .admin-modal-button-cancel {
+    background-color: #6b7280;
+    color: white;
+  }
+
+  .admin-modal-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+/* Pages de chargement et d'erreur */
+.admin-loading-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #0b0812;
+}
+
+.admin-loading-message,
+.admin-error-message {
+  font-size: 1.5rem;
+  color: #9001f5;
+  text-align: center;
+  padding: 2rem;
+}

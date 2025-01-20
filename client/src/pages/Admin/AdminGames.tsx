@@ -1,73 +1,47 @@
-import { useEffect, useState } from "react";
-import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import AddButton from "../../components/AddButton";
-import AdminGrid from "../../components/AdminGrid";
+import { useState } from "react";
 import ModalAdminGame from "../../components/ModalAdminGame";
-import SliderBarAdmin from "../../components/SliderBarAdmin";
+import AdminItemGrid from "../../components/admin/AdminItemGrid";
+import AdminLayout from "../../components/admin/AdminLayout";
+import { useAdminData } from "../../components/admin/useAdminData";
 import type { Game } from "../../services/types";
-import "../../styles/AdminGames.css";
+import "../../styles/admin/AdminGames.css";
+import "../../styles/admin/AdminCommon.css";
 
-const DEFAULT_GAME = {
+const DEFAULT_GAME: Game = {
   id: 0,
   name: "",
   description: "",
   image: "",
-  price: "",
+  price: 0,
+  is_available: true,
 };
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 const AdminGames = () => {
-  const [games, setGames] = useState<Game[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    data: games,
+    loading,
+    error,
+    updateItem,
+    deleteItem,
+    addItem,
+    updateAvailability,
+  } = useAdminData<Game>({
+    fetchUrl: "/api/games",
+    loadingMessage: "Motivation des fantômes de Pac-Man...",
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"edit" | "add">("add");
-  const [selectedGame, setSelectedGame] = useState(DEFAULT_GAME);
+  const [selectedGame, setSelectedGame] = useState<Game>(DEFAULT_GAME);
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/games`, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        const data = await response.json();
-        setGames(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des jeux:", error);
-        setError(
-          error instanceof Error ? error.message : "Une erreur est survenue",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGames();
-  }, []);
-
-  const handleEditClick = (game: {
-    id: number;
-    image: string;
-    name: string;
-    is_available: boolean;
-    description: string;
-    price: string;
-  }) => {
+  const handleEditClick = (game: Game) => {
     setModalMode("edit");
     setSelectedGame({
-      id: game.id,
-      name: game.name,
+      ...game,
       description: game.description || "",
       image: game.image || "",
-      price: game.price.toString(),
+      price: game.price,
     });
     setIsModalOpen(true);
   };
@@ -82,108 +56,26 @@ const AdminGames = () => {
     name: string;
     description: string;
     image: string;
-    price: string;
+    price?: string;
   }) => {
     try {
+      const formattedData = {
+        name: gameData.name,
+        description: gameData.description,
+        image: gameData.image,
+        price: Number(gameData.price),
+        is_available: true,
+      };
+
       if (modalMode === "add") {
-        const response = await fetch(`${API_URL}/api/games`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            ...gameData,
-            price: Number(gameData.price),
-            is_available: true,
-          }),
-        });
-
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        const data = await response.json();
-
-        setGames([
-          ...games,
-          {
-            ...gameData,
-            id: data.id,
-            is_available: true,
-            price: Number(gameData.price),
-          },
-        ]);
+        await addItem(formattedData);
       } else {
-        await updateGame(selectedGame.id, {
-          ...gameData,
-          price: Number(gameData.price),
-          is_available: true,
-        });
+        await updateItem(selectedGame.id, formattedData);
       }
       setIsModalOpen(false);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
-      setError(
-        error instanceof Error ? error.message : "Une erreur est survenue",
-      );
-    }
-  };
-
-  const updateGame = async (
-    id: number,
-    gameData: Omit<Game, "id"> & { price: number },
-  ) => {
-    try {
-      const response = await fetch(`${API_URL}/api/games/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(gameData),
-      });
-
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-      setGames(games.map((g) => (g.id === id ? { ...g, ...gameData } : g)));
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour:", error);
-      throw error;
-    }
-  };
-
-  const updateGameAvailability = async (id: number, isAvailable: boolean) => {
-    try {
-      const response = await fetch(`${API_URL}/api/games/${id}/availability`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ isAvailable }),
-      });
-
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-      setGames(
-        games.map((game) =>
-          game.id === id ? { ...game, is_available: isAvailable } : game,
-        ),
-      );
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour:", error);
-      setError(
-        error instanceof Error ? error.message : "Une erreur est survenue",
-      );
-    }
-  };
-
-  const deleteGame = async (id: number) => {
-    try {
-      const response = await fetch(`${API_URL}/api/games/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-      setGames(games.filter((game) => game.id !== id));
-    } catch (error) {
-      console.error("Erreur lors de la suppression:", error);
-      setError(
+      setLocalError(
         error instanceof Error ? error.message : "Une erreur est survenue",
       );
     }
@@ -191,79 +83,57 @@ const AdminGames = () => {
 
   if (loading) {
     return (
-      <div className="games-page">
-        <div className="games-page__loading">
+      <div className="admin-loading-page">
+        <div className="admin-loading-message">
           Motivation des fantômes de Pac-Man...
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error || localError) {
     return (
-      <div className="games-page">
-        <div className="games-page__error">{error}</div>
+      <div className="admin-loading-page">
+        <div className="admin-error-message">{error || localError}</div>
       </div>
     );
   }
 
   return (
-    <div className="admingames-container">
-      <img src={logoWG} alt="logo" className="admingames-logo" />
-      <SliderBarAdmin isOpen={isOpen} onToggle={setIsOpen} />
-
-      <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
-        <div className="admingames-content">
-          <div className="admingrid-card">
-            {games.map((game) => (
-              <AdminGrid
-                key={game.id}
-                id={game.id}
-                type="game"
-                game={{
-                  id: game.id,
-                  image: game.image,
-                  name: game.name,
-                  is_available: game.is_available,
-                  description: game.description || "",
-                  price: game.price.toString(),
-                }}
-                onAvailabilityChange={updateGameAvailability}
-                onEdit={handleEditClick}
-                onUpdate={(id, data) =>
-                  updateGame(id, {
-                    name: data.name,
-                    description: data.description,
-                    image: data.image,
-                    price: Number(data.price),
-                    is_available: game.is_available,
-                  })
-                }
-                onDelete={() => {
-                  if (
-                    window.confirm(
-                      "🎮 Suppression de jeu - Cette action est irréversible. Confirmer ?",
-                    )
-                  ) {
-                    deleteGame(game.id);
-                  }
-                }}
-              />
-            ))}
-          </div>
-        </div>
+    <AdminLayout
+      showAddButton={true}
+      onAddClick={handleAddClick}
+      containerClassName="admingames-container"
+      contentClassName="admingames-content"
+      logoClassName="admingames-logo"
+    >
+      <div className="admingrid-card">
+        {games?.map((game) => (
+          <AdminItemGrid
+            key={game.id}
+            id={game.id}
+            type="game"
+            game={game}
+            onAvailabilityChange={updateAvailability}
+            onEdit={handleEditClick}
+            onDelete={deleteItem}
+          />
+        ))}
       </div>
 
-      <AddButton onClick={handleAddClick} />
       <ModalAdminGame
-        key={isModalOpen ? "modal-open" : "modal-closed"}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        gameData={selectedGame}
+        gameData={{
+          ...selectedGame,
+          description: selectedGame.description || "",
+          image: selectedGame.image || "",
+          price: selectedGame.price?.toString() || "0",
+        }}
         onSave={handleSave}
         mode={modalMode}
       />
-    </div>
+    </AdminLayout>
   );
 };
 
