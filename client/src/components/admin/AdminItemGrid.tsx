@@ -9,12 +9,12 @@ import {
 import type React from "react";
 import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import type { Game, Prize } from "../../services/types";
+import type { Game, Prize, User } from "../../services/types";
 import "../../styles/admin/AdminCommon.css";
 
 interface AdminItemGridProps<T> {
   id: number;
-  type: "game" | "prize";
+  type: "game" | "prize" | "user";
   game?: T extends Game
     ? Omit<T, "description" | "image"> & {
         description?: string;
@@ -22,6 +22,7 @@ interface AdminItemGridProps<T> {
       }
     : never;
   prize?: T extends Prize ? T : never;
+  user?: T extends User ? T : never;
   onAvailabilityChange?: (id: number, isAvailable: boolean) => void;
   onEdit?: (item: T) => void;
   onUpdate?: (

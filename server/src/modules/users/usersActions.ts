@@ -26,4 +26,61 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read };
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const user = {
+      id: Number(req.params.id),
+      name: req.body.name,
+      firstname: req.body.firstname,
+      email: req.body.email,
+      username: req.body.username,
+      phone_number: req.body.phone_number,
+      profile_pic: req.body.profile_pic,
+      total_points: req.body.total_points,
+      current_points: req.body.current_points,
+    };
+
+    const affectedRows = await usersRepository.update(user);
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    await usersRepository.delete(userId);
+
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const user = {
+      name: req.body.name,
+      firstname: req.body.firstname,
+      email: req.body.email,
+      username: req.body.username,
+      phone_number: req.body.phone_number,
+      profile_pic: req.body.profile_pic,
+      total_points: req.body.total_points,
+      current_points: req.body.current_points,
+    };
+
+    const insertId = await usersRepository.create(user);
+
+    res.status(201).json({ id: insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, edit, destroy, add };

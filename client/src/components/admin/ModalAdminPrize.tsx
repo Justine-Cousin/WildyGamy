@@ -1,37 +1,40 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import "../styles/ModalAdminGame.css";
-import type { ModalProps } from "../services/types";
+import type { ModalProps } from "../../services/types";
+import logoWG from "../assets/images/logo_wildy_gamy.png";
+import "../../styles/ModalAdminGame.css";
 
 type Errors = {
   name?: string;
   description?: string;
   image?: string;
-  price?: string;
+  exchange_price?: string;
 };
 
-const ModalAdminGame: React.FC<ModalProps> = ({
+const ModalAdminPrize: React.FC<ModalProps> = ({
   isOpen,
   onClose,
-  gameData,
+  prizeData,
   onSave,
   mode,
 }) => {
-  const [name, setName] = useState(gameData?.name || "");
-  const [description, setDescription] = useState(gameData?.description || "");
-  const [image, setImage] = useState<string>(gameData?.image || "");
-  const [price, setPrice] = useState(gameData?.price?.toString() || "");
+  const [name, setName] = useState(prizeData?.name || "");
+  const [description, setDescription] = useState(prizeData?.description || "");
+  const [image, setImage] = useState(prizeData?.image || logoWG);
+  const [exchange_price, setExchangePrice] = useState(
+    prizeData?.exchange_price?.toString() || "",
+  );
   const [errors, setErrors] = useState<Errors>({});
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   useEffect(() => {
-    if (gameData) {
-      setName(gameData.name || "");
-      setDescription(gameData.description || "");
-      setImage(typeof gameData.image === "string" ? gameData.image : "");
-      setPrice(gameData.price?.toString() || "");
+    if (prizeData) {
+      setName(prizeData.name || "");
+      setDescription(prizeData.description || "");
+      setImage(prizeData.image || "");
+      setExchangePrice(prizeData.exchange_price?.toString() || "");
     }
-  }, [gameData]);
+  }, [prizeData]);
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
@@ -44,10 +47,10 @@ const ModalAdminGame: React.FC<ModalProps> = ({
       newErrors.description = "La description est requise";
     }
 
-    if (!price.trim()) {
-      newErrors.price = "Le prix est requis";
-    } else if (!/^\d+$/.test(price.trim())) {
-      newErrors.price = "Le prix doit être un nombre";
+    if (!exchange_price.trim()) {
+      newErrors.exchange_price = "Le prix est requis";
+    } else if (!/^\d+$/.test(exchange_price.trim())) {
+      newErrors.exchange_price = "Le prix doit être un nombre entier";
     }
 
     setErrors(newErrors);
@@ -56,7 +59,12 @@ const ModalAdminGame: React.FC<ModalProps> = ({
 
   const handleSave = () => {
     if (validateForm()) {
-      onSave({ name, description, image, price });
+      onSave({
+        name,
+        description,
+        image,
+        exchange_price,
+      });
       onClose();
     }
   };
@@ -76,7 +84,7 @@ const ModalAdminGame: React.FC<ModalProps> = ({
       >
         <div className="edit-modal">
           <h2 className="edit-modal-title">
-            {mode === "edit" ? "MODIFIER LE JEU" : "AJOUTER UN JEU"}
+            {mode === "edit" ? "MODIFIER LE LOT" : "AJOUTER UN LOT"}
           </h2>
           <div className="edit-modal-content">
             <div className="image-section">
@@ -90,29 +98,31 @@ const ModalAdminGame: React.FC<ModalProps> = ({
                     id="image"
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
-                    className={`edit-modal-input ${errors.image ? "input-error" : ""}`}
+                    className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
                   />
                   <button
                     type="button"
-                    className="preview-button"
                     onClick={() => setIsPreviewVisible(!isPreviewVisible)}
+                    className="preview-button"
                   >
                     {isPreviewVisible ? "Cacher" : "Prévisualiser"}
                   </button>
+                  <div>
+                    {errors.image && (
+                      <span className="error-message">{errors.image}</span>
+                    )}
+                  </div>
                 </div>
-                {errors.image && (
-                  <span className="error-message">{errors.image}</span>
+                {isPreviewVisible && (
+                  <div className="image-preview">
+                    {image ? (
+                      <img src={image} alt="Prévisualisation" />
+                    ) : (
+                      <div className="no-image">Aucune image</div>
+                    )}
+                  </div>
                 )}
               </div>
-              {isPreviewVisible && (
-                <div className="image-preview">
-                  {image ? (
-                    <img src={image} alt="Prévisualisation" />
-                  ) : (
-                    <div className="no-image">Aucune image</div>
-                  )}
-                </div>
-              )}
             </div>
             <div className="form-section">
               <div className="form-group">
@@ -138,25 +148,25 @@ const ModalAdminGame: React.FC<ModalProps> = ({
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
+                  className={`edit-modal-input ${errors.description ? "input-error" : ""}`}
                 />
                 {errors.description && (
                   <span className="error-message">{errors.description}</span>
                 )}
               </div>
               <div className="form-group">
-                <label htmlFor="price" className="edit-modal-label">
-                  Prix <span className="required">*</span>
+                <label htmlFor="exchange_price" className="edit-modal-label">
+                  Prix d'échange <span className="required">*</span>
                 </label>
                 <input
                   type="text"
-                  id="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  className={`edit-modal-input ${errors.price ? "input-error" : ""}`}
+                  id="exchange_price"
+                  value={exchange_price}
+                  onChange={(e) => setExchangePrice(e.target.value)}
+                  className={`edit-modal-input ${errors.exchange_price ? "input-error" : ""}`}
                 />
-                {errors.price && (
-                  <span className="error-message">{errors.price}</span>
+                {errors.exchange_price && (
+                  <span className="error-message">{errors.exchange_price}</span>
                 )}
               </div>
             </div>
@@ -184,4 +194,4 @@ const ModalAdminGame: React.FC<ModalProps> = ({
   );
 };
 
-export default ModalAdminGame;
+export default ModalAdminPrize;
