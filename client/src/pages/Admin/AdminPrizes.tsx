@@ -4,7 +4,7 @@ import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useAdminData } from "../../components/admin/useAdminData";
 import type { Prize } from "../../services/types";
-import "../../styles/AdminPrizes.css";
+import "../../styles/admin/AdminPrizes.css";
 import "../../styles/admin/AdminCommon.css";
 
 const DEFAULT_PRIZE: Prize = {

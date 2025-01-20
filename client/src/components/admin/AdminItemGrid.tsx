@@ -1,6 +1,14 @@
-import { Eye, EyeClosed, PencilLine, Trash2 } from "lucide-react";
+import {
+  Coins,
+  Eye,
+  EyeClosed,
+  PencilLine,
+  Tickets,
+  Trash2,
+} from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { Game, Prize } from "../../services/types";
 import "../../styles/admin/AdminCommon.css";
 
@@ -85,11 +93,24 @@ const AdminItemGrid = <T extends Game | Prize>({
       <div className="admincard-content-info">
         <img
           className={type === "game" ? "gamecard-image" : "pricecard-img"}
-          src={item.image || ""}
+          src={item.image || logoWG}
           alt={item.name}
         />
         <div className="adminCard-info">
           <h3 className="adminCard-name">{item.name}</h3>
+        </div>
+        <div className="adminCard-prices">
+          {type === "game" ? (
+            <div className="adminCard-prices-game">
+              <span>{(item as Game).price}</span>
+              <Coins size={16} />
+            </div>
+          ) : (
+            <div className="adminCard-prices-prize">
+              <span>{(item as Prize).exchange_price}</span>
+              <Tickets size={16} />
+            </div>
+          )}
         </div>
       </div>
 

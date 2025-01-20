@@ -4,11 +4,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    padding: 20px;
-    width: 100%;
   }
 
-  /* Layout */
   .admingames-container,
   .adminprizes-container {
     min-height: 100vh;
@@ -17,10 +14,9 @@
     padding-top: 120px;
   }
 
-  /* Logo */
   .admingames-logo,
   .adminprizes-logo {
-    width: 16%;
+    width: 14%;
     position: fixed;
     top: 0;
     right: 0;
@@ -28,7 +24,6 @@
     z-index: 1000;
   }
 
-  /* Content */
   .admingames-content,
   .adminprizes-content {
     padding: 2rem;
@@ -41,7 +36,6 @@
     z-index: 1;
   }
 
-  /* Sidebar */
   .main-content {
     transition: margin-left 0.3s ease;
   }
@@ -76,6 +70,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    position: relative;
   }
 
   /* Images */
@@ -97,16 +92,46 @@
     margin-bottom: 10px;
   }
 
+  /* prix */
+  .adminCard-prices {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    z-index: 1;
+  }
+
+  .adminCard-prices-game,
+  .adminCard-prices-prize {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: white;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .adminCard-prices-game span,
+  .adminCard-prices-prize span {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #9001f5; /* Couleur assortie au thème */
+  }
+
+  .adminCard-prices-game svg,
+  .adminCard-prices-prize svg {
+    color: #9001f5; /* Couleur assortie au thème */
+  }
+
   /* Boutons de la carte */
   .admincard-buttons {
-    width: 100%;
     display: flex;
     justify-content: center;
     gap: 20px;
-    padding: 10px 0;
+    padding: 10px;
     margin-top: auto;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
   }
 
   .admincard-button {

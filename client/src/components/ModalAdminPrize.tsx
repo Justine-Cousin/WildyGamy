@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import logoWG from "../assets/images/logo_wildy_gamy.png";
 import type { ModalProps } from "../services/types";
 import "../styles/ModalAdminGame.css";
 
@@ -19,7 +20,7 @@ const ModalAdminPrize: React.FC<ModalProps> = ({
 }) => {
   const [name, setName] = useState(prizeData?.name || "");
   const [description, setDescription] = useState(prizeData?.description || "");
-  const [image, setImage] = useState(prizeData?.image || "");
+  const [image, setImage] = useState(prizeData?.image || logoWG);
   const [exchange_price, setExchangePrice] = useState(
     prizeData?.exchange_price?.toString() || "",
   );
@@ -44,10 +45,6 @@ const ModalAdminPrize: React.FC<ModalProps> = ({
 
     if (!description.trim()) {
       newErrors.description = "La description est requise";
-    }
-
-    if (!image.trim()) {
-      newErrors.image = "L'URL de l'image est requise";
     }
 
     if (!exchange_price.trim()) {
@@ -93,7 +90,7 @@ const ModalAdminPrize: React.FC<ModalProps> = ({
             <div className="image-section">
               <div className="form-group">
                 <label htmlFor="image" className="edit-modal-label">
-                  Image URL <span className="required">*</span>
+                  Image URL
                 </label>
                 <div className="image-input-container">
                   <input

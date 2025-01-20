@@ -1,6 +1,6 @@
 import { Joystick, LogOut, Menu, Trophy, Users, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import "../styles/SliderBarAdmin.css";
+import "../../styles/admin/SliderBarAdmin.css";
 
 interface SliderBarAdminProps {
   isOpen: boolean;

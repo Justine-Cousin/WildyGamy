@@ -19,7 +19,7 @@ const ModalAdminGame: React.FC<ModalProps> = ({
 }) => {
   const [name, setName] = useState(gameData?.name || "");
   const [description, setDescription] = useState(gameData?.description || "");
-  const [image, setImage] = useState(gameData?.image || "");
+  const [image, setImage] = useState<string>(gameData?.image || "");
   const [price, setPrice] = useState(gameData?.price?.toString() || "");
   const [errors, setErrors] = useState<Errors>({});
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
@@ -28,7 +28,7 @@ const ModalAdminGame: React.FC<ModalProps> = ({
     if (gameData) {
       setName(gameData.name || "");
       setDescription(gameData.description || "");
-      setImage(gameData.image || "");
+      setImage(typeof gameData.image === "string" ? gameData.image : "");
       setPrice(gameData.price?.toString() || "");
     }
   }, [gameData]);
@@ -42,10 +42,6 @@ const ModalAdminGame: React.FC<ModalProps> = ({
 
     if (!description.trim()) {
       newErrors.description = "La description est requise";
-    }
-
-    if (!image.trim()) {
-      newErrors.image = "L'URL de l'image est requise";
     }
 
     if (!price.trim()) {
@@ -86,7 +82,7 @@ const ModalAdminGame: React.FC<ModalProps> = ({
             <div className="image-section">
               <div className="form-group">
                 <label htmlFor="image" className="edit-modal-label">
-                  Image URL <span className="required">*</span>
+                  Image URL
                 </label>
                 <div className="image-input-container">
                   <input

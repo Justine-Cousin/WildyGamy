@@ -4,7 +4,7 @@ import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useAdminData } from "../../components/admin/useAdminData";
 import type { Game } from "../../services/types";
-import "../../styles/AdminGames.css";
+import "../../styles/admin/AdminGames.css";
 import "../../styles/admin/AdminCommon.css";
 
 const DEFAULT_GAME: Game = {

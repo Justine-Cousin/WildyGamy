@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import "../styles/AddButton.css";
+import "../../styles/admin/AddButton.css";
 
 interface AddButtonProps {
   onClick: () => void;

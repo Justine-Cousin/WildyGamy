@@ -22,13 +22,15 @@ class prizeRepository {
   }
 
   async readAll() {
-    const [rows] = await databaseClient.query<Rows>("select * from prize");
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from prize ORDER BY exchange_price ASC",
+    );
     return rows as Prize[];
   }
 
   async readAllAvailable() {
     const [rows] = await databaseClient.query<Rows>(
-      "select * from prize where is_available = 1",
+      "select * from prize where is_available = 1 ORDER BY exchange_price ASC",
     );
     return rows as Prize[];
   }

@@ -1,8 +1,8 @@
-import "../../styles/AdminHome.css";
+import "../../styles/admin/AdminHome.css";
 import { Joystick, Trophy, Users } from "lucide-react";
 import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import SliderBarAdmin from "../../components/SliderBarAdmin";
+import SliderBarAdmin from "../../components/admin/SliderBarAdmin";
 
 function AdminHome() {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,8 +1,8 @@
 import type React from "react";
 import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import AddButton from "../AddButton";
-import SliderBarAdmin from "../SliderBarAdmin";
+import AddButton from "./AddButton";
+import SliderBarAdmin from "./SliderBarAdmin";
 import "../../styles/admin/AdminCommon.css";
 
 interface AdminLayoutProps {
