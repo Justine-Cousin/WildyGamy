@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { ModalProps } from "../../services/types";
-import logoWG from "../assets/images/logo_wildy_gamy.png";
 import "../../styles/ModalAdminGame.css";
 
 type Errors = {

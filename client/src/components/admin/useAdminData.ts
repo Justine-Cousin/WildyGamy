@@ -37,7 +37,7 @@ export const useAdminData = <T extends { id: number }>({
     } finally {
       setLoading(false);
     }
-  }, [fetchUrl]); // fetchUrl est la seule dépendance nécessaire
+  }, [fetchUrl]);
 
   useEffect(() => {
     fetchData();

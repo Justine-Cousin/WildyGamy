@@ -38,17 +38,20 @@ interface AdminItemGridProps<T> {
   onDelete?: (id: number) => void;
 }
 
-const AdminItemGrid = <T extends Game | Prize>({
+const AdminItemGrid = <T extends Game | Prize | User>({
   id,
   type,
   game,
   prize,
+  user,
   onAvailabilityChange,
   onEdit,
   onDelete,
 }: AdminItemGridProps<T>) => {
-  const item = type === "game" ? game : prize;
-  const [isAvailable, setIsAvailable] = useState(item?.is_available ?? true);
+  const item = type === "game" ? game : type === "prize" ? prize : user;
+  const [isAvailable, setIsAvailable] = useState(
+    (item as Game | Prize)?.is_available ?? true,
+  );
   if (!item) return null;
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,7 +97,7 @@ const AdminItemGrid = <T extends Game | Prize>({
       <div className="admincard-content-info">
         <img
           className={type === "game" ? "gamecard-image" : "pricecard-img"}
-          src={item.image || logoWG}
+          src={"image" in item ? item.image || logoWG : logoWG}
           alt={item.name}
         />
         <div className="adminCard-info">
