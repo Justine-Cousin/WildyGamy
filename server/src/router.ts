@@ -29,6 +29,7 @@ router.get("/api/user/:username", async (req: Request, res: Response) => {
 });
 
 // Define item-related routes
+import usersActions from "./modules/users/usersActions";
 
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
@@ -45,6 +46,8 @@ router.delete("/api/prizes/:id", prizeActions.destroy);
 router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
+router.get("/api/users", usersActions.browse);
+router.get("/api/users/:id", usersActions.read);
 router.post("/api/games", gameActions.add);
 router.patch("/api/games/:id/availability", gameActions.updateAvailability);
 router.put("/api/games/:id", gameActions.edit);
