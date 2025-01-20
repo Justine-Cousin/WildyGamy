@@ -92,7 +92,12 @@ export default function UserProfile() {
           {favorites.map((game) => (
             <GameCard
               key={game.id}
-              game={{ ...game, price: game.price.toString() }}
+              game={{
+                ...game,
+                price: game.price.toString(),
+                image: game.image || "",
+                description: game.description || "",
+              }}
             />
           ))}{" "}
         </div>

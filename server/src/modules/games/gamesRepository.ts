@@ -1,5 +1,4 @@
 import databaseClient from "../../../database/client";
-
 import type { Result, Rows } from "../../../database/client";
 
 export type Game = {
@@ -24,14 +23,16 @@ class gamesRepository {
   }
 
   async readAll() {
-    const [rows] = await databaseClient.query<Rows>("select * from game");
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from game ORDER BY name ASC",
+    );
 
     return rows as Game[];
   }
 
   async readAllAvailable() {
     const [rows] = await databaseClient.query<Rows>(
-      "select * from game where is_available = 1",
+      "select * from game where is_available = 1 ORDER BY name ASC",
     );
 
     return rows as Game[];
@@ -54,7 +55,7 @@ class gamesRepository {
         game.image,
         game.is_available,
         game.id,
-      ], // Ajout de game.id
+      ],
     );
 
     return result.affectedRows;
