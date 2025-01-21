@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   padding: 12px;
-  border: #694fa6 2px solid;
+  border: #694fa6 3px solid;
   border-radius: 20px;
   background: linear-gradient(0deg, #5b4391, #1b142b);
   gap: 12px;
@@ -92,4 +92,17 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
+}
+
+.user-profile-page-prizes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 30px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.user-profile-page-no-prizes-message {
+  color: var(--font-title-color);
+  text-align: center;
 }
