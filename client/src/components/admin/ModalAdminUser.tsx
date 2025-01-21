@@ -31,6 +31,7 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
     if (userData) {
       setName(userData.name || "");
       setFirstname(userData.firstname || "");
+      setUsername(userData.username || "");
       setEmail(userData.email || "");
       setPhoneNumber(userData.phone_number || "");
       setProfilePic(userData.profile_pic || "");
@@ -50,6 +51,10 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
 
     if (!email.trim()) {
       newErrors.email = "L'email est requis";
+    }
+
+    if (!username.trim()) {
+      newErrors.username = "Le nom d'utilisateur est requis";
     }
 
     if (!phone_number.trim()) {
@@ -136,6 +141,21 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
                 )}
               </div>
             </div>
+            <div className="form-group">
+              <label htmlFor="firstname" className="edit-modal-label">
+                Prénom <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstname"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+                className={`edit-modal-input ${errors.firstname ? "input-error" : ""}`}
+              />
+              {errors.firstname && (
+                <span className="error-message">{errors.firstname}</span>
+              )}
+            </div>
             <div className="form-section">
               <div className="form-group">
                 <label htmlFor="name" className="edit-modal-label">
@@ -150,21 +170,6 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
                 />
                 {errors.name && (
                   <span className="error-message">{errors.name}</span>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="firstname" className="edit-modal-label">
-                  Prénom <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="firstname"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
-                  className={`edit-modal-input ${errors.firstname ? "input-error" : ""}`}
-                />
-                {errors.firstname && (
-                  <span className="error-message">{errors.firstname}</span>
                 )}
               </div>
               <div className="form-group">

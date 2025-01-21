@@ -69,7 +69,7 @@ class usersRepository {
 
   async create(user: createUser) {
     const [result] = await databaseClient.query<Result>(
-      "insert into user (name, firstname, email, username, phone_number, profile_pic) values (?, ?, ?, ?, ?, ?)",
+      "insert into user (name, firstname, email, username, phone_number, profile_pic, total_points, current_points) values (?, ?, ?, ?, ?, ?)",
       [
         user.name,
         user.firstname,
@@ -77,6 +77,8 @@ class usersRepository {
         user.username,
         user.phone_number,
         user.profile_pic,
+        user.total_points,
+        user.current_points,
       ],
     );
 
