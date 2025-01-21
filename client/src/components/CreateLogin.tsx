@@ -4,8 +4,27 @@ import bin from "../assets/images/bin.svg";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/CreateLogin.css";
 
+interface FormData {
+  name: string;
+  firstname: string;
+  phone_number: string;
+  email: string;
+  username: string;
+  password: string;
+  confirm_password: string;
+}
+
+interface FileChangeEvent extends React.ChangeEvent<HTMLInputElement> {
+  target: HTMLInputElement & { files: FileList };
+}
+
+interface ApiError {
+  error?: string;
+  details?: string;
+}
+
 export default function CreateLogin() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     firstname: "",
     phone_number: "",
@@ -17,9 +36,9 @@ export default function CreateLogin() {
 
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -38,10 +57,6 @@ export default function CreateLogin() {
     setError("");
   };
 
-  interface FileChangeEvent extends React.ChangeEvent<HTMLInputElement> {
-    target: HTMLInputElement & { files: FileList };
-  }
-
   const handleFileChange = (e: FileChangeEvent) => {
     const file = e.target.files[0];
     if (file) {
@@ -51,8 +66,9 @@ export default function CreateLogin() {
         return;
       }
 
-      if (!file.type.startsWith("image/")) {
-        setError("Veuillez sélectionner une image valide");
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        setError("Veuillez sélectionner une image valide (JPG, JPEG ou PNG)");
         e.target.value = "";
         return;
       }
@@ -60,6 +76,7 @@ export default function CreateLogin() {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
+
       const newPreviewUrl = URL.createObjectURL(file);
       setPreviewUrl(newPreviewUrl);
       setProfilePic(file);
@@ -73,8 +90,10 @@ export default function CreateLogin() {
     }
     setProfilePic(null);
     setPreviewUrl(null);
-    const fileInput = document.getElementById("profile_pic");
-    if (fileInput) (fileInput as HTMLInputElement).value = "";
+    const fileInput = document.getElementById(
+      "profile_pic",
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,7 +136,7 @@ export default function CreateLogin() {
       }
 
       const submitData = new FormData();
-      for (const key of Object.keys(formData) as (keyof typeof formData)[]) {
+      for (const key of Object.keys(formData) as Array<keyof FormData>) {
         if (key !== "confirm_password") {
           submitData.append(key, formData[key]);
         }
@@ -126,13 +145,14 @@ export default function CreateLogin() {
       if (profilePic) {
         submitData.append("profile_pic", profilePic);
       }
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
         method: "POST",
         credentials: "include",
         body: submitData,
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as ApiError;
 
       if (!response.ok) {
         throw new Error(
@@ -175,10 +195,18 @@ export default function CreateLogin() {
           </div>
         )}
 
-        <form className="login-form" onSubmit={handleSubmit} noValidate>
+        <form
+          className="login-form"
+          onSubmit={handleSubmit}
+          noValidate
+          aria-label="Formulaire de création de compte"
+        >
           <div className="login-text">
             <label className="login-label" htmlFor="name">
-              Nom <span className="login-asterisk">*</span>
+              Nom{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -190,13 +218,18 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Lassalle"
                 required
+                aria-required="true"
+                disabled={isLoading}
               />
             </div>
           </div>
 
           <div className="login-text">
             <label className="login-label" htmlFor="firstname">
-              Prénom <span className="login-asterisk">*</span>
+              Prénom{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -208,6 +241,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Jean"
                 required
+                aria-required="true"
                 disabled={isLoading}
               />
             </div>
@@ -233,7 +267,10 @@ export default function CreateLogin() {
 
           <div className="login-text">
             <label className="login-label" htmlFor="email">
-              Adresse e-mail <span className="login-asterisk">*</span>
+              Adresse e-mail{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -245,6 +282,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: jean.lassalle@example.fr"
                 required
+                aria-required="true"
                 disabled={isLoading}
               />
             </div>
@@ -252,7 +290,10 @@ export default function CreateLogin() {
 
           <div className="login-text">
             <label className="login-label" htmlFor="username">
-              Pseudo <span className="login-asterisk">*</span>
+              Pseudo{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -264,6 +305,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: jlassalle"
                 required
+                aria-required="true"
                 disabled={isLoading}
               />
             </div>
@@ -271,7 +313,10 @@ export default function CreateLogin() {
 
           <div className="login-picture-container">
             <label className="login-text-picture" htmlFor="profile_pic">
-              Photo de profil <span className="login-asterisk">*</span>
+              Photo de profil{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="login-picture-wrapper">
               <div className="login-picture-input">
@@ -280,9 +325,11 @@ export default function CreateLogin() {
                   type="file"
                   id="profile_pic"
                   name="profile_pic"
-                  accept="image/*"
+                  accept="image/jpeg,image/png"
                   onChange={handleFileChange}
                   required
+                  aria-required="true"
+                  aria-label="Sélectionner une photo de profil"
                   disabled={isLoading}
                 />
               </div>
@@ -290,30 +337,34 @@ export default function CreateLogin() {
                 <div className="preview-container">
                   <img
                     src={previewUrl}
-                    alt="Prévisualisation"
+                    alt="Prévisualisation du profil"
                     className="profile-preview"
                   />
-
-                  <div
+                  <button
+                    type="button"
                     className="login-bin-button"
                     onClick={clearProfilePic}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === "") {
-                        clearProfilePic();
-                      }
-                    }}
+                    aria-label="Supprimer la photo de profil"
                   >
                     ×
-                  </div>
+                  </button>
                 </div>
               )}
-              <img src={bin} alt="supprimer" className="login-bin" />
+              <img
+                src={bin}
+                alt="icône supprimer"
+                className="login-bin"
+                aria-hidden="true"
+              />
             </div>
           </div>
 
           <div className="login-text">
             <label className="login-label" htmlFor="password">
-              Mot de passe <span className="login-asterisk">*</span>
+              Mot de passe{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -325,6 +376,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="Minimum 6 caractères"
                 required
+                aria-required="true"
                 minLength={6}
                 disabled={isLoading}
               />
@@ -334,7 +386,9 @@ export default function CreateLogin() {
           <div className="login-text">
             <label className="login-label" htmlFor="confirm_password">
               Confirmer le mot de passe{" "}
-              <span className="login-asterisk">*</span>
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -346,6 +400,7 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="Confirmez votre mot de passe"
                 required
+                aria-required="true"
                 minLength={6}
                 disabled={isLoading}
               />
@@ -356,6 +411,7 @@ export default function CreateLogin() {
             className="login-submit-button"
             type="submit"
             disabled={isLoading || success}
+            aria-disabled={isLoading || success}
           >
             {isLoading ? "Création en cours..." : "Créer mon compte"}
           </button>
