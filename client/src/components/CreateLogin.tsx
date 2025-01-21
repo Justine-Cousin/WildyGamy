@@ -325,7 +325,7 @@ export default function CreateLogin() {
                   type="file"
                   id="profile_pic"
                   name="profile_pic"
-                  accept="image/jpeg,image/png"
+                  accept="image/jpeg,image/png,image/jpg"
                   onChange={handleFileChange}
                   required
                   aria-required="true"
