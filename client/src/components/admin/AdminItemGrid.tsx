@@ -1,8 +1,10 @@
 import {
+  CircleUser,
   Coins,
   Eye,
   EyeClosed,
   PencilLine,
+  Phone,
   Tickets,
   Trash2,
 } from "lucide-react";
@@ -96,12 +98,39 @@ const AdminItemGrid = <T extends Game | Prize | User>({
     >
       <div className="admincard-content-info">
         <img
-          className={type === "game" ? "gamecard-image" : "pricecard-img"}
-          src={"image" in item ? item.image || logoWG : logoWG}
+          className={
+            type === "game"
+              ? "gamecard-image"
+              : type === "prize"
+                ? "pricecard-img"
+                : "profile_pic"
+          }
+          src={
+            type === "user"
+              ? (item as User).profile_pic || logoWG
+              : "image" in item
+                ? item.image || logoWG
+                : logoWG
+          }
           alt={item.name}
         />
         <div className="adminCard-info">
-          <h3 className="adminCard-name">{item.name}</h3>
+          <h3 className="adminCard-name">
+            {(item as User).firstname} {item.name}
+          </h3>
+          {type === "user" && (
+            <div className="adminCard-user-info">
+              <div className="adminCard-username">
+                <CircleUser className="username-icone" size={15} />
+                <span> {(item as User).username}</span>
+              </div>
+
+              <div className="adminCard-phone">
+                <Phone className="phone-icone" size={15} />
+                <span> {(item as User).phone_number || "Non renseigné"}</span>
+              </div>
+            </div>
+          )}
         </div>
         <div className="adminCard-prices">
           {type === "game" ? (
@@ -109,12 +138,12 @@ const AdminItemGrid = <T extends Game | Prize | User>({
               <span>{(item as Game).price}</span>
               <Coins size={16} />
             </div>
-          ) : (
+          ) : type === "prize" ? (
             <div className="adminCard-prices-prize">
               <span>{(item as Prize).exchange_price}</span>
               <Tickets size={16} />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 

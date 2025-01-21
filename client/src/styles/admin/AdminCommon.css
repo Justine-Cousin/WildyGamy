@@ -7,7 +7,8 @@
   }
 
   .admingames-container,
-  .adminprizes-container {
+  .adminprizes-container,
+  .adminusers-container {
     min-height: 100vh;
     background-color: #0b0812;
     position: relative;
@@ -15,7 +16,8 @@
   }
 
   .admingames-logo,
-  .adminprizes-logo {
+  .adminprizes-logo,
+  .adminusers-logo {
     width: 14%;
     position: fixed;
     top: 0;
@@ -25,7 +27,8 @@
   }
 
   .admingames-content,
-  .adminprizes-content {
+  .adminprizes-content,
+  .adminusers-content {
     padding: 2rem;
     margin-top: 30px;
     max-width: 1200px;
@@ -89,7 +92,6 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: #f3f4f6;
-    margin-bottom: 10px;
   }
 
   /* prix */
@@ -265,4 +267,37 @@
   color: #9001f5;
   text-align: center;
   padding: 2rem;
+}
+
+.profile_pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.adminCard-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 10px;
+}
+
+.adminCard-phone {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.adminCard-username {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.username-icon,
+.phone-icon {
+  color: #e9d5ff;
+  filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
 }
