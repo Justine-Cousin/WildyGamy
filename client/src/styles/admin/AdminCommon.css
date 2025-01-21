@@ -159,7 +159,8 @@
 
   .admingrid-eye,
   .admingrid-pencil,
-  .admingrid-trash {
+  .admingrid-trash,
+  .admingrid-ban {
     width: 22px;
     height: 22px;
     color: #e9d5ff;
@@ -169,7 +170,8 @@
 
   .admingrid-eye:hover,
   .admingrid-pencil:hover,
-  .admingrid-trash:hover {
+  .admingrid-trash:hover,
+  .admingrid-ban:hover {
     color: #ff4d9e;
   }
 
@@ -300,4 +302,26 @@
 .phone-icon {
   color: #e9d5ff;
   filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
+}
+
+.admingrid-ban {
+  width: 22px;
+  height: 22px;
+  color: #e9d5ff;
+  filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
+  transition: color 0.2s ease;
+}
+
+.admingrid-ban.banned {
+  color: #666;
+  transform: rotate(45deg);
+}
+
+.admingrid-ban:hover {
+  color: #ff4d9e;
+}
+
+.admingrid-ban.banned:hover {
+  transform: rotate(0deg);
+  color: #4caf50;
 }

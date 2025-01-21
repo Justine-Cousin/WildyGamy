@@ -28,14 +28,14 @@ const AdminUsers = () => {
     error,
     updateItem,
     deleteItem,
-    addItem,
+    setData,
   } = useAdminData<User>({
     fetchUrl: "/api/users",
     loadingMessage: "Invocation des joueurs",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState<"edit" | "add">("add");
+  const [modalMode, setModalMode] = useState<"edit" | "add">("edit");
   const [selectedUser, setSelectedUser] = useState<User>(DEFAULT_USER);
 
   const handleEditClick = (user: User) => {
@@ -49,12 +49,6 @@ const AdminUsers = () => {
       phone_number: user.phone_number || "",
       profile_pic: user.profile_pic || "",
     });
-    setIsModalOpen(true);
-  };
-
-  const handleAddClick = () => {
-    setSelectedUser(DEFAULT_USER);
-    setModalMode("add");
     setIsModalOpen(true);
   };
 
@@ -80,14 +74,37 @@ const AdminUsers = () => {
         is_admin: selectedUser.is_admin || false,
       };
 
-      if (modalMode === "add") {
-        await addItem(formattedData);
-      } else {
-        await updateItem(selectedUser.id, formattedData);
-      }
+      await updateItem(selectedUser.id, formattedData);
       setIsModalOpen(false);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleBan = async (id: number) => {
+    try {
+      const user = users?.find((user) => user.id === id);
+      if (!user) return;
+
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API_URL}/api/users/${id}/ban`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ is_banned: !user.is_banned }),
+        credentials: "include",
+      });
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      const updatedUsers = users?.map((user) =>
+        user.id === id ? { ...user, is_banned: !user.is_banned } : user,
+      );
+      if (updatedUsers) {
+        setData(updatedUsers);
+      }
+    } catch (error) {
+      console.error("Erreur lors du bannissement:", error);
     }
   };
 
@@ -109,8 +126,7 @@ const AdminUsers = () => {
 
   return (
     <AdminLayout
-      showAddButton={true}
-      onAddClick={handleAddClick}
+      showAddButton={false}
       containerClassName="adminusers-container"
       contentClassName="adminusers-content"
       logoClassName="adminusers-logo"
@@ -124,6 +140,8 @@ const AdminUsers = () => {
             user={user}
             onEdit={handleEditClick}
             onDelete={deleteItem}
+            onBan={handleBan}
+            isBanned={user.is_banned}
           />
         ))}
       </div>
@@ -141,7 +159,7 @@ const AdminUsers = () => {
           profile_pic: selectedUser.profile_pic || "",
         }}
         onSave={handleSave}
-        mode={modalMode}
+        mode={modalMode || "edit"}
       />
     </AdminLayout>
   );

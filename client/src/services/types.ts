@@ -10,6 +10,7 @@ export interface User {
   total_points: number;
   current_points: number;
   is_admin: boolean;
+  is_banned?: boolean;
 }
 
 export interface BaseItem {
