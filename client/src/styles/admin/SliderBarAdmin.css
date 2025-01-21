@@ -34,7 +34,8 @@
 .button-close {
   width: 35px;
   height: 35px;
-  color: #ff0178;
+  color: #e9d5ff;
+  filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
 }
 
 .adminhome-sidebar-open {
@@ -70,4 +71,11 @@
 
 .main-content.main-content-shifted {
   margin-left: 250px;
+}
+
+.iconItem {
+  width: 30px;
+  height: 30px;
+  color: #e9d5ff;
+  filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
 }

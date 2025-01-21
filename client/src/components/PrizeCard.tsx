@@ -1,4 +1,5 @@
 import coin from "../assets/images/coin.svg";
+import logoWG from "../assets/images/logo_wildy_gamy.png";
 import type { Prize } from "../services/types";
 
 const PrizeCard = ({ prize }: { prize: Prize }) => {
@@ -7,7 +8,7 @@ const PrizeCard = ({ prize }: { prize: Prize }) => {
       <div className="prize-card__content">
         <div className="prize-card__image-container">
           <img
-            src={prize.image}
+            src={prize.image ? prize.image : logoWG}
             alt={prize.name}
             className="prize-card__image"
           />

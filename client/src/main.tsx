@@ -9,6 +9,7 @@ import App from "./App";
 import AdminGames from "./pages/Admin/AdminGames";
 import AdminHome from "./pages/Admin/AdminHome";
 import AdminPrize from "./pages/Admin/AdminPrizes";
+import AdminUsers from "./pages/Admin/AdminUsers";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
       { path: "admin", element: <AdminHome /> },
       { path: "admin/games", element: <AdminGames /> },
       { path: "admin/prizes", element: <AdminPrize /> },
+      { path: "admin/users", element: <AdminUsers /> },
       { path: "ranking", element: <RankingPage /> },
     ],
   },
