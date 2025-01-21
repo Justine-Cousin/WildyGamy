@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ModalAdminGame from "../../components/ModalAdminGame";
 import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
+import ModalAdminGame from "../../components/admin/ModalAdminGame";
 import { useAdminData } from "../../components/admin/useAdminData";
 import type { Game } from "../../services/types";
 import "../../styles/admin/AdminGames.css";

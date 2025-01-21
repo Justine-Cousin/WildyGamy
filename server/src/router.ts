@@ -46,11 +46,15 @@ router.delete("/api/prizes/:id", prizeActions.destroy);
 router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
-router.get("/api/users", usersActions.browse);
-router.get("/api/users/:id", usersActions.read);
 router.post("/api/games", gameActions.add);
 router.patch("/api/games/:id/availability", gameActions.updateAvailability);
 router.put("/api/games/:id", gameActions.edit);
 router.delete("/api/games/:id", gameActions.destroy);
+
+router.get("/api/users", usersActions.browse);
+router.get("/api/users/:id", usersActions.read);
+router.post("/api/users", usersActions.add);
+router.put("/api/users/:id", usersActions.edit);
+router.delete("/api/users/:id", usersActions.destroy);
 
 export default router;

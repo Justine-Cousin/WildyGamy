@@ -1,0 +1,21 @@
+.adminusers-container {
+  min-height: 100vh;
+  background-color: none;
+  position: relative;
+}
+
+.prizes-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: none;
+}
+
+.users-page__loading,
+.users-page__error {
+  font-size: 1.5rem;
+  color: #9001f5;
+  text-align: center;
+  padding: 2rem;
+}
