@@ -68,5 +68,6 @@ router.get("/api/users/:id", usersActions.read);
 router.post("/api/users", usersActions.add);
 router.put("/api/users/:id", usersActions.edit);
 router.delete("/api/users/:id", usersActions.destroy);
+router.put("/api/users/:id/ban", usersActions.toggleBan);
 
 export default router;
