@@ -27,17 +27,17 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const read: RequestHandler = async (req, res, next) => {
   try {
-    const { username } = req.params;
+    const { id } = req.params;
 
-    if (!username) {
-      res.status(400).json({ error: "Le nom d'utilisateur est requis" });
+    if (!id) {
+      res.status(400).json({ error: "User ID is required" });
       return;
     }
 
-    const user = await userRepository.readByUsername(username);
+    const user = await userRepository.readById(Number(id));
 
     if (!user) {
-      res.status(404).json({ error: "Utilisateur non trouvé" });
+      res.status(404).json({ error: "User not found" });
       return;
     }
 

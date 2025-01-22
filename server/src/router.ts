@@ -38,7 +38,7 @@ router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // Define Your API Routes Here
 
 router.get("/api/user", userActions.browse);
-router.get("/api/user/:username", userActions.read);
+router.get("/api/user/:id", userActions.read);
 router.post("/api/user", userActions.add);
 router.put("/api/user/:username", userActions.edit);
 router.delete("/api/user/:username", userActions.destroy);
@@ -57,7 +57,7 @@ router.patch("/api/prizes/:id/availability", prizeActions.updateAvailability);
 router.put("/api/prizes/:id", prizeActions.edit);
 router.delete("/api/prizes/:id", prizeActions.destroy);
 
-router.get("/api/games/available", gameActions.browseAvailable);
+router.get("/a ble", gameActions.browseAvailable);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
 router.post("/api/games", gameActions.add);
