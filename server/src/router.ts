@@ -3,6 +3,7 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import authActions from "./modules/auth/authActions";
 import gameActions from "./modules/games/gamesActions";
 import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
@@ -10,6 +11,10 @@ import userActions from "./modules/user/userActions";
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
+  next();
+});
 const handleAsyncError = (
   handler: (req: Request, res: Response, next: NextFunction) => Promise<void>,
 ) => {
@@ -39,6 +44,8 @@ router.get("/api/user/:username", userActions.read);
 router.post("/api/user", userActions.add);
 router.put("/api/user/:username", userActions.edit);
 router.delete("/api/user/:username", userActions.destroy);
+router.post("/api/login", authActions.login);
+router.use("/api/*", authActions.verifyToken);
 
 // Define item-related routes
 import usersActions from "./modules/users/usersActions";
