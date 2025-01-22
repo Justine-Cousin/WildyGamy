@@ -1,190 +1,158 @@
 import path from "node:path";
-import type { Request, Response } from "express";
+import argon2 from "argon2";
+import type { RequestHandler } from "express";
 import type { UploadedFile } from "express-fileupload";
-import UserRepository from "./userRepository";
+import cloudinary from "../../middleware/cloudinary";
+import userRepository from "./userRepository";
 
-const userActions = {
-  browse: async (req: Request, res: Response) => {
-    try {
-      res.setHeader("Content-Type", "application/json");
-
-      res.status(501).json({
-        error: "La liste des utilisateurs n'est pas disponible",
-      });
-    } catch (error) {
-      console.error("Erreur lors de la récupération des utilisateurs:", error);
-      res.status(500).json({
-        error: "Erreur lors de la récupération des utilisateurs",
-      });
-    }
-  },
-
-  read: async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-
-      if (!id) {
-        return res.status(400).json({ error: "ID is required" });
-      }
-
-      const user = await UserRepository.readById(Number(id));
-
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      const { password_hash, ...userWithoutPassword } = user;
-      res.status(200).json(userWithoutPassword);
-    } catch (error) {
-      console.error("Error reading user:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  },
-
-  add: async (req: Request, res: Response) => {
-    try {
-      res.setHeader("Content-Type", "application/json");
-
-      console.error("Request body:", req.body);
-      console.error("Request files:", req.files);
-
-      const { name, firstname, email, username, password, phone_number } =
-        req.body;
-
-      if (
-        !name?.trim() ||
-        !firstname?.trim() ||
-        !email?.trim() ||
-        !username?.trim() ||
-        !password
-      ) {
-        return res.status(400).json({
-          error: "Veuillez remplir tous les champs obligatoires",
-        });
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({
-          error: "Format d'email invalide",
-        });
-      }
-
-      if (password.length < 6) {
-        return res.status(400).json({
-          error: "Le mot de passe doit contenir au moins 6 caractères",
-        });
-      }
-
-      const existingEmail = await UserRepository.readByEmail(email);
-      if (existingEmail) {
-        return res.status(400).json({
-          error: "Cette adresse email est déjà utilisée",
-        });
-      }
-
-      const existingUsername = await UserRepository.readByUsername(username);
-      if (existingUsername) {
-        return res.status(400).json({
-          error: "Ce nom d'utilisateur est déjà utilisé",
-        });
-      }
-
-      let profile_pic_path = null;
-      if (req.files && "profile_pic" in req.files) {
-        const profilePic = req.files.profile_pic as UploadedFile;
-
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-        if (!allowedTypes.includes(profilePic.mimetype)) {
-          return res.status(400).json({
-            error: "Seuls les formats JPG, JPEG et PNG sont acceptés",
-          });
-        }
-
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        const extension = path.extname(profilePic.name);
-        const filename = `profile-${uniqueSuffix}${extension}`;
-
-        try {
-          await profilePic.mv(
-            path.join(
-              __dirname,
-              "../../../public/uploads/profile_pics",
-              filename,
-            ),
-          );
-          profile_pic_path = `/uploads/profile_pics/${filename}`;
-        } catch (moveError) {
-          console.error("Erreur lors du déplacement du fichier:", moveError);
-          return res.status(500).json({
-            error: "Erreur lors de l'enregistrement de l'image de profil",
-          });
-        }
-      }
-
-      const userId = await UserRepository.create({
-        name: name.trim(),
-        firstname: firstname.trim(),
-        email: email.trim(),
-        username: username.trim(),
-        password,
-        phone_number: phone_number?.trim(),
-        profile_pic: profile_pic_path,
-      });
-
-      res.status(201).json({
-        message: "Compte créé avec succès",
-        userId,
-      });
-    } catch (error) {
-      console.error("Erreur lors de la création du compte:", error);
-      res.status(500).json({
-        error: "Une erreur est survenue lors de la création du compte",
-      });
-    }
-  },
-
-  edit: async (req: Request, res: Response) => {
-    try {
-      res.setHeader("Content-Type", "application/json");
-      res.status(501).json({
-        error: "La modification de compte n'est pas encore disponible",
-      });
-    } catch (error) {
-      console.error("Erreur lors de la modification du compte:", error);
-      res.status(500).json({
-        error: "Une erreur est survenue lors de la modification du compte",
-      });
-    }
-  },
-
-  destroy: async (req: Request, res: Response) => {
-    try {
-      res.setHeader("Content-Type", "application/json");
-      res.status(501).json({
-        error: "La suppression de compte n'est pas encore disponible",
-      });
-    } catch (error) {
-      console.error("Erreur lors de la suppression du compte:", error);
-      res.status(500).json({
-        error: "Une erreur est survenue lors de la suppression du compte",
-      });
-    }
-  },
-
-  login: async (req: Request, res: Response) => {
-    try {
-      res.setHeader("Content-Type", "application/json");
-      res.status(501).json({
-        error: "La connexion n'est pas encore disponible",
-      });
-    } catch (error) {
-      console.error("Erreur lors de la connexion:", error);
-      res.status(500).json({
-        error: "Une erreur est survenue lors de la connexion",
-      });
-    }
-  },
+const hashingOptions = {
+  type: argon2.argon2id,
+  memoryCost: 19 * 2 ** 10,
+  timeCost: 2,
+  parallelism: 1,
 };
 
-export default userActions;
+const browse: RequestHandler = async (req, res, next) => {
+  try {
+    const users = await userRepository.readAll();
+    const usersWithoutPassword = users.map(
+      ({ password_hash, ...user }) => user,
+    );
+
+    res.json(usersWithoutPassword);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+
+    if (!username) {
+      res.status(400).json({ error: "Le nom d'utilisateur est requis" });
+      return;
+    }
+
+    const user = await userRepository.readByUsername(username);
+
+    if (!user) {
+      res.status(404).json({ error: "Utilisateur non trouvé" });
+      return;
+    }
+
+    const { password_hash, ...userWithoutPassword } = user;
+    res.json(userWithoutPassword);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const { name, firstname, email, username, password, phone_number } =
+      req.body;
+
+    if (
+      !name?.trim() ||
+      !firstname?.trim() ||
+      !email?.trim() ||
+      !username?.trim() ||
+      !password
+    ) {
+      res.status(400).json({ error: "Tous les champs sont requis" });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      res.status(400).json({ error: "Le format d'email n'est pas valide" });
+      return;
+    }
+
+    if (password.length < 6) {
+      res
+        .status(400)
+        .json({ error: "Le mot de passe doit contenir au moins 6 caractères" });
+      return;
+    }
+
+    const existingEmail = await userRepository.readByEmail(email);
+    if (existingEmail) {
+      res.status(400).json({ error: "Cet adresse email est déjà utilisé" });
+      return;
+    }
+
+    const existingUsername = await userRepository.readByUsername(username);
+    if (existingUsername) {
+      res.status(400).json({ error: "Ce pseudo n'est pas disponible" });
+      return;
+    }
+    const hashedPassword = await argon2.hash(password, hashingOptions);
+
+    let profilePicUrl = null;
+    if (req.files && "profile_pic" in req.files) {
+      const profilePic = req.files.profile_pic as UploadedFile;
+
+      if (
+        !["image/jpeg", "image/jpg", "image/png"].includes(profilePic.mimetype)
+      ) {
+        res.status(400).json({
+          error:
+            "Seuls les fichiers aux formats JPG, JPEG et PNG sont acceptés",
+        });
+        return;
+      }
+
+      try {
+        const result = await cloudinary.uploader.upload(
+          profilePic.tempFilePath,
+          {
+            folder: "profile_pics",
+            resource_type: "auto",
+          },
+        );
+        profilePicUrl = result.secure_url;
+      } catch (uploadError) {
+        console.error("Erreur upload Cloudinary:", uploadError);
+        res.status(500).json({ error: "Erreur lors de l'upload de l'image" });
+        return;
+      }
+    }
+
+    const userId = await userRepository.create({
+      name: name.trim(),
+      firstname: firstname.trim(),
+      email: email.trim().toLowerCase(),
+      username: username.trim(),
+      password_hash: hashedPassword,
+      phone_number: phone_number?.trim(),
+      profile_pic: profilePicUrl,
+    });
+
+    res.status(201).json({
+      message: "Bienvenue ! Votre compte a été créé avec succès",
+      userId,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    res.status(501).json({ error: "Update operation not implemented" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    res.status(501).json({ error: "Delete operation not implemented" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, edit, destroy };

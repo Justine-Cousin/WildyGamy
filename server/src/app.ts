@@ -67,16 +67,9 @@ app.use(
     abortOnLimit: true,
     debug: true,
     parseNested: true,
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
   }),
-);
-const uploadDir = path.join(__dirname, "../../public/uploads/profile_pics");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "../../public/uploads")),
 );
 
 // Import the API router

@@ -2,7 +2,7 @@ import { Eye, EyeClosed, PencilLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
 import "../styles/AdminGrid.css";
-import EditModalAdminGame from "./ModalAdminGame";
+import EditModalAdminGame from "./admin/ModalAdminGame";
 
 type AdminGridProps = {
   type: string;

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ModalAdminPrize from "../../components/ModalAdminPrize";
 import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
+import ModalAdminPrize from "../../components/admin/ModalAdminPrize";
 import { useAdminData } from "../../components/admin/useAdminData";
 import type { Prize } from "../../services/types";
 import "../../styles/admin/AdminPrizes.css";

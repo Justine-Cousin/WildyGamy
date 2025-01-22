@@ -9,11 +9,21 @@ export interface User {
   profile_pic?: string;
   total_points: number;
   current_points: number;
+  is_admin: boolean;
 }
 
 export interface BaseItem {
   id: number;
   name: string;
+  USER_ID?: number;
+  username?: string;
+  firstname?: string;
+  email?: string;
+  phone_number?: string;
+  profile_pic?: string;
+  total_points?: number;
+  current_points?: number;
+  is_admin?: boolean;
   description?: string;
   image?: string;
   is_available: boolean;

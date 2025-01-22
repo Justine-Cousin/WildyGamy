@@ -9,7 +9,8 @@ CREATE TABLE user (
     phone_number VARCHAR(20),
     profile_pic VARCHAR(255),
     total_points INT DEFAULT 0,
-    current_points INT DEFAULT 0
+    current_points INT DEFAULT 0,
+    is_admin BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE game (

@@ -13,6 +13,7 @@ type user = {
   total_points: number;
   current_points: number;
 };
+export type createUser = Omit<user, "id">;
 
 class usersRepository {
   async read(id: number) {
@@ -38,6 +39,48 @@ class usersRepository {
       total_points: row.total_points,
       current_points: row.current_points,
     }));
+  }
+
+  async update(user: createUser & { id: number }) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set name = ?, firstname = ?, email = ?, username = ?, phone_number = ?, profile_pic = ?, total_points = ?, current_points = ? where id = ?",
+      [
+        user.name,
+        user.firstname,
+        user.email,
+        user.username,
+        user.phone_number,
+        user.profile_pic,
+        user.total_points,
+        user.current_points,
+        user.id,
+      ],
+    );
+    return result.affectedRows;
+  }
+
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "delete from user where id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async create(user: createUser) {
+    const [result] = await databaseClient.query<Result>(
+      "insert into user (name, firstname, email, username, phone_number, profile_pic) values (?, ?, ?, ?, ?, ?)",
+      [
+        user.name,
+        user.firstname,
+        user.email,
+        user.username,
+        user.phone_number,
+        user.profile_pic,
+      ],
+    );
+
+    return result.insertId;
   }
 }
 
