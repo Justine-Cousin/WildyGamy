@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import { useState } from "react";
 import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -36,6 +37,7 @@ const AdminUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"edit" | "add">("edit");
   const [selectedUser, setSelectedUser] = useState<User>(DEFAULT_USER);
+  const [valueInput, setValueInput] = useState("");
 
   const handleEditClick = (user: User) => {
     setModalMode("edit");
@@ -123,6 +125,24 @@ const AdminUsers = () => {
     );
   }
 
+  const usersFiltered = users?.filter(
+    (user) =>
+      user.name.toLocaleLowerCase().includes(valueInput.toLocaleLowerCase()) ||
+      user.firstname
+        .toLocaleLowerCase()
+        .includes(valueInput.toLocaleLowerCase()) ||
+      user.username
+        .toLocaleLowerCase()
+        .includes(valueInput.toLocaleLowerCase()) ||
+      user.email.toLocaleLowerCase().includes(valueInput.toLocaleLowerCase()) ||
+      user.phone_number
+        ?.toLocaleLowerCase()
+        .includes(valueInput.toLocaleLowerCase()) ||
+      user.email.toLocaleLowerCase().includes(valueInput.toLocaleLowerCase()),
+  );
+
+  const noResultMessages = ["Aucun joueur trouvé"];
+
   return (
     <AdminLayout
       showAddButton={false}
@@ -130,20 +150,40 @@ const AdminUsers = () => {
       contentClassName="adminusers-content"
       logoClassName="adminusers-logo"
     >
-      <div className="admingrid-card">
-        {users?.map((user) => (
-          <AdminItemGrid
-            key={user.id}
-            id={user.id}
-            type="user"
-            user={user}
-            onEdit={handleEditClick}
-            onBan={handleBan}
-            isBanned={user.is_banned}
+      <div className="admin-search-bar-container">
+        <form
+          id="admin-user-search-bar"
+          onSubmit={(event) => event.preventDefault()}
+        >
+          <Search className="admin-user-search-img" />
+          <input
+            type="text"
+            placeholder="Rechercher un joueur"
+            value={valueInput}
+            onChange={(event) => setValueInput(event.target.value)}
+            id="admin-user-search-bar-input"
           />
-        ))}
+        </form>
       </div>
-
+      <div className="admin-user-result">
+        <div className="admingrid-card">
+          {usersFiltered?.length === 0 ? (
+            <div className="admin-no-result">{noResultMessages}</div>
+          ) : (
+            usersFiltered?.map((user) => (
+              <AdminItemGrid
+                key={user.id}
+                id={user.id}
+                type="user"
+                user={user}
+                onEdit={handleEditClick}
+                onBan={handleBan}
+                isBanned={user.is_banned}
+              />
+            ))
+          )}
+        </div>
+      </div>
       <ModalAdminUser
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
