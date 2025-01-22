@@ -10,7 +10,8 @@ CREATE TABLE user (
     profile_pic VARCHAR(255),
     total_points INT DEFAULT 0,
     current_points INT DEFAULT 0,
-    is_admin BOOLEAN DEFAULT FALSE NOT NULL
+    is_admin BOOLEAN DEFAULT FALSE NOT NULL,
+    is_banned BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE game (
@@ -85,4 +86,12 @@ INSERT INTO prize_acquired (user_id, prize_id) VALUES
 (5, 6),
 (5, 7),
 (5, 8);
+
+INSERT INTO favorite (user_id, game_id) VALUES
+(1, 1),
+(1, 2), 
+(2, 3), 
+(3, 1), 
+(4, 5), 
+(5, 6);
 

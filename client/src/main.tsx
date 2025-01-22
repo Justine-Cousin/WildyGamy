@@ -16,6 +16,7 @@ import LoginPage from "./pages/LoginPage";
 import Play from "./pages/Play";
 import RankingPage from "./pages/RankingPage";
 import Room from "./pages/Room";
+import UserProfile from "./pages/UserProfile";
 import PrizePage from "./pages/prizePage";
 
 // Import additional components for new routes
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
       { path: "admin", element: <AdminHome /> },
       { path: "admin/games", element: <AdminGames /> },
       { path: "admin/prizes", element: <AdminPrize /> },
+      { path: "user_profile/:id", element: <UserProfile /> },
       { path: "admin/users", element: <AdminUsers /> },
       { path: "ranking", element: <RankingPage /> },
     ],
