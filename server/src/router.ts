@@ -1,4 +1,8 @@
-import express, { type Request, type Response } from "express";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 import gameActions from "./modules/games/gamesActions";
 import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
@@ -6,27 +10,35 @@ import userActions from "./modules/user/userActions";
 
 const router = express.Router();
 
-// Define Your API Routes Here
+const handleAsyncError = (
+  handler: (req: Request, res: Response, next: NextFunction) => Promise<void>,
+) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await handler(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+};
 
-router.use((req, res, next) => {
+router.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("Content-Type", "application/json");
   next();
 });
 
-router.post("/api/user", async (req: Request, res: Response) => {
-  try {
-    await userActions.add(req, res);
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
-router.get("/api/user/:username", async (req: Request, res: Response) => {
-  try {
-    await userActions.read(req, res);
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// Define Your API Routes Here
+
+router.get("/api/user", userActions.browse);
+router.get("/api/user/:username", userActions.read);
+router.post("/api/user", userActions.add);
+router.put("/api/user/:username", userActions.edit);
+router.delete("/api/user/:username", userActions.destroy);
 
 // Define item-related routes
 import usersActions from "./modules/users/usersActions";

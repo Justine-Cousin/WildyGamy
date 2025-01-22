@@ -1,30 +1,28 @@
-import bcrypt from "bcrypt";
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
 
 type User = {
-  id?: number;
+  id: number;
   name: string;
   firstname: string;
   email: string;
   username: string;
   password_hash: string;
-  phone_number?: string;
+  phone_number?: string | null;
   profile_pic?: string | null;
   total_points: number;
   current_points: number;
 };
 
-class UserRepository {
-  async create(
-    user: Omit<
-      User,
-      "id" | "password_hash" | "total_points" | "current_points"
-    > & { password: string },
-  ) {
-    const saltRounds = 10;
-    const password_hash = await bcrypt.hash(user.password, saltRounds);
+type CreateUserInput = Omit<
+  User,
+  "id" | "password_hash" | "total_points" | "current_points"
+> & {
+  password_hash: string;
+};
 
+class UserRepository {
+  async create(user: CreateUserInput) {
     const [result] = await databaseClient.query<Result>(
       `INSERT INTO user (
         name, firstname, email, username, 
@@ -36,7 +34,7 @@ class UserRepository {
         user.firstname,
         user.email,
         user.username,
-        password_hash,
+        user.password_hash,
         user.phone_number || null,
         user.profile_pic || null,
       ],
@@ -45,7 +43,20 @@ class UserRepository {
     return result.insertId;
   }
 
+  async readAll() {
+    const [rows] = await databaseClient.query<Rows>("SELECT * FROM user");
+    return rows as User[];
+  }
+
   async readByEmail(email: string) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM user WHERE email = ?",
+      [email],
+    );
+    return rows[0] as User | undefined;
+  }
+
+  async readByEmailWithPassword(email: string) {
     const [rows] = await databaseClient.query<Rows>(
       "SELECT * FROM user WHERE email = ?",
       [email],
