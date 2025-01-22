@@ -87,3 +87,11 @@ INSERT INTO prize_acquired (user_id, prize_id) VALUES
 (5, 7),
 (5, 8);
 
+INSERT INTO favorite (user_id, game_id) VALUES
+(1, 1),
+(1, 2), 
+(2, 3), 
+(3, 1), 
+(4, 5), 
+(5, 6);
+

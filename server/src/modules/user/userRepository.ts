@@ -48,6 +48,16 @@ class UserRepository {
     return rows as User[];
   }
 
+  async readById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT id, name, firstname, email, username, phone_number, 
+       profile_pic, total_points, current_points 
+       FROM user WHERE id = ?`,
+      [id],
+    );
+    return rows[0] as User | undefined;
+  }
+
   async readByEmail(email: string) {
     const [rows] = await databaseClient.query<Rows>(
       "SELECT * FROM user WHERE email = ?",

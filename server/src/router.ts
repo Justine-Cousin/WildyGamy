@@ -3,10 +3,13 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import acquiredActions from "./modules/acquired/acquiredActions";
+import favoritesActions from "./modules/favorites/favoritesActions";
 import gameActions from "./modules/games/gamesActions";
 import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
 import userActions from "./modules/user/userActions";
+import usersActions from "./modules/users/usersActions";
 
 const router = express.Router();
 
@@ -41,7 +44,6 @@ router.put("/api/user/:username", userActions.edit);
 router.delete("/api/user/:username", userActions.destroy);
 
 // Define item-related routes
-import usersActions from "./modules/users/usersActions";
 
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
@@ -68,6 +70,9 @@ router.get("/api/users/:id", usersActions.read);
 router.post("/api/users", usersActions.add);
 router.put("/api/users/:id", usersActions.edit);
 router.delete("/api/users/:id", usersActions.destroy);
-router.put("/api/users/:id/ban", usersActions.toggleBan);
+
+router.get("/api/user/:id/favorites", favoritesActions.read);
+
+router.get("/api/user/:id/acquired", acquiredActions.read);
 
 export default router;
