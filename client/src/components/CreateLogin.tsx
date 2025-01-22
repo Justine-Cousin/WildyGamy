@@ -1,11 +1,30 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bin from "../assets/images/bin.svg";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/CreateLogin.css";
 
+interface FormData {
+  name: string;
+  firstname: string;
+  phone_number: string;
+  email: string;
+  username: string;
+  password: string;
+  confirm_password: string;
+}
+
+interface FileChangeEvent extends React.ChangeEvent<HTMLInputElement> {
+  target: HTMLInputElement & { files: FileList };
+}
+
+interface ApiError {
+  error?: string;
+  details?: string;
+}
+
 export default function CreateLogin() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     firstname: "",
     phone_number: "",
@@ -16,8 +35,18 @@ export default function CreateLogin() {
   });
 
   const [profilePic, setProfilePic] = useState<File | null>(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,10 +57,6 @@ export default function CreateLogin() {
     setError("");
   };
 
-  interface FileChangeEvent extends React.ChangeEvent<HTMLInputElement> {
-    target: HTMLInputElement & { files: FileList };
-  }
-
   const handleFileChange = (e: FileChangeEvent) => {
     const file = e.target.files[0];
     if (file) {
@@ -40,84 +65,104 @@ export default function CreateLogin() {
         e.target.value = "";
         return;
       }
+
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        setError("Veuillez sélectionner une image valide (JPG, JPEG ou PNG)");
+        e.target.value = "";
+        return;
+      }
+
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
       setProfilePic(file);
       setError("");
     }
   };
 
   const clearProfilePic = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
     setProfilePic(null);
-    const fileInput = document.getElementById("profile_pic");
-    if (fileInput) (fileInput as HTMLInputElement).value = "";
+    setPreviewUrl(null);
+    const fileInput = document.getElementById(
+      "profile_pic",
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
-    if (
-      !formData.name.trim() ||
-      !formData.firstname.trim() ||
-      !formData.email.trim() ||
-      !formData.username.trim() ||
-      !formData.password ||
-      !formData.confirm_password
-    ) {
-      setError("Veuillez remplir tous les champs obligatoires");
-      return;
-    }
-
-    if (formData.password !== formData.confirm_password) {
-      setError("Les mots de passe ne correspondent pas");
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Le mot de passe doit contenir au moins 6 caractères");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError("Format d'email invalide");
-      return;
-    }
-
-    const submitData = new FormData();
-    for (const key of Object.keys(formData) as (keyof typeof formData)[]) {
-      if (key !== "confirm_password") {
-        submitData.append(key, formData[key]);
-      }
-    }
-    if (profilePic) {
-      submitData.append("profile_pic", profilePic);
-    }
+    setIsLoading(true);
 
     try {
+      if (
+        !formData.name.trim() ||
+        !formData.firstname.trim() ||
+        !formData.email.trim() ||
+        !formData.username.trim() ||
+        !formData.password ||
+        !formData.confirm_password ||
+        !profilePic
+      ) {
+        setError("Veuillez remplir tous les champs obligatoires");
+        setIsLoading(false);
+        return;
+      }
+
+      if (formData.password !== formData.confirm_password) {
+        setError("Les mots de passe ne correspondent pas");
+        setIsLoading(false);
+        return;
+      }
+
+      if (formData.password.length < 6) {
+        setError("Le mot de passe doit contenir au moins 6 caractères");
+        setIsLoading(false);
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        setError("Format d'email invalide");
+        setIsLoading(false);
+        return;
+      }
+
+      const submitData = new FormData();
+      for (const key of Object.keys(formData) as Array<keyof FormData>) {
+        if (key !== "confirm_password") {
+          submitData.append(key, formData[key]);
+        }
+      }
+
+      if (profilePic) {
+        submitData.append("profile_pic", profilePic);
+      }
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
         credentials: "include",
         body: submitData,
       });
 
+      const data = (await response.json()) as ApiError;
+
       if (!response.ok) {
-        const contentType = response.headers.get("content-type");
-        if (contentType?.includes("application/json")) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.error ||
-              "Une erreur est survenue lors de la création du compte",
-          );
-        }
-        throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        throw new Error(
+          data.error ||
+            data.details ||
+            "Une erreur est survenue lors de la création du compte",
+        );
       }
 
-      await response.json();
       setSuccess(true);
-
       setTimeout(() => {
         window.location.href = "/login";
       }, 2000);
@@ -128,6 +173,8 @@ export default function CreateLogin() {
       } else {
         setError("Une erreur inconnue est survenue");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -148,10 +195,18 @@ export default function CreateLogin() {
           </div>
         )}
 
-        <form className="login-form" onSubmit={handleSubmit} noValidate>
+        <form
+          className="login-form"
+          onSubmit={handleSubmit}
+          noValidate
+          aria-label="Formulaire de création de compte"
+        >
           <div className="login-text">
             <label className="login-label" htmlFor="name">
-              Nom <span className="login-asterisk">*</span>
+              Nom{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -163,13 +218,18 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Lassalle"
                 required
+                aria-required="true"
+                disabled={isLoading}
               />
             </div>
           </div>
 
           <div className="login-text">
             <label className="login-label" htmlFor="firstname">
-              Prénom <span className="login-asterisk">*</span>
+              Prénom{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -181,6 +241,8 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="ex: Jean"
                 required
+                aria-required="true"
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -198,13 +260,17 @@ export default function CreateLogin() {
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 placeholder="ex: 06 12 34 56 78"
+                disabled={isLoading}
               />
             </div>
           </div>
 
           <div className="login-text">
             <label className="login-label" htmlFor="email">
-              Adresse e-mail <span className="login-asterisk">*</span>
+              Adresse e-mail{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -214,15 +280,20 @@ export default function CreateLogin() {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="ex: jean.lassalle@lebergerdesespyrenees.fr"
+                placeholder="ex: jean.lassalle@example.fr"
                 required
+                aria-required="true"
+                disabled={isLoading}
               />
             </div>
           </div>
 
           <div className="login-text">
             <label className="login-label" htmlFor="username">
-              Pseudo <span className="login-asterisk">*</span>
+              Pseudo{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -232,15 +303,20 @@ export default function CreateLogin() {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                placeholder="ex: lebergerdesPyrénées"
+                placeholder="ex: jlassalle"
                 required
+                aria-required="true"
+                disabled={isLoading}
               />
             </div>
           </div>
 
           <div className="login-picture-container">
             <label className="login-text-picture" htmlFor="profile_pic">
-              Photo de profil <span className="login-asterisk">*</span>
+              Photo de profil{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="login-picture-wrapper">
               <div className="login-picture-input">
@@ -249,30 +325,46 @@ export default function CreateLogin() {
                   type="file"
                   id="profile_pic"
                   name="profile_pic"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/jpg"
                   onChange={handleFileChange}
                   required
+                  aria-required="true"
+                  aria-label="Sélectionner une photo de profil"
+                  disabled={isLoading}
                 />
               </div>
-              {profilePic && (
-                <button
-                  type="button"
-                  className="login-bin-button"
-                  onClick={clearProfilePic}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      clearProfilePic();
-                    }
-                  }}
-                />
+              {previewUrl && (
+                <div className="preview-container">
+                  <img
+                    src={previewUrl}
+                    alt="Prévisualisation du profil"
+                    className="profile-preview"
+                  />
+                  <button
+                    type="button"
+                    className="login-bin-button"
+                    onClick={clearProfilePic}
+                    aria-label="Supprimer la photo de profil"
+                  >
+                    ×
+                  </button>
+                </div>
               )}
-              <img src={bin} alt="supprimer" className="login-bin" />
+              <img
+                src={bin}
+                alt="icône supprimer"
+                className="login-bin"
+                aria-hidden="true"
+              />
             </div>
           </div>
 
           <div className="login-text">
             <label className="login-label" htmlFor="password">
-              Mot de passe <span className="login-asterisk">*</span>
+              Mot de passe{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -284,7 +376,9 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="Minimum 6 caractères"
                 required
+                aria-required="true"
                 minLength={6}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -292,7 +386,9 @@ export default function CreateLogin() {
           <div className="login-text">
             <label className="login-label" htmlFor="confirm_password">
               Confirmer le mot de passe{" "}
-              <span className="login-asterisk">*</span>
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -304,7 +400,9 @@ export default function CreateLogin() {
                 onChange={handleInputChange}
                 placeholder="Confirmez votre mot de passe"
                 required
+                aria-required="true"
                 minLength={6}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -312,9 +410,10 @@ export default function CreateLogin() {
           <button
             className="login-submit-button"
             type="submit"
-            disabled={success}
+            disabled={isLoading || success}
+            aria-disabled={isLoading || success}
           >
-            Créer mon compte
+            {isLoading ? "Création en cours..." : "Créer mon compte"}
           </button>
         </form>
       </BlurredBackground>
