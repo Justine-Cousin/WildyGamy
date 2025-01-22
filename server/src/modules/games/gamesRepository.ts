@@ -1,7 +1,7 @@
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
 
-type Game = {
+export type Game = {
   id: number;
   name: string;
   description: string;
