@@ -2,6 +2,7 @@ import {
   Ban,
   CircleUser,
   Coins,
+  Crown,
   Eye,
   EyeClosed,
   PencilLine,
@@ -160,6 +161,20 @@ const AdminItemGrid = <T extends Game | Prize | User>({
               <Tickets size={16} />
             </div>
           ) : null}
+        </div>
+        <div className="adminCard-points">
+          {type === "user" && (
+            <>
+              <div className="adminCard-points-user">
+                <span>{(item as User).total_points}</span>
+                <Crown size={16} />
+              </div>
+              <div className="adminCard-currentpoint-user">
+                <span>{(item as User).current_points}</span>
+                <Tickets size={16} />
+              </div>
+            </>
+          )}
         </div>
       </div>
 

@@ -95,33 +95,42 @@
   }
 
   /* prix */
-  .adminCard-prices {
+  .adminCard-prices,
+  .adminCard-points {
     position: absolute;
     top: -10px;
     right: 10px;
     z-index: 1;
+    gap: 4px;
   }
 
   .adminCard-prices-game,
-  .adminCard-prices-prize {
+  .adminCard-prices-prize,
+  .adminCard-points-user,
+  .adminCard-currentpoint-user {
     display: flex;
     align-items: center;
     gap: 4px;
     background-color: white;
     padding: 6px 12px;
+    margin-bottom: 5px;
     border-radius: 9999px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .adminCard-prices-game span,
-  .adminCard-prices-prize span {
+  .adminCard-prices-prize span,
+  .adminCard-points-user span,
+  .adminCard-currentpoint-user span {
     font-weight: 600;
     font-size: 0.875rem;
     color: #9001f5; /* Couleur assortie au thème */
   }
 
   .adminCard-prices-game svg,
-  .adminCard-prices-prize svg {
+  .adminCard-prices-prize svg,
+  .adminCard-points-user svg,
+  .adminCard-currentpoint-user svg {
     color: #9001f5; /* Couleur assortie au thème */
   }
 

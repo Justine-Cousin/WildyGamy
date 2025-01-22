@@ -27,7 +27,6 @@ const AdminUsers = () => {
     loading,
     error,
     updateItem,
-    deleteItem,
     setData,
   } = useAdminData<User>({
     fetchUrl: "/api/users",
@@ -139,7 +138,6 @@ const AdminUsers = () => {
             type="user"
             user={user}
             onEdit={handleEditClick}
-            onDelete={deleteItem}
             onBan={handleBan}
             isBanned={user.is_banned}
           />
