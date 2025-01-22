@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import "../../styles/ModalAdminGame.css";
-import type { ModalProps } from "../../services/types";
+import type { GameSaveData, ModalProps } from "../../services/types";
 
 type Errors = {
   name?: string;
@@ -10,7 +10,7 @@ type Errors = {
   price?: string;
 };
 
-const ModalAdminGame: React.FC<ModalProps> = ({
+const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
   isOpen,
   onClose,
   gameData,

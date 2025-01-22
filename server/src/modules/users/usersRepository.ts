@@ -38,6 +38,7 @@ class usersRepository {
       profile_pic: row.profile_pic,
       total_points: row.total_points,
       current_points: row.current_points,
+      is_banned: Boolean(row.is_banned),
     }));
   }
 
@@ -69,7 +70,7 @@ class usersRepository {
 
   async create(user: createUser) {
     const [result] = await databaseClient.query<Result>(
-      "insert into user (name, firstname, email, username, phone_number, profile_pic) values (?, ?, ?, ?, ?, ?)",
+      "insert into user (name, firstname, email, username, phone_number, profile_pic, total_points, current_points) values (?, ?, ?, ?, ?, ?, ?, ?)",
       [
         user.name,
         user.firstname,
@@ -77,10 +78,21 @@ class usersRepository {
         user.username,
         user.phone_number,
         user.profile_pic,
+        user.total_points || 0,
+        user.current_points || 0,
       ],
     );
 
     return result.insertId;
+  }
+
+  async toggleBan(id: number, isBanned: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_banned = ? where id = ?",
+      [isBanned, id],
+    );
+
+    return result.affectedRows;
   }
 }
 

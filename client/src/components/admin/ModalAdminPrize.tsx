@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import type { ModalProps } from "../../services/types";
+import type { ModalProps, PrizeSaveData } from "../../services/types";
 import "../../styles/ModalAdminGame.css";
 
 type Errors = {
@@ -11,7 +11,7 @@ type Errors = {
   exchange_price?: string;
 };
 
-const ModalAdminPrize: React.FC<ModalProps> = ({
+const ModalAdminPrize: React.FC<ModalProps<PrizeSaveData>> = ({
   isOpen,
   onClose,
   prizeData,

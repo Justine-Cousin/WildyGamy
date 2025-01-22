@@ -1,6 +1,8 @@
 import {
+  Ban,
   CircleUser,
   Coins,
+  Crown,
   Eye,
   EyeClosed,
   PencilLine,
@@ -38,6 +40,8 @@ interface AdminItemGridProps<T> {
     },
   ) => void;
   onDelete?: (id: number) => void;
+  onBan?: (id: number) => void;
+  isBanned?: boolean;
 }
 
 const AdminItemGrid = <T extends Game | Prize | User>({
@@ -49,6 +53,8 @@ const AdminItemGrid = <T extends Game | Prize | User>({
   onAvailabilityChange,
   onEdit,
   onDelete,
+  onBan,
+  isBanned,
 }: AdminItemGridProps<T>) => {
   const item = type === "game" ? game : type === "prize" ? prize : user;
   const [isAvailable, setIsAvailable] = useState(
@@ -88,12 +94,23 @@ const AdminItemGrid = <T extends Game | Prize | User>({
     }
   };
 
+  const handleBan = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const message = isBanned
+      ? "🔓 Êtes-vous sûr de vouloir débannir cet utilisateur ?"
+      : "🚫 Êtes-vous sûr de vouloir bannir cet utilisateur ?";
+    if (window.confirm(message)) {
+      onBan?.(id);
+    }
+  };
+
   return (
     <div
       className={`admincard-content ${type === "prize" ? "prizecard-content" : ""} ${
-        isAvailable
-          ? "admincard-content-available"
-          : "admincard-content-unavailable"
+        isBanned
+          ? "admincard-content-unavailable"
+          : "admincard-content-available"
       }`}
     >
       <div className="admincard-content-info">
@@ -145,6 +162,20 @@ const AdminItemGrid = <T extends Game | Prize | User>({
             </div>
           ) : null}
         </div>
+        <div className="adminCard-points">
+          {type === "user" && (
+            <>
+              <div className="adminCard-points-user">
+                <span>{(item as User).total_points}</span>
+                <Crown size={16} />
+              </div>
+              <div className="adminCard-currentpoint-user">
+                <span>{(item as User).current_points}</span>
+                <Tickets size={16} />
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="admincard-buttons">
@@ -160,6 +191,17 @@ const AdminItemGrid = <T extends Game | Prize | User>({
             ) : (
               <EyeClosed className="admingrid-eye" />
             )}
+          </button>
+        )}
+
+        {type === "user" && onBan && (
+          <button
+            type="button"
+            className="admincard-button"
+            onClick={handleBan}
+            title={isBanned ? "Débannir l'utilisateur" : "Bannir l'utilisateur"}
+          >
+            <Ban className={`admingrid-ban ${isBanned ? "banned" : ""}`} />
           </button>
         )}
 

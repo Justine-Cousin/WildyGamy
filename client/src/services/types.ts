@@ -10,6 +10,7 @@ export interface User {
   total_points: number;
   current_points: number;
   is_admin: boolean;
+  is_banned?: boolean;
 }
 
 export interface BaseItem {
@@ -50,28 +51,38 @@ export interface PrizeAcquired {
   acquisition_date: Date;
 }
 
-export interface ModalProps {
+export interface GameSaveData {
+  name: string;
+  description: string;
+  image: string;
+  price: string;
+}
+
+export interface PrizeSaveData {
+  name: string;
+  description: string;
+  image: string;
+  exchange_price: string;
+}
+
+export interface UserSaveData {
+  name: string;
+  firstname: string;
+  email: string;
+  username: string;
+  phone_number: string;
+  profile_pic: string;
+}
+
+export interface ModalProps<
+  T extends GameSaveData | PrizeSaveData | UserSaveData,
+> {
   isOpen: boolean;
   onClose: () => void;
-  gameData?: {
-    name: string;
-    description: string;
-    image: string;
-    price: string;
-  };
-  prizeData?: {
-    name: string;
-    description: string;
-    image: string;
-    exchange_price: string;
-  };
-  onSave: (updatedData: {
-    name: string;
-    description: string;
-    image: string;
-    price?: string;
-    exchange_price?: string;
-  }) => void;
+  gameData?: GameSaveData;
+  prizeData?: PrizeSaveData;
+  userData?: UserSaveData;
+  onSave: (updatedData: T) => void;
   mode: "edit" | "add";
 }
 

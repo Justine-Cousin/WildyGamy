@@ -83,4 +83,19 @@ const add: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read, edit, destroy, add };
+const toggleBan: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    const { is_banned } = req.body;
+    const affectedRows = await usersRepository.toggleBan(userId, is_banned);
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, edit, destroy, add, toggleBan };

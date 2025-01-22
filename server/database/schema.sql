@@ -10,7 +10,8 @@ CREATE TABLE user (
     profile_pic VARCHAR(255),
     total_points INT DEFAULT 0,
     current_points INT DEFAULT 0,
-    is_admin BOOLEAN DEFAULT FALSE NOT NULL
+    is_admin BOOLEAN DEFAULT FALSE NOT NULL,
+    is_banned BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE game (
