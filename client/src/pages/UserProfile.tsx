@@ -24,7 +24,11 @@ export default function UserProfile() {
           `${import.meta.env.VITE_API_URL}/api/user/${id}`,
           { credentials: "include" },
         );
-        if (!userResponse.ok) throw new Error("Failed to fetch user data");
+
+        if (!userResponse.ok) {
+          throw new Error(`HTTP error! status: ${userResponse.status}`);
+        }
+
         const userData = await userResponse.json();
         setUserProfile(userData);
 
@@ -33,16 +37,14 @@ export default function UserProfile() {
           `${import.meta.env.VITE_API_URL}/api/user/${id}/favorites`,
           { credentials: "include" },
         );
-        if (!favoritesResponse.ok) throw new Error("Failed to fetch favorites");
         const favoritesData = await favoritesResponse.json();
         setFavorites(favoritesData);
 
-        // Fetch acquired prizes
+        // Fetch prizes
         const prizesResponse = await fetch(
           `${import.meta.env.VITE_API_URL}/api/user/${id}/acquired`,
           { credentials: "include" },
         );
-        if (!prizesResponse.ok) throw new Error("Failed to fetch prizes");
         const prizesData = await prizesResponse.json();
         setPrizeAcquired(prizesData);
       } catch (error) {
