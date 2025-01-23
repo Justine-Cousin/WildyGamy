@@ -1,5 +1,5 @@
+import { get } from "node:http";
 import databaseClient from "../../../database/client";
-
 import type { Result, Rows } from "../../../database/client";
 
 type user = {
@@ -21,12 +21,13 @@ class usersRepository {
       "select * from user where id = ?",
       [id],
     );
-
     return rows[0] as user;
   }
 
   async readAll() {
-    const [rows] = await databaseClient.query<Rows>("select * from user");
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from user ORDER BY total_points DESC",
+    );
 
     return rows.map((row) => ({
       id: row.id,
