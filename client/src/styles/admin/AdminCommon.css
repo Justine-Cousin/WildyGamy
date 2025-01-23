@@ -128,6 +128,7 @@
   .adminCard-points {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 10px;
     padding: 20px;
   }
@@ -255,6 +256,10 @@
     min-height: 80px;
   }
 
+  .admincard-content.admincard-content-available-user.is-admin {
+    background: linear-gradient(45deg, #ff4d9e, #c3b0ea);
+  }
+
   /* Style spécifique pour les prix */
   .prizecard-content {
     background: linear-gradient(45deg, #9001f5, #c3b0ea);
@@ -353,6 +358,9 @@
   align-items: center;
   gap: 20px;
   padding-left: 20px;
+  font-size: 14px;
+  color: #f3f4f6;
+  white-space: nowrap;
 }
 
 .adminCard-phone,
@@ -394,14 +402,14 @@
 
 .admin-switch {
   & .MuiSwitch-switchBase.Mui-checked {
-    color: #ff69b4;
+    color: #ff4d9e;
 
     &:hover {
-      background-color: rgba(255, 105, 180, 0.1);
+      background-color: rgba(255, 105, 180, 0.068);
     }
 
     & + .MuiSwitch-track {
-      background-color: #ff69b4;
+      background-color: #ff4d9e;
     }
   }
 }

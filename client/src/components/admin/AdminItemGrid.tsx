@@ -124,7 +124,11 @@ const AdminItemGrid = <T extends Game | Prize | User>({
   if (type === "user") {
     return (
       <div
-        className={`admincard-content ${isBanned ? "admincard-content-unavailable-user" : "admincard-content-available-user"}`}
+        className={`admincard-content ${
+          isBanned
+            ? "admincard-content-unavailable-user"
+            : "admincard-content-available-user"
+        } ${isAdmin ? "is-admin" : ""}`}
       >
         <div className="admincard-content-info-user">
           <img
