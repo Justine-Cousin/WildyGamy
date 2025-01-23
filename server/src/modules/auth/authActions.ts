@@ -1,58 +1,53 @@
 import argon2 from "argon2";
+
 import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
-import userRepository from "../../modules/user/userRepository";
+import userRepository from "../user/userRepository";
 
 const login: RequestHandler = async (req, res, next) => {
   try {
-    const user = await userRepository.readByEmailWithPassword(req.body.email);
+    const { email, password } = req.body;
 
-    if (user == null) {
-      res.sendStatus(422);
+    if (!email?.trim() || !password) {
+      res.status(400).json({ error: "Email et mot de passe requis" });
       return;
     }
 
-    const verified = await argon2.verify(user.password_hash, req.body.password);
+    const user = await userRepository.readByEmailWithPassword(
+      email.trim().toLowerCase(),
+    );
 
-    if (verified) {
-      const { password_hash, ...userWithoutPassword } = user;
-
-      const token = jwt.sign(
-        {
-          sub: user.id.toString(),
-          username: user.username,
-        },
-        process.env.APP_SECRET as string,
-        { expiresIn: "1h" },
-      );
-
-      res.json({
-        token,
-        user: userWithoutPassword,
-      });
-    } else {
-      res.sendStatus(422);
+    if (!user) {
+      res.status(422).json({ error: "Identifiants invalides" });
+      return;
     }
-  } catch (err) {
-    next(err);
-  }
-};
 
-const hashingOptions = {
-  type: argon2.argon2id,
-  memoryCost: 19 * 2 ** 10,
-  timeCost: 2,
-  parallelism: 1,
-};
+    const verified = await argon2.verify(user.password_hash, password);
 
-const hashPassword: RequestHandler = async (req, res, next) => {
-  try {
-    const { password } = req.body;
-    const hashedPassword = await argon2.hash(password, hashingOptions);
-    req.body.password_hash = hashedPassword;
-    req.body.password = undefined;
-    next();
+    if (!verified) {
+      res.status(422).json({ error: "Identifiants invalides" });
+      return;
+    }
+
+    const { password_hash, ...userWithoutPassword } = user;
+
+    const token = jwt.sign(
+      {
+        sub: user.id.toString(),
+        email: user.email,
+        username: user.username,
+      },
+      process.env.APP_SECRET as string,
+      {
+        expiresIn: "1h",
+      },
+    );
+
+    res.json({
+      token,
+      user: userWithoutPassword,
+    });
   } catch (err) {
     next(err);
   }
@@ -62,22 +57,28 @@ const verifyToken: RequestHandler = (req, res, next) => {
   try {
     const authHeader = req.get("Authorization");
 
-    if (authHeader == null) {
-      throw new Error("Authorization header is missing");
+    if (!authHeader) {
+      throw new Error("Authorization header manquant");
     }
 
     const [type, token] = authHeader.split(" ");
 
     if (type !== "Bearer") {
-      throw new Error("Authorization header has not the 'Bearer' type");
+      throw new Error("Type d'autorisation invalide");
     }
 
-    req.auth = jwt.verify(token, process.env.APP_SECRET as string) as MyPayload;
+    const decoded = jwt.verify(
+      token,
+      process.env.APP_SECRET as string,
+    ) as MyPayload;
+
+    req.auth = decoded;
+
     next();
   } catch (err) {
-    console.error(err);
-    res.sendStatus(401);
+    console.error("Erreur d'authentification:", err);
+    res.status(401).json({ error: "Non autorisé" });
   }
 };
 
-export default { login, hashPassword, verifyToken };
+export default { login, verifyToken };

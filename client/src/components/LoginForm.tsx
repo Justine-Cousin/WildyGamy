@@ -1,12 +1,86 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api, auth } from "../services/api";
+import { useAuth } from "../services/authContext";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/LoginForm.css";
 
+interface LoginFormData {
+  email: string;
+  password: string;
+  stay_connected: boolean;
+}
+
 export default function LoginForm() {
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+    stay_connected: false,
+  });
+
+  const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { setAuth: setAuthContext } = useAuth();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    setError("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      if (!formData.email || !formData.password) {
+        setError("Veuillez remplir tous les champs");
+        return;
+      }
+
+      const response = await api.post("/api/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (!response) {
+        throw new Error("Erreur de connexion");
+      }
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        setAuthContext(data);
+        auth.setToken(data.token, formData.stay_connected);
+        navigate(`/user_profile/${data.user.id}`);
+      } else {
+        setError(data.error || "Email ou mot de passe incorrect");
+      }
+    } catch (err) {
+      console.error("Erreur de connexion:", err);
+      setError("Une erreur est survenue lors de la connexion");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="login-container">
       <BlurredBackground>
         <h1 className="login__title">SE CONNECTER</h1>
-        <form className="login__form">
+
+        {error && (
+          <div className="login__error" aria-label="alert">
+            {error}
+          </div>
+        )}
+
+        <form className="login__form" onSubmit={handleSubmit} noValidate>
           <div className="login__field">
             <label className="login__label" htmlFor="email">
               Adresse email <span className="login__required">*</span>
@@ -17,8 +91,12 @@ export default function LoginForm() {
                 type="email"
                 id="email"
                 name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 placeholder="ex : lorem.ipsum@gmail.com"
                 required
+                disabled={isLoading}
+                autoComplete="email"
               />
             </div>
           </div>
@@ -33,8 +111,12 @@ export default function LoginForm() {
                 type="password"
                 id="password"
                 name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 placeholder="xxxxxxx"
                 required
+                disabled={isLoading}
+                autoComplete="current-password"
               />
             </div>
           </div>
@@ -46,13 +128,21 @@ export default function LoginForm() {
                 className="login__remember-input"
                 id="stay_connected"
                 name="stay_connected"
+                checked={formData.stay_connected}
+                onChange={handleInputChange}
+                disabled={isLoading}
               />
               Rester connecté
             </label>
           </div>
 
-          <button className="login__submit" type="submit">
-            Se connecter
+          <button
+            className="login__submit"
+            type="submit"
+            disabled={isLoading}
+            aria-busy={isLoading}
+          >
+            {isLoading ? "Connexion en cours..." : "Se connecter"}
           </button>
 
           <div className="login__links">
@@ -62,6 +152,7 @@ export default function LoginForm() {
           </div>
         </form>
       </BlurredBackground>
+
       <div className="login__signup-container">
         <hr className="login__signup-line" />
         <span className="login__signup">
