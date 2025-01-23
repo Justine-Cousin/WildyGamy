@@ -176,10 +176,15 @@
   .admincard-buttons-user {
     display: flex;
     align-items: center;
+    justify-content: space-around;
     gap: 10px;
     padding: 10px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
+  }
+
+  .MuiTypography-root {
+    color: #f3f4f6;
   }
 
   .admincard-button {
@@ -385,4 +390,18 @@
 .admingrid-ban.banned:hover {
   transform: rotate(0deg);
   color: #4caf50;
+}
+
+.admin-switch {
+  & .MuiSwitch-switchBase.Mui-checked {
+    color: #ff69b4;
+
+    &:hover {
+      background-color: rgba(255, 105, 180, 0.1);
+    }
+
+    & + .MuiSwitch-track {
+      background-color: #ff69b4;
+    }
+  }
 }

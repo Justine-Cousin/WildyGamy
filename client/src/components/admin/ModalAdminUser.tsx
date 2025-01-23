@@ -1,4 +1,3 @@
-import { Circle, CircleCheck } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { ModalProps, UserSaveData } from "../../services/types";
@@ -11,7 +10,6 @@ type Errors = {
   username?: string;
   phone_number?: string;
   profile_pic?: string;
-  is_admin?: string;
 };
 
 const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
@@ -28,7 +26,6 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
   const [phone_number, setPhoneNumber] = useState(userData?.phone_number || "");
   const [profile_pic, setProfilePic] = useState(userData?.profile_pic || "");
   const [errors, setErrors] = useState<Errors>({});
-  const [isAdmin, setIsAdmin] = useState(userData?.is_admin || false);
 
   useEffect(() => {
     if (userData) {
@@ -38,7 +35,6 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
       setEmail(userData.email || "");
       setPhoneNumber(userData.phone_number || "");
       setProfilePic(userData.profile_pic || "");
-      setIsAdmin(userData.is_admin || false);
     }
   }, [userData]);
 
@@ -78,7 +74,7 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
         username,
         phone_number,
         profile_pic,
-        is_admin: isAdmin,
+        is_admin: userData?.is_admin || false,
       });
       onClose();
     }
@@ -192,26 +188,6 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className={`edit-modal-input ${errors.phone_number ? "input-error" : ""}`}
               />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="admin-toggle" className="edit-modal-label">
-                Administrateur
-              </label>
-              <div className="admin-toggle">
-                <button
-                  type="button"
-                  onClick={() => setIsAdmin(!isAdmin)}
-                  className="admin-toggle-button"
-                >
-                  {isAdmin ? (
-                    <CircleCheck className="isadmin-button" />
-                  ) : (
-                    <Circle className="isadmin-button" />
-                  )}
-                </button>
-                <span>{isAdmin ? "Oui" : "Non"}</span>
-              </div>
             </div>
           </div>
 

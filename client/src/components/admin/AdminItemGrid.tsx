@@ -1,3 +1,4 @@
+import { FormControlLabel, FormGroup, Switch } from "@mui/material";
 import {
   Ban,
   CircleUser,
@@ -43,6 +44,7 @@ interface AdminItemGridProps<T> {
   onBan?: (id: number) => void;
   isBanned?: boolean;
   isAdmin?: boolean;
+  onAdmin?: (id: number) => void;
 }
 
 const AdminItemGrid = <T extends Game | Prize | User>({
@@ -56,6 +58,8 @@ const AdminItemGrid = <T extends Game | Prize | User>({
   onDelete,
   onBan,
   isBanned,
+  onAdmin,
+  isAdmin,
 }: AdminItemGridProps<T>) => {
   const item = type === "game" ? game : type === "prize" ? prize : user;
   const [isAvailable, setIsAvailable] = useState(
@@ -106,12 +110,22 @@ const AdminItemGrid = <T extends Game | Prize | User>({
     }
   };
 
+  const handleAdmin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const message = isAdmin
+      ? "🔓 Êtes-vous sûr de vouloir retirer les droits d'administrateur à cet utilisateur ?"
+      : "🚫 Êtes-vous sûr de vouloir donner les droits d'administrateur à cet utilisateur ?";
+    if (window.confirm(message)) {
+      onAdmin?.(id);
+    }
+  };
+
   if (type === "user") {
     return (
       <div
         className={`admincard-content ${isBanned ? "admincard-content-unavailable-user" : "admincard-content-available-user"}`}
       >
-        {/* Photo + Nom + Infos */}
         <div className="admincard-content-info-user">
           <img
             className="profile_pic"
@@ -136,7 +150,6 @@ const AdminItemGrid = <T extends Game | Prize | User>({
           </div>
         </div>
 
-        {/* Points */}
         <div className="adminCard-points">
           <div className="adminCard-points-user">
             <span>{(item as User).total_points}</span>
@@ -148,7 +161,6 @@ const AdminItemGrid = <T extends Game | Prize | User>({
           </div>
         </div>
 
-        {/* Boutons */}
         <div className="admincard-buttons-user">
           {onBan && (
             <button
@@ -172,22 +184,24 @@ const AdminItemGrid = <T extends Game | Prize | User>({
               <PencilLine className="admingrid-pencil" />
             </button>
           )}
-          {onDelete && (
-            <button
-              type="button"
-              className="admincard-button trash-button"
-              onClick={handleDelete}
-              title="Supprimer"
-            >
-              <Trash2 className="admingrid-trash" />
-            </button>
-          )}
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isAdmin}
+                  name="isAdmin"
+                  onChange={handleAdmin}
+                  color="secondary"
+                />
+              }
+              label="Admin"
+            />
+          </FormGroup>
         </div>
       </div>
     );
   }
 
-  // Return pour les cartes jeux et prix
   return (
     <div
       className={`admincard-content ${type === "prize" ? "prizecard-content" : ""} ${

@@ -113,6 +113,35 @@ const AdminUsers = () => {
     }
   };
 
+  const handleAdmin = async (id: number) => {
+    try {
+      const user = users?.find((user) => user.id === id);
+      if (!user) return;
+
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API_URL}/api/users/${id}/admin`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ is_admin: !user.is_admin }),
+        credentials: "include",
+      });
+
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      const updatedUsers = users?.map((user) =>
+        user.id === id ? { ...user, is_admin: !user.is_admin } : user,
+      );
+      if (updatedUsers) {
+        setData(updatedUsers);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la modification des droits admin:", error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="admin-loading-page">
@@ -183,6 +212,8 @@ const AdminUsers = () => {
                 onEdit={handleEditClick}
                 onBan={handleBan}
                 isBanned={user.is_banned}
+                onAdmin={handleAdmin}
+                isAdmin={user.is_admin}
               />
             ))
           )}
