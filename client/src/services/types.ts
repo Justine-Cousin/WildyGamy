@@ -72,6 +72,7 @@ export interface UserSaveData {
   username: string;
   phone_number: string;
   profile_pic: string;
+  is_admin: boolean;
 }
 
 export interface ModalProps<

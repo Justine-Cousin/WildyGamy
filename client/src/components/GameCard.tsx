@@ -1,5 +1,6 @@
 import "../styles/GameCard.css";
-import coin from "../assets/images/coin.svg";
+import { Coins, Heart } from "lucide-react";
+import { useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 
 export interface Game {
@@ -19,6 +20,11 @@ interface GamesCardProps {
 }
 
 export default function GamesCard({ game }: GamesCardProps) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
   return (
     <div key={game.id} className="gamecard-content">
       <img
@@ -28,8 +34,17 @@ export default function GamesCard({ game }: GamesCardProps) {
       />
       <p className="gamecard-description">{game.description}</p>
       <div className="gamecard-price-container">
-        <img src={coin} className="gamecard-img-coin" alt="coin" />
+        <Coins className="gamecard-img-coin" />
         <p className="gamecard-price">{game.price}</p>
+      </div>
+      <div className="gamecard-heart">
+        <button
+          type="button"
+          className={`gamecard-heart-button ${isFavorite ? "favorite" : ""}`}
+          onClick={toggleFavorite}
+        >
+          <Heart fill={isFavorite ? "#db9e2b" : "none"} stroke="currentColor" />
+        </button>
       </div>
     </div>
   );

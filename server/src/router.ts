@@ -4,6 +4,7 @@ import express, {
   type Response,
 } from "express";
 import acquiredActions from "./modules/acquired/acquiredActions";
+import authActions from "./modules/auth/authActions";
 import favoritesActions from "./modules/favorites/favoritesActions";
 import gameActions from "./modules/games/gamesActions";
 import itemActions from "./modules/item/itemActions";
@@ -13,6 +14,10 @@ import usersActions from "./modules/users/usersActions";
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
+  next();
+});
 const handleAsyncError = (
   handler: (req: Request, res: Response, next: NextFunction) => Promise<void>,
 ) => {
@@ -70,10 +75,22 @@ router.get("/api/users", usersActions.browse);
 router.get("/api/users/:id", usersActions.read);
 router.post("/api/users", usersActions.add);
 router.put("/api/users/:id", usersActions.edit);
+router.put("/api/users/:id/ban", usersActions.toggleBan);
+router.put("/api/users/:id/admin", usersActions.toggleAdmin);
 router.delete("/api/users/:id", usersActions.destroy);
 
 router.get("/api/user/:id/favorites", favoritesActions.read);
 
 router.get("/api/user/:id/acquired", acquiredActions.read);
+
+// Define Your API Routes Here
+
+router.get("/api/user", userActions.browse);
+router.get("/api/user/:id", userActions.read);
+router.post("/api/user", userActions.add);
+router.put("/api/user/:username", userActions.edit);
+router.delete("/api/user/:username", userActions.destroy);
+router.post("/api/login", authActions.login);
+router.use("/api/*", authActions.verifyToken);
 
 export default router;

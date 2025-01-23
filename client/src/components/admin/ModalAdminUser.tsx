@@ -18,6 +18,7 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
   userData,
   onSave,
 }) => {
+  if (!isOpen) return null;
   const [name, setName] = useState(userData?.name || "");
   const [firstname, setFirstname] = useState(userData?.firstname || "");
   const [email, setEmail] = useState(userData?.email || "");
@@ -25,7 +26,6 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
   const [phone_number, setPhoneNumber] = useState(userData?.phone_number || "");
   const [profile_pic, setProfilePic] = useState(userData?.profile_pic || "");
   const [errors, setErrors] = useState<Errors>({});
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   useEffect(() => {
     if (userData) {
@@ -74,6 +74,7 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
         username,
         phone_number,
         profile_pic,
+        is_admin: userData?.is_admin || false,
       });
       onClose();
     }
@@ -81,167 +82,134 @@ const ModalAdminUser: React.FC<ModalProps<UserSaveData>> = ({
 
   if (!isOpen) return null;
 
-  function setImage(value: string): void {
-    setProfilePic(value);
-  }
   return (
     <div
       className="modal-admin-user modal-overlay"
       onClick={onClose}
-      onKeyUp={(e) => e.key === "Escape" && onClose()}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") onClose();
+      }}
     >
       <div
-        className="modal-overlay"
-        onClick={onClose}
-        onKeyDown={(e) => e.key === "Escape" && onClose()}
+        className="modal-container"
+        onClick={(e) => e.stopPropagation()}
+        onKeyUp={(e) => e.stopPropagation()}
       >
-        <div
-          className="modal-container"
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => e.key === "Enter" && e.stopPropagation()}
-        >
-          <div className="edit-modal">
-            <h2 className="edit-modal-title">MODIFIER L'UTILISATEUR</h2>
-            <div className="edit-modal-content">
-              <div className="image-section">
-                <div className="form-group">
-                  <label htmlFor="image" className="edit-modal-label">
-                    Photo de profil
-                  </label>
-                  <div className="image-input-container">
-                    <input
-                      type="text"
-                      id="image"
-                      value={profile_pic}
-                      onChange={(e) => setImage(e.target.value)}
-                      className={`edit-modal-textarea ${errors.profile_pic ? "input-error" : ""}`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setIsPreviewVisible(!isPreviewVisible)}
-                      className="preview-button"
-                    >
-                      {isPreviewVisible ? "Cacher" : "Prévisualiser"}
-                    </button>
-                    <div>
-                      {errors.profile_pic && (
-                        <span className="error-message">
-                          {errors.profile_pic}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  {isPreviewVisible && (
-                    <div className="image-preview">
-                      {profile_pic ? (
-                        <img src={profile_pic} alt="Prévisualisation" />
-                      ) : (
-                        <div className="no-image">Aucune image</div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="firstname" className="edit-modal-label">
-                  Prénom <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="firstname"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
-                  className={`edit-modal-input ${errors.firstname ? "input-error" : ""}`}
-                />
-                {errors.firstname && (
-                  <span className="error-message">{errors.firstname}</span>
-                )}
-              </div>
-              <div className="form-section">
-                <div className="form-group">
-                  <label htmlFor="name" className="edit-modal-label">
-                    Nom <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
-                  />
-                  {errors.name && (
-                    <span className="error-message">{errors.name}</span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email" className="edit-modal-label">
-                    Email <span className="required">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={`edit-modal-input ${errors.email ? "input-error" : ""}`}
-                  />
-                  {errors.email && (
-                    <span className="error-message">{errors.email}</span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="username" className="edit-modal-label">
-                    Nom d'utilisateur <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className={`edit-modal-input ${errors.username ? "input-error" : ""}`}
-                  />
-                  {errors.username && (
-                    <span className="error-message">{errors.username}</span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="phone_number" className="edit-modal-label">
-                    Numéro de téléphone <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="phone_number"
-                    value={phone_number}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className={`edit-modal-input ${errors.phone_number ? "input-error" : ""}`}
-                  />
-                  {errors.phone_number && (
-                    <span className="error-message">{errors.phone_number}</span>
-                  )}
-                </div>
-                <div className="edit-modal-buttons">
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    className="edit-modal-save"
-                  >
-                    Enregistrer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="edit-modal-cancel"
-                  >
-                    {" "}
-                    Annuler
-                  </button>
-                </div>
-              </div>
+        <h2 className="edit-modal-title">Modifier l'utilisateur</h2>
+
+        <div className="edit-modal-content">
+          <div className="profile-section">
+            <div className="current-profile-image">
+              {profile_pic ? (
+                <img src={profile_pic} alt="Profile" />
+              ) : (
+                <div className="no-image" />
+              )}
             </div>
+            <div className="form-group">
+              <label htmlFor="profile_pic" className="edit-modal-label">
+                Photo de profil
+              </label>
+              <input
+                type="text"
+                id="profile_pic"
+                value={profile_pic}
+                onChange={(e) => setProfilePic(e.target.value)}
+                className="edit-modal-input"
+                placeholder="URL de l'image"
+              />
+            </div>
+          </div>
+
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="firstname" className="edit-modal-label">
+                Prénom <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstname"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+                className={`edit-modal-input ${errors.firstname ? "input-error" : ""}`}
+              />
+              {errors.firstname && (
+                <span className="error-message">{errors.firstname}</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="name" className="edit-modal-label">
+                Nom <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="username" className="edit-modal-label">
+                Nom d'utilisateur <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className={`edit-modal-input ${errors.username ? "input-error" : ""}`}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email" className="edit-modal-label">
+                Email <span className="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`edit-modal-input ${errors.email ? "input-error" : ""}`}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="phone_number" className="edit-modal-label">
+                Numéro de téléphone <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="phone_number"
+                value={phone_number}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className={`edit-modal-input ${errors.phone_number ? "input-error" : ""}`}
+              />
+            </div>
+          </div>
+
+          <div className="edit-modal-buttons">
+            <button
+              type="button"
+              onClick={handleSave}
+              className="edit-modal-save"
+            >
+              Enregistrer
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="edit-modal-cancel"
+            >
+              Annuler
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default ModalAdminUser;

@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import { useState } from "react";
 import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -19,6 +20,7 @@ const DEFAULT_USER: User = {
   total_points: 0,
   current_points: 0,
   is_admin: false,
+  is_banned: false,
 };
 
 const AdminUsers = () => {
@@ -36,6 +38,7 @@ const AdminUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"edit" | "add">("edit");
   const [selectedUser, setSelectedUser] = useState<User>(DEFAULT_USER);
+  const [valueInput, setValueInput] = useState("");
 
   const handleEditClick = (user: User) => {
     setModalMode("edit");
@@ -71,6 +74,7 @@ const AdminUsers = () => {
         total_points: selectedUser.total_points || 0,
         current_points: selectedUser.current_points || 0,
         is_admin: selectedUser.is_admin || false,
+        is_banned: selectedUser.is_banned || false,
       };
 
       await updateItem(selectedUser.id, formattedData);
@@ -94,8 +98,10 @@ const AdminUsers = () => {
         body: JSON.stringify({ is_banned: !user.is_banned }),
         credentials: "include",
       });
+
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
+
       const updatedUsers = users?.map((user) =>
         user.id === id ? { ...user, is_banned: !user.is_banned } : user,
       );
@@ -104,6 +110,35 @@ const AdminUsers = () => {
       }
     } catch (error) {
       console.error("Erreur lors du bannissement:", error);
+    }
+  };
+
+  const handleAdmin = async (id: number) => {
+    try {
+      const user = users?.find((user) => user.id === id);
+      if (!user) return;
+
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API_URL}/api/users/${id}/admin`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ is_admin: !user.is_admin }),
+        credentials: "include",
+      });
+
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      const updatedUsers = users?.map((user) =>
+        user.id === id ? { ...user, is_admin: !user.is_admin } : user,
+      );
+      if (updatedUsers) {
+        setData(updatedUsers);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la modification des droits admin:", error);
     }
   };
 
@@ -123,6 +158,24 @@ const AdminUsers = () => {
     );
   }
 
+  const usersFiltered = users?.filter(
+    (user) =>
+      user.name.toLocaleLowerCase().includes(valueInput.toLocaleLowerCase()) ||
+      user.firstname
+        .toLocaleLowerCase()
+        .includes(valueInput.toLocaleLowerCase()) ||
+      user.username
+        .toLocaleLowerCase()
+        .includes(valueInput.toLocaleLowerCase()) ||
+      user.email.toLocaleLowerCase().includes(valueInput.toLocaleLowerCase()) ||
+      user.phone_number
+        ?.toLocaleLowerCase()
+        .includes(valueInput.toLocaleLowerCase()) ||
+      user.email.toLocaleLowerCase().includes(valueInput.toLocaleLowerCase()),
+  );
+
+  const noResultMessages = ["Aucun joueur trouvé"];
+
   return (
     <AdminLayout
       showAddButton={false}
@@ -130,20 +183,42 @@ const AdminUsers = () => {
       contentClassName="adminusers-content"
       logoClassName="adminusers-logo"
     >
-      <div className="admingrid-card">
-        {users?.map((user) => (
-          <AdminItemGrid
-            key={user.id}
-            id={user.id}
-            type="user"
-            user={user}
-            onEdit={handleEditClick}
-            onBan={handleBan}
-            isBanned={user.is_banned}
+      <div className="admin-search-bar-container">
+        <form
+          id="admin-user-search-bar"
+          onSubmit={(event) => event.preventDefault()}
+        >
+          <Search className="admin-user-search-img" />
+          <input
+            type="text"
+            placeholder="Rechercher un joueur"
+            value={valueInput}
+            onChange={(event) => setValueInput(event.target.value)}
+            id="admin-user-search-bar-input"
           />
-        ))}
+        </form>
       </div>
-
+      <div className="admin-user-result">
+        <div className="admingrid-card-user">
+          {usersFiltered?.length === 0 ? (
+            <div className="admin-no-result">{noResultMessages}</div>
+          ) : (
+            usersFiltered?.map((user) => (
+              <AdminItemGrid
+                key={user.id}
+                id={user.id}
+                type="user"
+                user={user}
+                onEdit={handleEditClick}
+                onBan={handleBan}
+                isBanned={user.is_banned}
+                onAdmin={handleAdmin}
+                isAdmin={user.is_admin}
+              />
+            ))
+          )}
+        </div>
+      </div>
       <ModalAdminUser
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -47,7 +47,7 @@ export default function NavBar() {
 
       <div className={`burger-menu-dropdown ${isMenuOpen ? "active" : ""}`}>
         <Link className="burger-menu-link" to="/about_us" onClick={toggleMenu}>
-          About Us
+          Qui sommes-nous ?
         </Link>
         <Link className="burger-menu-link" to="/play" onClick={toggleMenu}>
           Jeu en ligne

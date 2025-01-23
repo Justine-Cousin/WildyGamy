@@ -2,6 +2,7 @@ import "../styles/RankingPage.css";
 import { useEffect, useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import Ranking from "../components/Ranking";
+import UserStatHeader from "../components/UserStatHeader";
 import type { User } from "../services/types";
 
 const RankingPage = () => {
@@ -67,11 +68,23 @@ const RankingPage = () => {
   return (
     <div className="ranking-page">
       <img className="ranking-logo" src={logoWG} alt="Logo" />
-      <div className="ranking-container">
-        <h3 className="ranking-title">Mon Classement</h3>
-        {users.map((user, index) => (
-          <Ranking key={user.id} user={user} position={index + 1} />
-        ))}
+      <h3 className="ranking-title">Mon Classement</h3>
+      <div className="ranking-bigcontainer">
+        <div className="ranking-header">
+          <UserStatHeader user={users[2]} ranking={users} />
+        </div>
+        <div className="ranking-container">
+          <div className="ranking-content">
+            {users.map((user, index) => (
+              <Ranking
+                key={user.id}
+                user={user}
+                position={index + 1}
+                isCurrentUser={user.id === users[2].id}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
