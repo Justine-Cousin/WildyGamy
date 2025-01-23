@@ -1,10 +1,18 @@
 import "../styles/UserProfile.css";
-import { Crown, Gift, Medal, Tickets, Trophy } from "lucide-react";
+import {
+  Crown,
+  Gift,
+  Medal,
+  Tickets,
+  Trophy,
+  UserRoundCog,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import GameCard from "../components/GameCard";
 import PrizeCard from "../components/PrizeCard";
+import UserSettingsModal from "../components/UserSettingsModal";
 import type { Game, Prize, User } from "../services/types";
 
 export default function UserProfile() {
@@ -14,6 +22,10 @@ export default function UserProfile() {
   const [prizeAcquired, setPrizeAcquired] = useState<Prize[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +42,10 @@ export default function UserProfile() {
         }
 
         const userData = await userResponse.json();
-        setUserProfile(userData);
+        setUserProfile({
+          ...userData,
+          phone_number: userData.phone_number ?? "",
+        });
 
         // Fetch favorites
         const favoritesResponse = await fetch(
@@ -68,6 +83,10 @@ export default function UserProfile() {
         <img className="play-wg-logo-user-page" src={logoWG} alt="Logo" />
         <h1 className="user-profile-page-title">MON PROFIL</h1>
         <div className="user-profile-info-card">
+          <UserRoundCog
+            className="user-profile-page-settings-icon"
+            onClick={toggleModal}
+          />
           <img
             className="user-profile-avatar"
             src={userProfile ? userProfile.profile_pic : ""}
@@ -126,6 +145,13 @@ export default function UserProfile() {
           <p className="user-profile-page-no-prizes-message">
             Aucune récompense acquise
           </p>
+        )}
+        {isModalOpen && (
+          <UserSettingsModal
+            isOpen={isModalOpen}
+            onClose={toggleModal}
+            user={userProfile}
+          />
         )}
       </div>
     </>

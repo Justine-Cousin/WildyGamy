@@ -5,7 +5,7 @@ export interface User {
   email: string;
   username: string;
   password_hash: string;
-  phone_number?: string;
+  phone_number: string;
   profile_pic?: string;
   total_points: number;
   current_points: number;
