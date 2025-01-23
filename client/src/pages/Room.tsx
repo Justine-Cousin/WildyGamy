@@ -1,19 +1,13 @@
 import "../styles/Room.css";
-import { useState } from "react";
-import Game1 from "../assets/images/game1.jpg";
-import Game2 from "../assets/images/game2.jpg";
-import Game3 from "../assets/images/game3.jpg";
-import Game4 from "../assets/images/game4.jpg";
-import Game5 from "../assets/images/game5.jpg";
-import Game6 from "../assets/images/game6.jpg";
+import { useEffect, useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import room from "../assets/images/room-image.jpg";
+import type { Game } from "../services/types";
 
 function RoomDescription() {
   return (
     <div className="room-container">
       <img className="room-image" src={room} alt="room-image" />
-      <h1 className="room-title">Wildy Gamy</h1>
       <p>
         Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou et
         Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse. Ce lieu
@@ -36,27 +30,42 @@ function RoomDescription() {
   );
 }
 
-interface Game {
-  id: number;
-  image: string;
-  name: string;
-}
-
-const gamesData: Game[] = [
-  { id: 1, image: Game1, name: "Game 1" },
-  { id: 2, image: Game2, name: "Game 2" },
-  { id: 3, image: Game3, name: "Game 3" },
-  { id: 4, image: Game4, name: "Game 4" },
-  { id: 5, image: Game5, name: "Game 5" },
-  { id: 6, image: Game6, name: "Game 6" },
-];
-
 function RoomCarousel() {
+  const [games, setGames] = useState<Game[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/games`,
+        );
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des jeux");
+        }
+        const data = await response.json();
+        setGames(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Une erreur est survenue",
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, []);
+
+  if (isLoading) return <div>Chargement...</div>;
+  if (error) return <div>Erreur : {error}</div>;
+
   return (
     <div className="room-carousel">
       <h1 className="room-titlecarousel">NEW GAME</h1>
       <div className="room-carouselcontainer">
-        {gamesData.map((game) => (
+        {games.map((game) => (
           <article key={game.id} className="room-gamecard">
             <img src={game.image} alt={game.name} className="room-gameimage" />
             <h2 className="room-gametitle">{game.name}</h2>
@@ -213,6 +222,7 @@ function Room() {
   return (
     <div className="room-page">
       <img className="room-logo" src={logoWG} alt="Logo" />
+      <h1 className="room-title">Wildy Gamy</h1>
       <div className="room-fullpage">
         <RoomDescription />
         <RoomCarousel />
