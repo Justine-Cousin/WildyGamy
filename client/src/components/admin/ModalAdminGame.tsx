@@ -1,23 +1,7 @@
-import { useState } from "react";
-import "../styles/ModalAdminGame.css";
-
-type ModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  gameData: {
-    name: string;
-    description: string;
-    image: string;
-    price: string;
-  };
-  onSave: (updatedData: {
-    name: string;
-    description: string;
-    image: string;
-    price: string;
-  }) => void;
-  mode?: "add" | "edit";
-};
+import type React from "react";
+import { useEffect, useState } from "react";
+import "../../styles/ModalAdminGame.css";
+import type { GameSaveData, ModalProps } from "../../services/types";
 
 type Errors = {
   name?: string;
@@ -26,19 +10,28 @@ type Errors = {
   price?: string;
 };
 
-const ModalAdminGame: React.FC<ModalProps> = ({
+const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
   isOpen,
   onClose,
   gameData,
   onSave,
   mode,
 }) => {
-  const [name, setName] = useState(gameData.name);
-  const [description, setDescription] = useState(gameData.description);
-  const [image, setImage] = useState(gameData.image);
-  const [price, setPrice] = useState(gameData.price);
+  const [name, setName] = useState(gameData?.name || "");
+  const [description, setDescription] = useState(gameData?.description || "");
+  const [image, setImage] = useState<string>(gameData?.image || "");
+  const [price, setPrice] = useState(gameData?.price?.toString() || "");
   const [errors, setErrors] = useState<Errors>({});
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+
+  useEffect(() => {
+    if (gameData) {
+      setName(gameData.name || "");
+      setDescription(gameData.description || "");
+      setImage(typeof gameData.image === "string" ? gameData.image : "");
+      setPrice(gameData.price?.toString() || "");
+    }
+  }, [gameData]);
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
@@ -49,10 +42,6 @@ const ModalAdminGame: React.FC<ModalProps> = ({
 
     if (!description.trim()) {
       newErrors.description = "La description est requise";
-    }
-
-    if (!image.trim()) {
-      newErrors.image = "L'URL de l'image est requise";
     }
 
     if (!price.trim()) {
@@ -93,7 +82,7 @@ const ModalAdminGame: React.FC<ModalProps> = ({
             <div className="image-section">
               <div className="form-group">
                 <label htmlFor="image" className="edit-modal-label">
-                  Image URL <span className="required">*</span>
+                  Image URL
                 </label>
                 <div className="image-input-container">
                   <input
@@ -125,7 +114,6 @@ const ModalAdminGame: React.FC<ModalProps> = ({
                 </div>
               )}
             </div>
-
             <div className="form-section">
               <div className="form-group">
                 <label htmlFor="name" className="edit-modal-label">
@@ -142,7 +130,6 @@ const ModalAdminGame: React.FC<ModalProps> = ({
                   <span className="error-message">{errors.name}</span>
                 )}
               </div>
-
               <div className="form-group">
                 <label htmlFor="description" className="edit-modal-label">
                   Description <span className="required">*</span>
@@ -157,7 +144,6 @@ const ModalAdminGame: React.FC<ModalProps> = ({
                   <span className="error-message">{errors.description}</span>
                 )}
               </div>
-
               <div className="form-group">
                 <label htmlFor="price" className="edit-modal-label">
                   Prix <span className="required">*</span>

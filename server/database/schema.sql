@@ -9,7 +9,9 @@ CREATE TABLE user (
     phone_number VARCHAR(20),
     profile_pic VARCHAR(255),
     total_points INT DEFAULT 0,
-    current_points INT DEFAULT 0
+    current_points INT DEFAULT 0,
+    is_admin BOOLEAN DEFAULT FALSE NOT NULL,
+    is_banned BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE game (
@@ -34,7 +36,8 @@ CREATE TABLE prize (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     image VARCHAR(255),
-    exchange_price INT NOT NULL
+    exchange_price INT NOT NULL, 
+     is_available BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE prize_acquired (
@@ -83,4 +86,12 @@ INSERT INTO prize_acquired (user_id, prize_id) VALUES
 (5, 6),
 (5, 7),
 (5, 8);
+
+INSERT INTO favorite (user_id, game_id) VALUES
+(1, 1),
+(1, 2), 
+(2, 3), 
+(3, 1), 
+(4, 5), 
+(5, 6);
 

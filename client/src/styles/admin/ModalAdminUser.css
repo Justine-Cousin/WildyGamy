@@ -1,0 +1,183 @@
+.modal-admin-user.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 20, 43, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-admin-user .modal-container {
+  width: 95%;
+  max-width: 1200px;
+  height: auto;
+  min-height: fit-content;
+  background: rgb(21, 20, 43, 0.61);
+  border-radius: 34px;
+  border: 2px solid transparent;
+  background-image: linear-gradient(
+      rgba(21, 20, 43, 0.61),
+      rgba(21, 20, 43, 0.61)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  padding: 20px 30px;
+}
+
+.modal-admin-user .edit-modal-title {
+  font-family: var(--font-title-phosphate);
+  color: var(--font-title-color);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-admin-user .edit-modal-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 0;
+}
+
+.modal-admin-user .image-section {
+  grid-column: 1;
+}
+
+.modal-admin-user .form-section {
+  grid-column: 2 / span 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.modal-admin-user .form-group {
+  margin-bottom: 15px;
+}
+
+.modal-admin-user .edit-modal-label {
+  font-size: 16px;
+  color: #c3b0ea;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.modal-admin-user .edit-modal-input,
+.modal-admin-user .edit-modal-textarea {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 30px;
+  background: rgba(34, 24, 52, 0.8);
+  color: #c3b0ea;
+  font-family: "Inter", sans-serif;
+  border: 1px solid transparent;
+  background-image: linear-gradient(
+      rgba(34, 24, 52, 0.8),
+      rgba(34, 24, 52, 0.8)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.modal-admin-user .image-input-container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.modal-admin-user .preview-button {
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: #6403a9;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#6403a9, #6403a9),
+    linear-gradient(to bottom, #9001f5, #694fa6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: #c3b0ea;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.modal-admin-user .image-preview {
+  margin-top: 15px;
+  max-height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(34, 24, 52, 0.8);
+  border: 1px solid transparent;
+  background-image: linear-gradient(
+      rgba(34, 24, 52, 0.8),
+      rgba(34, 24, 52, 0.8)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
+}
+
+.modal-admin-user .image-preview img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.modal-admin-user .edit-modal-buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.modal-admin-user .edit-modal-save,
+.modal-admin-user .edit-modal-cancel {
+  padding: 14px 40px;
+  border-radius: 30px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #c3b0ea;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-admin-user .edit-modal-save {
+  background: #6403a9;
+  background-image: linear-gradient(#6403a9, #6403a9),
+    linear-gradient(to bottom, #9001f5, #694fa6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 9.2px #9001f5;
+}
+
+.modal-admin-user .edit-modal-save:hover {
+  box-shadow: 0 0 20px #9001f5;
+}
+
+.modal-admin-user .edit-modal-cancel {
+  background: rgba(34, 24, 52, 0.8);
+  background-image: linear-gradient(
+      rgba(34, 24, 52, 0.8),
+      rgba(34, 24, 52, 0.8)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.modal-admin-user .required {
+  color: #fe00ea;
+}
+
+.modal-admin-user .error-message {
+  color: #fe00ea;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.modal-admin-user .input-error {
+  border-color: #fe00ea;
+  box-shadow: 0 0 5px #fe00ea;
+}

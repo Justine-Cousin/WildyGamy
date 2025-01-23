@@ -1,6 +1,6 @@
 import { get } from "node:http";
 import databaseClient from "../../../database/client";
-import type { Rows } from "../../../database/client";
+import type { Result, Rows } from "../../../database/client";
 
 type user = {
   id: number;
@@ -13,6 +13,7 @@ type user = {
   total_points: number;
   current_points: number;
 };
+export type createUser = Omit<user, "id">;
 
 class usersRepository {
   async read(id: number) {
@@ -38,7 +39,61 @@ class usersRepository {
       profile_pic: row.profile_pic,
       total_points: row.total_points,
       current_points: row.current_points,
+      is_banned: Boolean(row.is_banned),
     }));
+  }
+
+  async update(user: createUser & { id: number }) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set name = ?, firstname = ?, email = ?, username = ?, phone_number = ?, profile_pic = ?, total_points = ?, current_points = ? where id = ?",
+      [
+        user.name,
+        user.firstname,
+        user.email,
+        user.username,
+        user.phone_number,
+        user.profile_pic,
+        user.total_points,
+        user.current_points,
+        user.id,
+      ],
+    );
+    return result.affectedRows;
+  }
+
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "delete from user where id = ?",
+      [id],
+    );
+    return result.affectedRows;
+  }
+
+  async create(user: createUser) {
+    const [result] = await databaseClient.query<Result>(
+      "insert into user (name, firstname, email, username, phone_number, profile_pic, total_points, current_points) values (?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        user.name,
+        user.firstname,
+        user.email,
+        user.username,
+        user.phone_number,
+        user.profile_pic,
+        user.total_points || 0,
+        user.current_points || 0,
+      ],
+    );
+
+    return result.insertId;
+  }
+
+  async toggleBan(id: number, isBanned: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_banned = ? where id = ?",
+      [isBanned, id],
+    );
+
+    return result.affectedRows;
   }
 }
 
