@@ -1,7 +1,7 @@
 import "../styles/GameCard.css";
 import { Coins, Heart } from "lucide-react";
 import { useState } from "react";
-import logoWG from "../assets/logoWG.png";
+import logoWG from "../assets/images/logo_wildy_gamy.png";
 
 export interface Game {
   id: number;
