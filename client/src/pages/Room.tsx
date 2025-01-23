@@ -1,5 +1,6 @@
 import "../styles/Room.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import room from "../assets/images/room-image.jpg";
 import type { Game } from "../services/types";
@@ -77,8 +78,17 @@ function RoomCarousel() {
 }
 
 function RoomGameOnline() {
+  const navigation = useNavigate();
   return (
-    <div className="room-gameonline">
+    <div
+      onClick={() => {
+        navigation("/play");
+      }}
+      onKeyDown={() => {
+        navigation("/play");
+      }}
+      className="room-gameonline"
+    >
       <div className="room-emptydiv"> </div>
       <div className="room-gameonlinecontent">
         <h1 className="room-titlegameonline">

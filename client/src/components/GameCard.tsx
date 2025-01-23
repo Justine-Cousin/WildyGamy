@@ -22,8 +22,27 @@ interface GamesCardProps {
 export default function GamesCard({ game }: GamesCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  const toggleFavorite = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/favorites`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ gameId: game.id }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error("Error while adding favorite");
+      }
+
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div key={game.id} className="gamecard-content">
