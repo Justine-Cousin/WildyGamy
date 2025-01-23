@@ -141,7 +141,28 @@ const add: RequestHandler = async (req, res, next) => {
 
 const edit: RequestHandler = async (req, res, next) => {
   try {
-    res.status(501).json({ error: "Update operation not implemented" });
+    const { id } = req.params;
+    const updates = req.body;
+
+    const allowedUpdates = [
+      "name",
+      "firstname",
+      "email",
+      "username",
+      "phone_number",
+    ];
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([key]) => allowedUpdates.includes(key)),
+    );
+
+    const success = await userRepository.update(Number(id), filteredUpdates);
+
+    if (!success) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    res.json({ message: "User updated successfully" });
   } catch (err) {
     next(err);
   }

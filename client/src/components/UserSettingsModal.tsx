@@ -1,25 +1,20 @@
 import "../styles/UserSettingsModal.css";
 import { KeyRound, LogOut, Pencil, Save, UserX, X } from "lucide-react";
 import { useState } from "react";
-
-interface User {
-  name: string;
-  firstname: string;
-  email: string;
-  username: string;
-  phone_number: string;
-}
+import type { User } from "../services/types";
 
 interface UserSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   user: User | null;
+  onUserUpdate?: (updatedUser: User) => void;
 }
 
 export default function UserSettingsModal({
   isOpen,
   onClose,
   user,
+  onUserUpdate,
 }: UserSettingsModalProps) {
   const [editModes, setEditModes] = useState({
     name: false,
@@ -46,6 +41,40 @@ export default function UserSettingsModal({
       ...prev,
       [field]: user?.[field] || "",
     }));
+  };
+
+  const handleSave = async (field: keyof typeof editModes) => {
+    try {
+      if (!user?.id) return;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${user.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ [field]: formData[field] }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update user");
+      }
+
+      if (user && onUserUpdate) {
+        const updatedUser = {
+          ...user,
+          [field]: formData[field],
+        };
+        onUserUpdate(updatedUser);
+      }
+
+      toggleEdit(field);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
   };
 
   if (!isOpen || !user) return null;
@@ -77,7 +106,7 @@ export default function UserSettingsModal({
                   <Save
                     size={16}
                     className="save-icon"
-                    onClick={() => toggleEdit("name")}
+                    onClick={() => handleSave("name")}
                   />
                   <X
                     size={16}
@@ -119,7 +148,7 @@ export default function UserSettingsModal({
                   <Save
                     size={16}
                     className="save-icon"
-                    onClick={() => toggleEdit("firstname")}
+                    onClick={() => handleSave("firstname")}
                   />
                   <X
                     size={16}
@@ -161,7 +190,7 @@ export default function UserSettingsModal({
                   <Save
                     size={16}
                     className="save-icon"
-                    onClick={() => toggleEdit("username")}
+                    onClick={() => handleSave("username")}
                   />
                   <X
                     size={16}
@@ -203,7 +232,7 @@ export default function UserSettingsModal({
                   <Save
                     size={16}
                     className="save-icon"
-                    onClick={() => toggleEdit("email")}
+                    onClick={() => handleSave("email")}
                   />
                   <X
                     size={16}
@@ -245,7 +274,7 @@ export default function UserSettingsModal({
                   <Save
                     size={16}
                     className="save-icon"
-                    onClick={() => toggleEdit("phone_number")}
+                    onClick={() => handleSave("phone_number")}
                   />
                   <X
                     size={16}

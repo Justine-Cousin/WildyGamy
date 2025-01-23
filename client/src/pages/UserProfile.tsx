@@ -151,6 +151,7 @@ export default function UserProfile() {
             isOpen={isModalOpen}
             onClose={toggleModal}
             user={userProfile}
+            onUserUpdate={(updatedUser) => setUserProfile(updatedUser)}
           />
         )}
       </div>

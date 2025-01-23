@@ -40,6 +40,7 @@ router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 router.get("/api/user", userActions.browse);
 router.get("/api/user/:id", userActions.read);
 router.post("/api/user", userActions.add);
+router.put("/api/user/:id", userActions.edit);
 router.put("/api/user/:username", userActions.edit);
 router.delete("/api/user/:username", userActions.destroy);
 
