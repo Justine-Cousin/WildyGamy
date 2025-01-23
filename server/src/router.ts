@@ -69,6 +69,8 @@ router.get("/api/users", usersActions.browse);
 router.get("/api/users/:id", usersActions.read);
 router.post("/api/users", usersActions.add);
 router.put("/api/users/:id", usersActions.edit);
+router.put("/api/users/:id/ban", usersActions.toggleBan);
+router.put("/api/users/:id/admin", usersActions.toggleAdmin);
 router.delete("/api/users/:id", usersActions.destroy);
 
 router.get("/api/user/:id/favorites", favoritesActions.read);

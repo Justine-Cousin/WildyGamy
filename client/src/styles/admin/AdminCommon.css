@@ -6,6 +6,19 @@
     gap: 20px;
   }
 
+  .admingrid-card-user {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .adminCard-info {
+    display: flex;
+    flex-direction: row;
+    align-items: column;
+    gap: 10px;
+  }
+
   .admingames-container,
   .adminprizes-container,
   .adminusers-container {
@@ -76,6 +89,12 @@
     position: relative;
   }
 
+  .admincard-content-info-user {
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+  }
+
   /* Images */
   .gamecard-image {
     width: 50%;
@@ -89,19 +108,28 @@
   }
 
   .adminCard-name {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.2rem;
     color: #f3f4f6;
+    white-space: nowrap;
+    padding-left: 20px;
   }
 
   /* prix */
-  .adminCard-prices,
-  .adminCard-points {
+  .adminCard-prices {
     position: absolute;
-    top: -10px;
+    top: 10px;
     right: 10px;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
     gap: 4px;
+  }
+
+  .adminCard-points {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
   }
 
   .adminCard-prices-game,
@@ -114,7 +142,7 @@
     background-color: white;
     padding: 6px 12px;
     margin-bottom: 5px;
-    border-radius: 9999px;
+    border-radius: 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
@@ -145,11 +173,20 @@
     border-radius: 10px;
   }
 
+  .admincard-buttons-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
   .admincard-button {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     transition: all 0.2s ease;
     border-radius: 50%;
     display: flex;
@@ -192,6 +229,25 @@
 
   .admincard-content.admincard-content-available {
     order: 0;
+  }
+
+  .admincard-content.admincard-content-unavailable-user {
+    background: linear-gradient(45deg, #8f01f55d, #c3b0ea4b) !important;
+    order: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    min-height: 80px;
+  }
+
+  .admincard-content.admincard-content-available-user {
+    order: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 10px 20px;
+    min-height: 80px;
   }
 
   /* Style spécifique pour les prix */
@@ -289,22 +345,18 @@
 
 .adminCard-user-info {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding-bottom: 10px;
+  gap: 20px;
+  padding-left: 20px;
 }
 
-.adminCard-phone {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
+.adminCard-phone,
 .adminCard-username {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 20px;
 }
 
 .username-icon,

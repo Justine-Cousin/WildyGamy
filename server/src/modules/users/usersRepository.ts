@@ -12,6 +12,8 @@ type user = {
   profile_pic: string;
   total_points: number;
   current_points: number;
+  is_banned: boolean;
+  is_admin: boolean;
 };
 export type createUser = Omit<user, "id">;
 
@@ -39,6 +41,7 @@ class usersRepository {
       total_points: row.total_points,
       current_points: row.current_points,
       is_banned: Boolean(row.is_banned),
+      is_admin: Boolean(row.is_admin),
     }));
   }
 
@@ -92,6 +95,14 @@ class usersRepository {
       [isBanned, id],
     );
 
+    return result.affectedRows;
+  }
+
+  async toggleAdmin(id: number, isAdmin: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_admin = ? where id = ?",
+      [isAdmin, id],
+    );
     return result.affectedRows;
   }
 }

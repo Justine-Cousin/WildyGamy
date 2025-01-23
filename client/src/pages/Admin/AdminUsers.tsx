@@ -20,6 +20,7 @@ const DEFAULT_USER: User = {
   total_points: 0,
   current_points: 0,
   is_admin: false,
+  is_banned: false,
 };
 
 const AdminUsers = () => {
@@ -73,6 +74,7 @@ const AdminUsers = () => {
         total_points: selectedUser.total_points || 0,
         current_points: selectedUser.current_points || 0,
         is_admin: selectedUser.is_admin || false,
+        is_banned: selectedUser.is_banned || false,
       };
 
       await updateItem(selectedUser.id, formattedData);
@@ -96,8 +98,10 @@ const AdminUsers = () => {
         body: JSON.stringify({ is_banned: !user.is_banned }),
         credentials: "include",
       });
+
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
+
       const updatedUsers = users?.map((user) =>
         user.id === id ? { ...user, is_banned: !user.is_banned } : user,
       );
@@ -166,7 +170,7 @@ const AdminUsers = () => {
         </form>
       </div>
       <div className="admin-user-result">
-        <div className="admingrid-card">
+        <div className="admingrid-card-user">
           {usersFiltered?.length === 0 ? (
             <div className="admin-no-result">{noResultMessages}</div>
           ) : (
