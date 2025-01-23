@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../services/api";
+import { api, auth } from "../services/api";
 import { useAuth } from "../services/authContext";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/LoginForm.css";
@@ -21,7 +21,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { setAuth: setAuthContext } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -55,15 +55,9 @@ export default function LoginForm() {
       const data = await response.json();
 
       if (response.status === 200) {
-        setAuth(data);
-
-        if (formData.stay_connected) {
-          localStorage.setItem("authToken", data.token);
-        } else {
-          sessionStorage.setItem("authToken", data.token);
-        }
-
-        navigate("/");
+        setAuthContext(data);
+        auth.setToken(data.token, formData.stay_connected);
+        navigate(`/user_profile/${data.user.id}`);
       } else {
         setError(data.error || "Email ou mot de passe incorrect");
       }
