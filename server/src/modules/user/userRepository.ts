@@ -81,6 +81,21 @@ class UserRepository {
     );
     return rows[0] as User | undefined;
   }
+
+  async update(id: number, updates: Partial<User>) {
+    const setClause = Object.keys(updates)
+      .map((key) => `${key} = ?`)
+      .join(", ");
+
+    const values = [...Object.values(updates), id];
+
+    const [result] = await databaseClient.query<Result>(
+      `UPDATE user SET ${setClause} WHERE id = ?`,
+      values,
+    );
+
+    return result.affectedRows > 0;
+  }
 }
 
 export default new UserRepository();

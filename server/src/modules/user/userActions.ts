@@ -141,7 +141,46 @@ const add: RequestHandler = async (req, res, next) => {
 
 const edit: RequestHandler = async (req, res, next) => {
   try {
-    res.status(501).json({ error: "Update operation not implemented" });
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Add profile_pic to allowed updates
+    const allowedUpdates = [
+      "name",
+      "firstname",
+      "email",
+      "username",
+      "phone_number",
+      "profile_pic",
+    ];
+
+    // Handle file upload if present
+    if (req.files && "profile_pic" in req.files) {
+      const profilePic = req.files.profile_pic as UploadedFile;
+      const result = await cloudinary.uploader.upload(profilePic.tempFilePath, {
+        folder: "profile_pics",
+      });
+      updates.profile_pic = result.secure_url;
+    }
+
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([key]) => allowedUpdates.includes(key)),
+    );
+
+    const success = await userRepository.update(Number(id), filteredUpdates);
+
+    if (!success) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    const updatedUser = await userRepository.readById(Number(id));
+    if (!updatedUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    const { password_hash, ...userWithoutPassword } = updatedUser;
+    res.json(userWithoutPassword);
   } catch (err) {
     next(err);
   }
