@@ -5,6 +5,7 @@ import {
   Medal,
   Tickets,
   Trophy,
+  Upload,
   UserRoundCog,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -25,6 +26,45 @@ export default function UserProfile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleProfilePicChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.files || !e.target.files[0]) return;
+
+    const file = e.target.files[0];
+
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("L'image ne doit pas dépasser 5MB");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("profile_pic", file);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        },
+      );
+      if (!response.ok) throw new Error("Échec de la mise à jour");
+
+      const data = await response.json();
+      setUserProfile(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setUploadError("Erreur lors de la mise à jour de l'image");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   useEffect(() => {
@@ -87,11 +127,27 @@ export default function UserProfile() {
             className="user-profile-page-settings-icon"
             onClick={toggleModal}
           />
-          <img
-            className="user-profile-avatar"
-            src={userProfile ? userProfile.profile_pic : ""}
-            alt=""
-          />
+          <div className="user-profile-avatar-wrapper">
+            <img
+              className="user-profile-avatar"
+              src={userProfile?.profile_pic}
+              alt="Avatar"
+            />
+            <label className="upload-icon" htmlFor="profile-pic-upload">
+              <Upload size={16} />
+              <input
+                id="profile-pic-upload"
+                type="file"
+                accept="image/jpeg,image/png,image/jpg"
+                onChange={handleProfilePicChange}
+                style={{ display: "none" }}
+              />
+            </label>
+            {isUploading && (
+              <span className="upload-status">Chargement...</span>
+            )}
+            {uploadError && <span className="upload-error">{uploadError}</span>}
+          </div>
           <h2 className="h2-welcome-message">
             Bonjour {userProfile ? userProfile.username : ""}
           </h2>
