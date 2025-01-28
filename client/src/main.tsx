@@ -50,7 +50,7 @@ const router = createBrowserRouter([
       { path: "admin", element: <AdminHome /> },
       { path: "admin/games", element: <AdminGames /> },
       { path: "admin/prizes", element: <AdminPrize /> },
-      { path: "user_profile/:id", element: <UserProfile /> },
+      { path: "user_profile", element: <UserProfile /> },
       { path: "admin/users", element: <AdminUsers /> },
       { path: "ranking", element: <RankingPage /> },
     ],
