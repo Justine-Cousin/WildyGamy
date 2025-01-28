@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../services/authContext";
 import "../styles/NavBar.css";
 import homeIcon from "../assets/images/home-icon.svg";
 import loginIcon from "../assets/images/login-icon.svg";
 
 export default function NavBar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const { auth } = useAuth();
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -18,6 +20,7 @@ export default function NavBar() {
           <img className="home-icon" src={homeIcon} alt="" />
         </Link>
       </div>
+
       <div className="nav-bar-center">
         <button
           type="button"
@@ -39,10 +42,21 @@ export default function NavBar() {
           <span className="burger-bar" />
         </button>
       </div>
+
       <div className="nav-bar-right">
-        <Link className="nav-bar-link" to="/login">
-          <img className="login-icon" src={loginIcon} alt="" />
-        </Link>
+        {auth?.user?.profile_pic ? (
+          <Link className="nav-bar-link" to="/user_profile">
+            <img
+              className="nav-profile-pic"
+              src={auth.user.profile_pic}
+              alt="Profile"
+            />
+          </Link>
+        ) : (
+          <Link className="nav-bar-link" to="/login">
+            <img className="login-icon" src={loginIcon} alt="" />
+          </Link>
+        )}
       </div>
 
       <div className={`burger-menu-dropdown ${isMenuOpen ? "active" : ""}`}>
