@@ -128,6 +128,8 @@ const add: RequestHandler = async (req, res, next) => {
       password_hash: hashedPassword,
       phone_number: phone_number?.trim(),
       profile_pic: profilePicUrl,
+      is_banned: false,
+      is_admin: false,
     });
 
     res.status(201).json({
@@ -194,4 +196,36 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read, add, edit, destroy };
+const toggleBan: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    const { is_banned } = req.body;
+    const affectedRows = await userRepository.toggleBan(userId, is_banned);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const toggleAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    const { is_admin } = req.body;
+    const affectedRows = await userRepository.toggleAdmin(userId, is_admin);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, edit, destroy, toggleBan, toggleAdmin };
