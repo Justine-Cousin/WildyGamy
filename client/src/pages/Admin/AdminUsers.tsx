@@ -31,7 +31,7 @@ const AdminUsers = () => {
     updateItem,
     setData,
   } = useAdminData<User>({
-    fetchUrl: "/api/users",
+    fetchUrl: "/api/user",
     loadingMessage: "Invocation des joueurs",
   });
 
