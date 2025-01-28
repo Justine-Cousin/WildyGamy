@@ -9,15 +9,15 @@ import {
   UserRoundCog,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import GameCard from "../components/GameCard";
 import PrizeCard from "../components/PrizeCard";
 import UserSettingsModal from "../components/UserSettingsModal";
+import { useAuth } from "../services/authContext";
 import type { Game, Prize, User } from "../services/types";
 
 export default function UserProfile() {
-  const { id } = useParams();
+  const { auth } = useAuth();
   const [userProfile, setUserProfile] = useState<User | null>(null);
   const [favorites, setFavorites] = useState<Game[]>([]);
   const [prizeAcquired, setPrizeAcquired] = useState<Prize[]>([]);
@@ -48,7 +48,7 @@ export default function UserProfile() {
       formData.append("profile_pic", file);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/user/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -73,7 +73,7 @@ export default function UserProfile() {
         setIsLoading(true);
         // Fetch user data
         const userResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}`,
           { credentials: "include" },
         );
 
@@ -89,7 +89,7 @@ export default function UserProfile() {
 
         // Fetch favorites
         const favoritesResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${id}/favorites`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/favorites`,
           { credentials: "include" },
         );
         const favoritesData = await favoritesResponse.json();
@@ -97,7 +97,7 @@ export default function UserProfile() {
 
         // Fetch prizes
         const prizesResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${id}/acquired`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/acquired`,
           { credentials: "include" },
         );
         const prizesData = await prizesResponse.json();
@@ -110,8 +110,8 @@ export default function UserProfile() {
       }
     };
 
-    if (id) fetchData();
-  }, [id]);
+    if (auth?.user.id) fetchData();
+  }, [auth?.user.id]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

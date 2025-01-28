@@ -40,15 +40,6 @@ router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-// Define Your API Routes Here
-
-router.get("/api/user", userActions.browse);
-router.get("/api/user/:id", userActions.read);
-router.post("/api/user", userActions.add);
-router.put("/api/user/:id", userActions.edit);
-router.put("/api/user/:username", userActions.edit);
-router.delete("/api/user/:username", userActions.destroy);
-
 // Define item-related routes
 
 router.get("/api/items", itemActions.browse);
@@ -88,6 +79,7 @@ router.get("/api/user/:id/acquired", acquiredActions.read);
 router.get("/api/user", userActions.browse);
 router.get("/api/user/:id", userActions.read);
 router.post("/api/user", userActions.add);
+router.put("/api/user/:id", userActions.edit);
 router.put("/api/user/:username", userActions.edit);
 router.put("/api/user/:id/ban", usersActions.toggleBan);
 router.put("/api/user/:id/admin", usersActions.toggleAdmin);
