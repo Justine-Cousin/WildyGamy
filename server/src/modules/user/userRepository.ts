@@ -12,6 +12,8 @@ type User = {
   profile_pic?: string | null;
   total_points: number;
   current_points: number;
+  is_banned: boolean;
+  is_admin: boolean;
 };
 
 type CreateUserInput = Omit<
@@ -44,7 +46,9 @@ class UserRepository {
   }
 
   async readAll() {
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM user");
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM user ORDER BY total_points DESC",
+    );
     return rows as User[];
   }
 
@@ -95,6 +99,23 @@ class UserRepository {
     );
 
     return result.affectedRows > 0;
+  }
+
+  async toggleBan(id: number, isBanned: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_banned = ? where id = ?",
+      [isBanned, id],
+    );
+
+    return result.affectedRows;
+  }
+
+  async toggleAdmin(id: number, isAdmin: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_admin = ? where id = ?",
+      [isAdmin, id],
+    );
+    return result.affectedRows;
   }
 }
 
