@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api, auth } from "../services/api";
+import { api } from "../services/api";
 import { useAuth } from "../services/authContext";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/LoginForm.css";
@@ -21,7 +21,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { setAuth: setAuthContext } = useAuth();
+  const { setAuth } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -52,14 +52,10 @@ export default function LoginForm() {
         throw new Error("Erreur de connexion");
       }
 
-      const data = await response.json();
-
       if (response.status === 200) {
-        setAuthContext(data);
-        auth.setToken(data.token, formData.stay_connected);
-        navigate(`/user_profile/${data.user.id}`);
-      } else {
-        setError(data.error || "Email ou mot de passe incorrect");
+        const data = await response.json();
+        setAuth(data);
+        navigate("/user_profile");
       }
     } catch (err) {
       console.error("Erreur de connexion:", err);
