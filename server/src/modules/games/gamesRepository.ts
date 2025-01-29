@@ -40,6 +40,14 @@ class gamesRepository {
     return rows as Game[];
   }
 
+  async readallNew() {
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from game where is_new = 1 AND is_available = 1",
+    );
+
+    return rows as Game[];
+  }
+
   async toggleNew(id: number, isNew: boolean) {
     const [result] = await databaseClient.query<Result>(
       "Update game set is_new = ? where id = ?",

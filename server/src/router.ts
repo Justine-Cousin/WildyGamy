@@ -55,6 +55,7 @@ router.put("/api/prizes/:id", prizeActions.edit);
 router.delete("/api/prizes/:id", prizeActions.destroy);
 
 router.get("/api/games/available", gameActions.browseAvailable);
+router.get("/api/games/new", gameActions.browseNew);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
 router.post("/api/games", gameActions.add);
