@@ -39,7 +39,7 @@ function RoomCarousel() {
     const fetchGames = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/games`,
+          `${import.meta.env.VITE_API_URL}/api/games/:id/browseNew`,
         );
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des jeux");

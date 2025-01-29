@@ -104,7 +104,7 @@ const AdminGames = () => {
 
   const handleNew = async (id: number) => {
     try {
-      const game = games?.find((g) => g.id === id);
+      const game = games?.find((game) => game.id === id);
       if (!game) return;
 
       const API_URL = import.meta.env.VITE_API_URL;

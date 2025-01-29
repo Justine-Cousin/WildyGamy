@@ -22,6 +22,16 @@ const browseAvailable: RequestHandler = async (req, res, next) => {
   }
 };
 
+const toggleNew: RequestHandler = async (req, res, next) => {
+  try {
+    const games = await gamesRepository.readAllNew();
+
+    res.json(games);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const read: RequestHandler = async (req, res, next) => {
   try {
     const gamesId = Number(req.params.id);
@@ -106,4 +116,5 @@ export default {
   edit,
   destroy,
   add,
+  toggleNew,
 };

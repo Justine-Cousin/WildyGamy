@@ -38,6 +38,14 @@ class gamesRepository {
     return rows as Game[];
   }
 
+  async readAllNew() {
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from game where is_available = 1 ORDER BY name ASC",
+    );
+
+    return rows as Game[];
+  }
+
   async updateAvailability(id: number, isAvailable: boolean) {
     await databaseClient.query<Result>(
       "update game set is_available = ? where id = ?",

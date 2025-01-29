@@ -21,7 +21,7 @@ CREATE TABLE game (
     image VARCHAR(255),
     price VARCHAR(50),
     is_available BOOLEAN DEFAULT TRUE NOT NULL,
-    is_new BOOLEAN DEFAULT TRUE NOT NULL
+    is_new BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE favorite (

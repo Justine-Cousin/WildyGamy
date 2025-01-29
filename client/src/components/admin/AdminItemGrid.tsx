@@ -130,8 +130,8 @@ const AdminItemGrid = <T extends Game | Prize | User>({
     e.preventDefault();
     e.stopPropagation();
     const message = isNew
-      ? "✨ Hop hop hop ! On met ce jeu sous les projecteurs ?"
-      : "🎪 Le show est terminé, on retire l'étiquette nouveau ?";
+      ? "🎪 Le show est terminé, on retire l'étiquette nouveau ?"
+      : "✨ Hop hop hop ! On met ce jeu sous les projecteurs ?";
     if (window.confirm(message)) {
       onNew?.(id);
     }
@@ -264,13 +264,13 @@ const AdminItemGrid = <T extends Game | Prize | User>({
           ? onNew && (
               <button
                 type="button"
-                onClick={handleNew}
                 className="admincard-button"
+                onClick={handleNew}
                 title={isNew ? "Retirer le tag nouveau" : "Mettre en avant"}
               >
                 <Sparkles
                   className={
-                    isNew ? "admingrid-sparkles" : "admingrid-sparkles-new"
+                    isNew ? "admingrid-sparkles-new" : "admingrid-sparkles"
                   }
                 />
               </button>
