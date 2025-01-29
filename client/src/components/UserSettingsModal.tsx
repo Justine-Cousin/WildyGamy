@@ -75,11 +75,9 @@ export default function UserSettingsModal({
         throw new Error("Failed to delete user");
       }
 
-      // Clear auth and redirect
       setAuth(null);
-      localStorage.removeItem("token");
       onClose();
-      navigate("/", { replace: true });
+      navigate("/");
     } catch (error) {
       console.error("Error deleting user:", error);
       alert("Erreur lors de la suppression du compte");
