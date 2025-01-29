@@ -61,7 +61,7 @@ function RoomCarousel() {
   if (isLoading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error}</div>;
 
-  return (
+  return games.length > 0 ? (
     <div className="room-carousel">
       <h1 className="room-titlecarousel">NEW GAME</h1>
       <div className="room-carouselcontainer">
@@ -73,7 +73,7 @@ function RoomCarousel() {
         ))}
       </div>
     </div>
-  );
+  ) : null;
 }
 
 function RoomGameOnline() {

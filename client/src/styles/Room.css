@@ -88,7 +88,7 @@
 }
 
 .room-gamecard {
-  min-width: 200px;
+  width: 200px;
   position: relative;
 }
 
