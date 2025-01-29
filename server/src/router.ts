@@ -71,6 +71,8 @@ router.put("/api/users/:id/admin", usersActions.toggleAdmin);
 router.delete("/api/users/:id", usersActions.destroy);
 
 router.get("/api/user/:id/favorites", favoritesActions.read);
+router.post("/api/user/:id/favorites", favoritesActions.add);
+router.delete("/api/user/:id/favorites", favoritesActions.destroy);
 
 router.get("/api/user/:id/acquired", acquiredActions.read);
 

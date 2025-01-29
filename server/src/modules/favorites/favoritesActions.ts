@@ -11,4 +11,27 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { read };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const newFavorite = { userId: req.body.userId, gameId: req.body.gameId };
+    const insertId = await favoritesRepository.create(
+      newFavorite.userId,
+      newFavorite.gameId,
+    );
+    res.sendStatus(201);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const { userId, gameId } = req.body;
+    await favoritesRepository.delete(userId, gameId);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { read, add, destroy };

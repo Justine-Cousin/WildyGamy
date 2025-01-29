@@ -16,27 +16,45 @@ export interface Game {
 }
 
 interface GamesCardProps {
-  game: Game & { price: string };
+  game: Game;
+  userId?: number;
 }
 
-export default function GamesCard({ game }: GamesCardProps) {
+export default function GamesCard({ game, userId }: GamesCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleFavorite = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/favorites`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      if (!isFavorite) {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${userId}/favorites`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ gameId: game.id }),
           },
-          credentials: "include",
-          body: JSON.stringify({ gameId: game.id }),
-        },
-      );
-      if (!response.ok) {
-        throw new Error("Error while adding favorite");
+        );
+        if (!response.ok) {
+          throw new Error("Error while adding favorite");
+        }
+      } else {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${userId}/favorites`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ gameId: game.id }),
+          },
+        );
+        if (!response.ok) {
+          throw new Error("Error while deleting favorite");
+        }
       }
 
       setIsFavorite(!isFavorite);
@@ -56,15 +74,20 @@ export default function GamesCard({ game }: GamesCardProps) {
         <Coins className="gamecard-img-coin" />
         <p className="gamecard-price">{game.price}</p>
       </div>
-      <div className="gamecard-heart">
-        <button
-          type="button"
-          className={`gamecard-heart-button ${isFavorite ? "favorite" : ""}`}
-          onClick={toggleFavorite}
-        >
-          <Heart fill={isFavorite ? "#db9e2b" : "none"} stroke="currentColor" />
-        </button>
-      </div>
+      {userId && (
+        <div className="gamecard-heart">
+          <button
+            type="button"
+            className={`gamecard-heart-button ${isFavorite ? "favorite" : ""}`}
+            onClick={toggleFavorite}
+          >
+            <Heart
+              fill={isFavorite ? "#db9e2b" : "none"}
+              stroke="currentColor"
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
