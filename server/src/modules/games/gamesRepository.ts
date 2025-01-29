@@ -1,4 +1,3 @@
-import { N } from "@faker-js/faker/dist/airline-BnpeTvY9";
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
 
