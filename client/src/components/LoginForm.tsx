@@ -8,6 +8,7 @@ import "../styles/LoginForm.css";
 interface LoginFormData {
   email: string;
   password: string;
+  is_admin: boolean;
   stay_connected: boolean;
 }
 
@@ -15,6 +16,7 @@ export default function LoginForm() {
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
+    is_admin: false,
     stay_connected: false,
   });
 
@@ -55,7 +57,12 @@ export default function LoginForm() {
       if (response.status === 200) {
         const data = await response.json();
         setAuth(data);
-        navigate("/user_profile");
+
+        if (data.user && data.user.is_admin === 1) {
+          navigate("/admin");
+        } else {
+          navigate("/user_profile");
+        }
       }
     } catch (err) {
       console.error("Erreur de connexion:", err);
