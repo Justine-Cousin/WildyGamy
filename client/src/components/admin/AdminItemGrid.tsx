@@ -63,8 +63,8 @@ const AdminItemGrid = <T extends Game | Prize | User>({
   isBanned,
   onAdmin,
   isAdmin,
-  isNew,
   onNew,
+  isNew,
 }: AdminItemGridProps<T>) => {
   const item = type === "game" ? game : type === "prize" ? prize : user;
   const [isAvailable, setIsAvailable] = useState(

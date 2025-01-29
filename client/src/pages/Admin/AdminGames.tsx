@@ -113,7 +113,7 @@ const AdminGames = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ is_new: !game.is_new }),
+        body: JSON.stringify({ isNew: !game.is_new }),
         credentials: "include",
       });
 
