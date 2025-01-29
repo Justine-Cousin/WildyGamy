@@ -1,6 +1,8 @@
 import "../styles/UserSettingsModal.css";
 import { KeyRound, LogOut, Pencil, Save, UserX, X } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../services/authContext";
 import type { User } from "../services/types";
 
 interface UserSettingsModalProps {
@@ -41,6 +43,49 @@ export default function UserSettingsModal({
       ...prev,
       [field]: user?.[field] || "",
     }));
+  };
+
+  const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    if (!user?.id) return;
+
+    const confirmed = window.confirm(
+      "Êtes-vous sûr de vouloir supprimer votre compte ?",
+    );
+    if (!confirmed) return;
+
+    try {
+      setIsDeleting(true);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${user.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete user");
+      }
+
+      // Clear auth and redirect
+      setAuth(null);
+      localStorage.removeItem("token");
+      onClose();
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Erreur lors de la suppression du compte");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleSave = async (field: keyof typeof editModes) => {
@@ -301,9 +346,14 @@ export default function UserSettingsModal({
             <KeyRound size={16} />
             Modifier mon mot de passe
           </button>
-          <button type="button" className="user-modal-action-button delete">
+          <button
+            type="button"
+            className="user-modal-action-button delete"
+            onClick={handleDeleteAccount}
+            disabled={isDeleting}
+          >
             <UserX size={16} />
-            Supprimer mon compte
+            {isDeleting ? "Suppression..." : "Supprimer mon compte"}
           </button>
           <button type="button" className="user-modal-action-button logout">
             <LogOut size={16} />
