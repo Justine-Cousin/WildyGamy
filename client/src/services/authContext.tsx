@@ -6,6 +6,7 @@ type User = {
   username: string;
   name: string;
   firstname: string;
+  profile_pic?: string;
 };
 
 type Auth = {

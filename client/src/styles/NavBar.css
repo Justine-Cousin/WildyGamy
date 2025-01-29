@@ -16,7 +16,11 @@
   z-index: 1000;
   box-shadow: 0px 0px 15px #c3b0ea;
 }
-
+.nav-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
 .nav-bar-link {
   color: #c3b0ea;
   text-decoration: none;
