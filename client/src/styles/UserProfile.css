@@ -9,6 +9,7 @@
 }
 
 .user-profile-info-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 12px;
@@ -16,6 +17,13 @@
   border-radius: 20px;
   background: linear-gradient(0deg, #5b4391, #1b142b);
   gap: 12px;
+}
+
+.user-profile-page-settings-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .user-profile-page-title {
@@ -26,16 +34,6 @@
   font-size: 8vw;
   text-align: center;
   padding: 12px;
-}
-
-.user-profile-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin: 0 auto;
-  display: block;
-  border: #9001f5 2px solid;
-  box-shadow: #c169ff 0px 0px 10px;
 }
 
 .h2-welcome-message {
@@ -104,5 +102,62 @@
 
 .user-profile-page-no-prizes-message {
   color: var(--font-title-color);
+  text-align: center;
+}
+
+.user-profile-avatar-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.user-profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: block;
+  border: #9001f5 2px solid;
+  box-shadow: #c169ff 0px 0px 10px;
+}
+
+.upload-icon {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  border: 1px solid #9001f5;
+}
+
+.upload-icon:hover {
+  background: #694fa6;
+}
+
+.upload-status {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #fff;
+}
+
+.upload-error {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ff4444;
+  font-size: 12px;
+  white-space: nowrap;
   text-align: center;
 }

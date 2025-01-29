@@ -12,6 +12,8 @@ type User = {
   profile_pic?: string | null;
   total_points: number;
   current_points: number;
+  is_banned: boolean;
+  is_admin: boolean;
 };
 
 type CreateUserInput = Omit<
@@ -44,7 +46,9 @@ class UserRepository {
   }
 
   async readAll() {
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM user");
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM user ORDER BY total_points DESC",
+    );
     return rows as User[];
   }
 
@@ -80,6 +84,47 @@ class UserRepository {
       [username],
     );
     return rows[0] as User | undefined;
+  }
+
+  async update(id: number, updates: Partial<User>) {
+    const setClause = Object.keys(updates)
+      .map((key) => `${key} = ?`)
+      .join(", ");
+
+    const values = [...Object.values(updates), id];
+
+    const [result] = await databaseClient.query<Result>(
+      `UPDATE user SET ${setClause} WHERE id = ?`,
+      values,
+    );
+
+    return result.affectedRows > 0;
+  }
+
+  async toggleBan(id: number, isBanned: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_banned = ? where id = ?",
+      [isBanned, id],
+    );
+
+    return result.affectedRows;
+  }
+
+  async toggleAdmin(id: number, isAdmin: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "update user set is_admin = ? where id = ?",
+      [isAdmin, id],
+    );
+    return result.affectedRows;
+  }
+
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "DELETE FROM user WHERE id = ?",
+      [id],
+    );
+
+    return result.affectedRows > 0;
   }
 }
 

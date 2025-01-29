@@ -128,6 +128,8 @@ const add: RequestHandler = async (req, res, next) => {
       password_hash: hashedPassword,
       phone_number: phone_number?.trim(),
       profile_pic: profilePicUrl,
+      is_banned: false,
+      is_admin: false,
     });
 
     res.status(201).json({
@@ -141,7 +143,46 @@ const add: RequestHandler = async (req, res, next) => {
 
 const edit: RequestHandler = async (req, res, next) => {
   try {
-    res.status(501).json({ error: "Update operation not implemented" });
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Add profile_pic to allowed updates
+    const allowedUpdates = [
+      "name",
+      "firstname",
+      "email",
+      "username",
+      "phone_number",
+      "profile_pic",
+    ];
+
+    // Handle file upload if present
+    if (req.files && "profile_pic" in req.files) {
+      const profilePic = req.files.profile_pic as UploadedFile;
+      const result = await cloudinary.uploader.upload(profilePic.tempFilePath, {
+        folder: "profile_pics",
+      });
+      updates.profile_pic = result.secure_url;
+    }
+
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([key]) => allowedUpdates.includes(key)),
+    );
+
+    const success = await userRepository.update(Number(id), filteredUpdates);
+
+    if (!success) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    const updatedUser = await userRepository.readById(Number(id));
+    if (!updatedUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    const { password_hash, ...userWithoutPassword } = updatedUser;
+    res.json(userWithoutPassword);
   } catch (err) {
     next(err);
   }
@@ -149,10 +190,51 @@ const edit: RequestHandler = async (req, res, next) => {
 
 const destroy: RequestHandler = async (req, res, next) => {
   try {
-    res.status(501).json({ error: "Delete operation not implemented" });
+    const { id } = req.params;
+
+    const success = await userRepository.delete(Number(id));
+
+    if (!success) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
 };
 
-export default { browse, read, add, edit, destroy };
+const toggleBan: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    const { is_banned } = req.body;
+    const affectedRows = await userRepository.toggleBan(userId, is_banned);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const toggleAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+    const { is_admin } = req.body;
+    const affectedRows = await userRepository.toggleAdmin(userId, is_admin);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, edit, destroy, toggleBan, toggleAdmin };

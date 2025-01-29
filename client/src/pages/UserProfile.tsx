@@ -1,19 +1,71 @@
 import "../styles/UserProfile.css";
-import { Crown, Gift, Medal, Tickets, Trophy } from "lucide-react";
+import {
+  Crown,
+  Gift,
+  Medal,
+  Tickets,
+  Trophy,
+  Upload,
+  UserRoundCog,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import GameCard from "../components/GameCard";
 import PrizeCard from "../components/PrizeCard";
+import UserSettingsModal from "../components/UserSettingsModal";
+import { useAuth } from "../services/authContext";
 import type { Game, Prize, User } from "../services/types";
 
 export default function UserProfile() {
-  const { id } = useParams();
+  const { auth } = useAuth();
   const [userProfile, setUserProfile] = useState<User | null>(null);
   const [favorites, setFavorites] = useState<Game[]>([]);
   const [prizeAcquired, setPrizeAcquired] = useState<Prize[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleProfilePicChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.files || !e.target.files[0]) return;
+
+    const file = e.target.files[0];
+
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("L'image ne doit pas dépasser 5MB");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("profile_pic", file);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        },
+      );
+      if (!response.ok) throw new Error("Échec de la mise à jour");
+
+      const data = await response.json();
+      setUserProfile(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setUploadError("Erreur lors de la mise à jour de l'image");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,28 +73,33 @@ export default function UserProfile() {
         setIsLoading(true);
         // Fetch user data
         const userResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}`,
           { credentials: "include" },
         );
-        if (!userResponse.ok) throw new Error("Failed to fetch user data");
+
+        if (!userResponse.ok) {
+          throw new Error(`HTTP error! status: ${userResponse.status}`);
+        }
+
         const userData = await userResponse.json();
-        setUserProfile(userData);
+        setUserProfile({
+          ...userData,
+          phone_number: userData.phone_number ?? "",
+        });
 
         // Fetch favorites
         const favoritesResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${id}/favorites`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/favorites`,
           { credentials: "include" },
         );
-        if (!favoritesResponse.ok) throw new Error("Failed to fetch favorites");
         const favoritesData = await favoritesResponse.json();
         setFavorites(favoritesData);
 
-        // Fetch acquired prizes
+        // Fetch prizes
         const prizesResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${id}/acquired`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/acquired`,
           { credentials: "include" },
         );
-        if (!prizesResponse.ok) throw new Error("Failed to fetch prizes");
         const prizesData = await prizesResponse.json();
         setPrizeAcquired(prizesData);
       } catch (error) {
@@ -53,8 +110,8 @@ export default function UserProfile() {
       }
     };
 
-    if (id) fetchData();
-  }, [id]);
+    if (auth?.user.id) fetchData();
+  }, [auth?.user.id]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -66,11 +123,31 @@ export default function UserProfile() {
         <img className="play-wg-logo-user-page" src={logoWG} alt="Logo" />
         <h1 className="user-profile-page-title">MON PROFIL</h1>
         <div className="user-profile-info-card">
-          <img
-            className="user-profile-avatar"
-            src={userProfile ? userProfile.profile_pic : ""}
-            alt=""
+          <UserRoundCog
+            className="user-profile-page-settings-icon"
+            onClick={toggleModal}
           />
+          <div className="user-profile-avatar-wrapper">
+            <img
+              className="user-profile-avatar"
+              src={userProfile?.profile_pic}
+              alt="Avatar"
+            />
+            <label className="upload-icon" htmlFor="profile-pic-upload">
+              <Upload size={16} />
+              <input
+                id="profile-pic-upload"
+                type="file"
+                accept="image/jpeg,image/png,image/jpg"
+                onChange={handleProfilePicChange}
+                style={{ display: "none" }}
+              />
+            </label>
+            {isUploading && (
+              <span className="upload-status">Chargement...</span>
+            )}
+            {uploadError && <span className="upload-error">{uploadError}</span>}
+          </div>
           <h2 className="h2-welcome-message">
             Bonjour {userProfile ? userProfile.username : ""}
           </h2>
@@ -126,6 +203,14 @@ export default function UserProfile() {
           <p className="user-profile-page-no-prizes-message">
             Aucune récompense acquise
           </p>
+        )}
+        {isModalOpen && (
+          <UserSettingsModal
+            isOpen={isModalOpen}
+            onClose={toggleModal}
+            user={userProfile}
+            onUserUpdate={(updatedUser) => setUserProfile(updatedUser)}
+          />
         )}
       </div>
     </>
