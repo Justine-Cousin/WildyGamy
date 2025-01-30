@@ -9,7 +9,6 @@ import {
   Star,
   TriangleAlert,
 } from "lucide-react";
-import React from "react";
 import "../styles/SnakeGame.css";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../services/authContext";
@@ -75,8 +74,6 @@ export default function SnakeGame() {
   const { auth } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [highScore, setHighScore] = useState(0);
-  const [, setIsLoading] = useState(true);
-  const [, setError] = useState<string | null>(null);
 
   const handleStartGame = () => {
     if (!auth) {
@@ -106,52 +103,58 @@ export default function SnakeGame() {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}`,
-          { credentials: "include" },
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          },
         );
 
         if (!response.ok) throw new Error("Failed to fetch highscore");
 
         const data = await response.json();
-
         setHighScore(data.highscore || 0);
       } catch (err) {
         console.error("Error fetching highscore:", err);
-        setError("Failed to load highscore");
-      } finally {
-        setIsLoading(false);
       }
     };
 
     fetchHighScore();
   }, [auth]);
 
-  useEffect(() => {
-    const updateHighScore = async () => {
-      if (!auth?.user?.id || score <= highScore) return;
+  const updateHighScore = useCallback(async () => {
+    if (!auth?.user?.id || score <= highScore) return;
 
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}/highscore`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ highscore: score }),
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}/highscore`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
           },
-        );
+          credentials: "include",
+          body: JSON.stringify({ highscore: score }),
+        },
+      );
 
-        if (!response.ok) throw new Error("Failed to update highscore");
-
-        setHighScore(score);
-      } catch (err) {
-        console.error("Error updating highscore:", err);
+      if (!response.ok) {
+        throw new Error("Failed to update highscore");
       }
-    };
 
-    if (gameOver) {
+      setHighScore(score);
+    } catch (err) {
+      console.error("Error updating highscore:", err);
+    }
+  }, [auth, score, highScore]);
+
+  useEffect(() => {
+    if (gameOver && score > highScore) {
       updateHighScore();
     }
-  }, [gameOver, score, highScore, auth]);
+  }, [gameOver, score, highScore, updateHighScore]);
 
   const restartGame = () => {
     setCountdown(3);
@@ -176,7 +179,7 @@ export default function SnakeGame() {
     }, 1000);
   };
 
-  const generateFood = React.useCallback((): Position => {
+  const generateFood = useCallback((): Position => {
     let position: Position;
     do {
       position = generateRandomPosition();
@@ -189,7 +192,7 @@ export default function SnakeGame() {
     return position;
   }, [snake, obstacleCoordinates, arePositionsEqual, generateRandomPosition]);
 
-  const generatePowerUp = React.useCallback(() => {
+  const generatePowerUp = useCallback(() => {
     if (Math.random() < 0.1) {
       const types = Object.keys(POWER_UPS) as PowerUpType[];
       const type = types[Math.floor(Math.random() * types.length)];
@@ -206,7 +209,7 @@ export default function SnakeGame() {
     return null;
   }, [snake, food, obstacles, arePositionsEqual, generateRandomPosition]);
 
-  const generateObstacles = React.useCallback(() => {
+  const generateObstacles = useCallback(() => {
     const newObstacles: Position[] = [];
     const obstacleCount = DIFFICULTY_LEVELS[difficulty].obstacles;
     const middleY = Math.floor(GRID_SIZE / 2);

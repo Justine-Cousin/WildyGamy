@@ -194,19 +194,25 @@ const updateHighscore: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
     const { highscore } = req.body;
 
-    if (!highscore) {
-      res.status(400).json({ error: "Highscore is required" });
-      return;
-    }
-
-    const success = await userRepository.updateHighscore(Number(id), highscore);
-
-    if (!success) {
+    const user = await userRepository.readById(Number(id));
+    if (!user) {
       res.status(404).json({ error: "User not found" });
       return;
     }
 
-    res.status(200).json({ message: "Highscore updated successfully" });
+    if (highscore > (user.highscore || 0)) {
+      const success = await userRepository.updateHighscore(
+        Number(id),
+        highscore,
+      );
+      if (!success) {
+        res.status(404).json({ error: "Update failed" });
+        return;
+      }
+      res.status(200).json({ message: "Highscore updated successfully" });
+    } else {
+      res.status(200).json({ message: "Score not high enough to update" });
+    }
   } catch (err) {
     next(err);
   }

@@ -56,7 +56,7 @@ class UserRepository {
   async readById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT id, name, firstname, email, username, phone_number, 
-       profile_pic, total_points, current_points 
+       profile_pic, total_points, current_points, highscore 
        FROM user WHERE id = ?`,
       [id],
     );
