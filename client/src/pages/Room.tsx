@@ -61,19 +61,25 @@ function RoomCarousel() {
   if (isLoading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error}</div>;
 
-  return games.length > 0 ? (
-    <div className="room-carousel">
-      <h1 className="room-titlecarousel">NEW GAME</h1>
-      <div className="room-carouselcontainer">
-        {games.map((game) => (
-          <article key={game.id} className="room-gamecard">
-            <img src={game.image} alt={game.name} className="room-gameimage" />
-            <h2 className="room-gametitle">{game.name}</h2>
-          </article>
-        ))}
+  return (
+    games.length > 0 && (
+      <div className="room-carousel">
+        <h1 className="room-titlecarousel">NEW GAME</h1>
+        <div className="room-carouselcontainer">
+          {games.map((game) => (
+            <article key={game.id} className="room-gamecard">
+              <img
+                src={game.image}
+                alt={game.name}
+                className="room-gameimage"
+              />
+              <h2 className="room-gametitle">{game.name}</h2>
+            </article>
+          ))}
+        </div>
       </div>
-    </div>
-  ) : null;
+    )
+  );
 }
 
 function RoomGameOnline() {

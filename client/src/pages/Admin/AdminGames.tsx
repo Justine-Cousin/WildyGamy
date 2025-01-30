@@ -67,7 +67,7 @@ const AdminGames = () => {
         image: gameData.image,
         price: Number(gameData.price),
         is_available: true,
-        is_new: selectedGame.is_new || false,
+        is_new: selectedGame.is_new,
       };
 
       if (modalMode === "add") {
