@@ -12,6 +12,7 @@ type User = {
   profile_pic?: string | null;
   total_points: number;
   current_points: number;
+  highscore: number;
   is_banned: boolean;
   is_admin: boolean;
 };
@@ -98,6 +99,14 @@ class UserRepository {
       values,
     );
 
+    return result.affectedRows > 0;
+  }
+
+  async updateHighscore(id: number, highscore: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET highscore = ? WHERE id = ?",
+      [highscore, id],
+    );
     return result.affectedRows > 0;
   }
 

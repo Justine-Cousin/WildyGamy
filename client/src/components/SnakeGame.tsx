@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import "../styles/SnakeGame.css";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../services/authContext";
 import GameLoginModal from "./GameLoginModal";
 
@@ -55,27 +55,28 @@ const POWER_UPS = {
 };
 
 export default function SnakeGame() {
-  const [snake, setSnake] = React.useState<Position[]>(INITIAL_SNAKE);
-  const [food, setFood] = React.useState<Position>({ x: 15, y: 15 });
-  const [direction, setDirection] = React.useState<Position>(INITIAL_DIRECTION);
-  const [gameOver, setGameOver] = React.useState(false);
-  const [score, setScore] = React.useState(0);
-  const [gameStarted, setGameStarted] = React.useState(false);
+  const [snake, setSnake] = useState<Position[]>(INITIAL_SNAKE);
+  const [food, setFood] = useState<Position>({ x: 15, y: 15 });
+  const [direction, setDirection] = useState<Position>(INITIAL_DIRECTION);
+  const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
+  const [gameStarted, setGameStarted] = useState(false);
   const [difficulty, setDifficulty] =
-    React.useState<keyof typeof DIFFICULTY_LEVELS>("medium");
-  const [powerUp, setPowerUp] = React.useState<PowerUp | null>(null);
-  const [activePowerUp, setActivePowerUp] = React.useState<PowerUpType | null>(
-    null,
+    useState<keyof typeof DIFFICULTY_LEVELS>("medium");
+  const [powerUp, setPowerUp] = useState<PowerUp | null>(null);
+  const [activePowerUp, setActivePowerUp] = useState<PowerUpType | null>(null);
+  const [obstacles, setObstacles] = useState<Position[]>([]);
+  const [isPaused, setIsPaused] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [showRules, setShowRules] = useState(false);
+  const [obstacleCoordinates, setObstacleCoordinates] = useState<Position[]>(
+    [],
   );
-  const [obstacles, setObstacles] = React.useState<Position[]>([]);
-  const [isPaused, setIsPaused] = React.useState(false);
-  const [countdown, setCountdown] = React.useState<number | null>(null);
-  const [showRules, setShowRules] = React.useState(false);
-  const [obstacleCoordinates, setObstacleCoordinates] = React.useState<
-    Position[]
-  >([]);
   const { auth } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [highScore, setHighScore] = useState(0);
+  const [, setIsLoading] = useState(true);
+  const [, setError] = useState<string | null>(null);
 
   const handleStartGame = () => {
     if (!auth) {
@@ -85,23 +86,72 @@ export default function SnakeGame() {
     }
   };
 
-  const generateRandomPosition = React.useCallback((): Position => {
+  const generateRandomPosition = useCallback((): Position => {
     return {
       x: Math.floor(Math.random() * GRID_SIZE),
       y: Math.floor(Math.random() * GRID_SIZE),
     };
   }, []);
 
-  const arePositionsEqual = React.useCallback(
+  const arePositionsEqual = useCallback(
     (pos1: Position, pos2: Position): boolean =>
       pos1.x === pos2.x && pos1.y === pos2.y,
     [],
   );
 
-  const [highScore, setHighScore] = React.useState(() => {
-    const saved = localStorage.getItem("snakeHighScore");
-    return saved ? Number.parseInt(saved, 10) : 0;
-  });
+  useEffect(() => {
+    const fetchHighScore = async () => {
+      if (!auth?.user?.id) return;
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}`,
+          { credentials: "include" },
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch highscore");
+
+        const data = await response.json();
+
+        setHighScore(data.highscore || 0);
+      } catch (err) {
+        console.error("Error fetching highscore:", err);
+        setError("Failed to load highscore");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHighScore();
+  }, [auth]);
+
+  useEffect(() => {
+    const updateHighScore = async () => {
+      if (!auth?.user?.id || score <= highScore) return;
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}/highscore`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ highscore: score }),
+          },
+        );
+
+        if (!response.ok) throw new Error("Failed to update highscore");
+
+        setHighScore(score);
+      } catch (err) {
+        console.error("Error updating highscore:", err);
+      }
+    };
+
+    if (gameOver) {
+      updateHighScore();
+    }
+  }, [gameOver, score, highScore, auth]);
 
   const restartGame = () => {
     setCountdown(3);
@@ -187,7 +237,7 @@ export default function SnakeGame() {
     return newObstacles;
   }, [difficulty, snake, food, arePositionsEqual, generateRandomPosition]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!gameStarted || gameOver || isPaused) return;
 
     const gameLoop = setInterval(
@@ -262,14 +312,7 @@ export default function SnakeGame() {
     generatePowerUp,
   ]);
 
-  React.useEffect(() => {
-    if (gameOver && score > highScore) {
-      setHighScore(score);
-      localStorage.setItem("snakeHighScore", score.toString());
-    }
-  }, [gameOver, score, highScore]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (gameOver) return;
 
@@ -366,8 +409,8 @@ export default function SnakeGame() {
           Règles <BookText size={16} />
         </button>
         <div className="score-container">
-          <div className="score">Score: {score}</div>
           <div className="high-score">Best: {highScore}</div>
+          <div className="score">Score: {score}</div>
         </div>
       </div>
       <div className="game-board">{renderBoard()}</div>

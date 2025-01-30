@@ -77,7 +77,6 @@ router.get("/api/user/:id/acquired", acquiredActions.read);
 // Define Your API Routes Here
 
 router.get("/api/user", userActions.browse);
-router.get("/api/user/:id", userActions.read);
 router.post("/api/user", userActions.add);
 router.put("/api/user/:id", userActions.edit);
 router.put("/api/user/:username", userActions.edit);
@@ -86,6 +85,8 @@ router.put("/api/user/:id/admin", usersActions.toggleAdmin);
 router.delete("/api/user/:id", userActions.destroy);
 router.delete("/api/user/:username", userActions.destroy);
 router.post("/api/login", authActions.login);
+router.get("/api/user/:id", userActions.read);
+router.put("/api/user/:id/highscore", userActions.updateHighscore);
 router.use("/api/*", authActions.verifyToken);
 
 export default router;
