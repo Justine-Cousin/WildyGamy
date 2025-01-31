@@ -3,7 +3,7 @@ import defaultProfilePic from "../assets/images/logo_wildy_gamy.png";
 import type { User } from "../services/types";
 
 interface RankingUser {
-  user: User;
+  user: User | null;
   ranking: User[];
 }
 
@@ -20,7 +20,7 @@ const calculateRanking = (users: User[], currentUser: User): number => {
 };
 
 const UserStatHeader = ({ user, ranking = [] }: RankingUser) => {
-  if (!user) return null;
+  if (!user || !user.username) return null;
 
   const userRanking = calculateRanking(ranking, user);
 
@@ -36,9 +36,7 @@ const UserStatHeader = ({ user, ranking = [] }: RankingUser) => {
       />
       <div className="ranking-userinfo">
         <div className="ranking-headertitle">
-          <h2 className="ranking-username">
-            Bonjour, {user.username || "Anonyme"} !
-          </h2>
+          <h2 className="ranking-username">Bonjour, {user.username} !</h2>
         </div>
         <div className="ranking-userstats">
           <div className="ranking-userpoints">
