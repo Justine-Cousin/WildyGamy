@@ -1,7 +1,8 @@
 import "../styles/GameCard.css";
 import { Coins, Heart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
+import { useAuth } from "../services/authContext";
 
 export interface Game {
   id: number;
@@ -17,24 +18,51 @@ export interface Game {
 
 interface GamesCardProps {
   game: Game;
-  userId?: number;
 }
 
-export default function GamesCard({ game, userId }: GamesCardProps) {
+export default function GamesCard({ game }: GamesCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    const checkFavorite = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/favorites`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+        if (!response.ok) {
+          throw new Error("Error while fetching favorites");
+        }
+        const favorites = await response.json();
+        setIsFavorite(
+          favorites.some((favorite: Game) => favorite.id === game.id),
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    checkFavorite();
+  }, [game.id, auth?.user.id]);
 
   const toggleFavorite = async () => {
     try {
       if (!isFavorite) {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${userId}/favorites`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/favorites`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ gameId: game.id }),
+            body: JSON.stringify({ gameId: game.id, userId: auth?.user.id }),
           },
         );
         if (!response.ok) {
@@ -42,14 +70,14 @@ export default function GamesCard({ game, userId }: GamesCardProps) {
         }
       } else {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${userId}/favorites`,
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/favorites`,
           {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ gameId: game.id }),
+            body: JSON.stringify({ gameId: game.id, userId: auth?.user.id }),
           },
         );
         if (!response.ok) {
@@ -74,7 +102,7 @@ export default function GamesCard({ game, userId }: GamesCardProps) {
         <Coins className="gamecard-img-coin" />
         <p className="gamecard-price">{game.price}</p>
       </div>
-      {userId && (
+      {auth && (
         <div className="gamecard-heart">
           <button
             type="button"

@@ -188,7 +188,6 @@ export default function UserProfile() {
                 description: game.description || "",
                 name: game.name,
               }}
-              userId={userProfile?.id}
             />
           ))}{" "}
         </div>

@@ -18,7 +18,7 @@ const add: RequestHandler = async (req, res, next) => {
       newFavorite.userId,
       newFavorite.gameId,
     );
-    res.sendStatus(201);
+    res.sendStatus(201).json({ id: insertId });
   } catch (err) {
     next(err);
   }
