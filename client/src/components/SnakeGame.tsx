@@ -208,7 +208,7 @@ export default function SnakeGame() {
 
   const handleAddScoreClick = () => {
     const confirmAction = window.confirm(
-      "Cette action est possible une fois par jour. Voulez-vous continuer?",
+      "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
     );
     if (confirmAction) {
       updatePoints();
