@@ -218,6 +218,36 @@ const updateHighscore: RequestHandler = async (req, res, next) => {
   }
 };
 
+const updatePoints: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { points } = req.body;
+
+    const user = await userRepository.readById(Number(id));
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    const newTotalPoints = user.total_points + points;
+    const newCurrentPoints = user.current_points + points;
+
+    const success = await userRepository.updatePoints(
+      Number(id),
+      newTotalPoints,
+      newCurrentPoints,
+    );
+    if (!success) {
+      res.status(404).json({ error: "Update failed" });
+      return;
+    }
+
+    res.status(200).json({ message: "Points updated successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const destroy: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -276,4 +306,5 @@ export default {
   toggleBan,
   toggleAdmin,
   updateHighscore,
+  updatePoints,
 };

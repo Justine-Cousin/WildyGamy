@@ -74,6 +74,7 @@ export default function SnakeGame() {
   const { auth } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [highScore, setHighScore] = useState(0);
+  const [lastClickDate, setLastClickDate] = useState<string | null>(null);
 
   const handleStartGame = () => {
     if (!auth) {
@@ -155,6 +156,67 @@ export default function SnakeGame() {
       updateHighScore();
     }
   }, [gameOver, score, highScore, updateHighScore]);
+
+  const updatePoints = async () => {
+    if (!auth?.user?.id) return;
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}/points`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({ points: score }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update points");
+      }
+      setLastClickDate(new Date().toISOString().split("T")[0]);
+    } catch (err) {
+      console.error("Error updating points:", err);
+    }
+  };
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    const storedDate = localStorage.getItem("lastClickDate");
+
+    if (storedDate === today) {
+      setLastClickDate(today);
+    } else {
+      localStorage.removeItem("lastClickDate");
+      setLastClickDate(null);
+    }
+
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    const timeUntilMidnight = midnight.getTime() - new Date().getTime();
+
+    const timer = setTimeout(() => {
+      setLastClickDate(null);
+      localStorage.removeItem("lastClickDate");
+    }, timeUntilMidnight);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleAddScoreClick = () => {
+    const confirmAction = window.confirm(
+      "Cette action est possible une fois par jour. Voulez-vous continuer?",
+    );
+    if (confirmAction) {
+      updatePoints();
+      const today = new Date().toISOString().split("T")[0];
+      localStorage.setItem("lastClickDate", today);
+      setLastClickDate(today);
+    }
+  };
 
   const restartGame = () => {
     setCountdown(3);
@@ -412,7 +474,7 @@ export default function SnakeGame() {
           Règles <BookText size={16} />
         </button>
         <div className="score-container">
-          <div className="high-score">Best: {highScore}</div>
+          <div className="high-score">Record: {highScore}</div>
           <div className="score">Score: {score}</div>
         </div>
       </div>
@@ -545,14 +607,24 @@ export default function SnakeGame() {
         <div className="game-over-overlay">
           <div className="game-over-modal">
             <h2>Game Over</h2>
-            <p>Your score: {score}</p>
-            <p>High score: {highScore}</p>
+            <p>Résultat: {score}</p>
+            <button
+              type="button"
+              className="button primary"
+              onClick={handleAddScoreClick}
+              disabled={
+                lastClickDate === new Date().toISOString().split("T")[0]
+              }
+            >
+              Créditer les points
+            </button>
+            <p>Meilleur score: {highScore}</p>
             <button
               type="button"
               className="button primary"
               onClick={resetGame}
             >
-              Play Again
+              Rejouer
             </button>
           </div>
         </div>

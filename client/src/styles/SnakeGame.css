@@ -228,6 +228,9 @@
   padding: 2rem;
   border-radius: 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .game-over-modal h2 {
@@ -237,7 +240,6 @@
 }
 
 .game-over-modal p {
-  margin-bottom: 1.5rem;
   color: #666;
 }
 
@@ -267,6 +269,11 @@
   color: var(--font-title-color);
   font-weight: bold;
   animation: countdownPulse 1s infinite;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @keyframes countdownPulse {

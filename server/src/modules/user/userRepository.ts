@@ -110,6 +110,14 @@ class UserRepository {
     return result.affectedRows > 0;
   }
 
+  async updatePoints(id: number, totalPoints: number, currentPoints: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET total_points = ?, current_points = ? WHERE id = ?",
+      [totalPoints, currentPoints, id],
+    );
+    return result.affectedRows > 0;
+  }
+
   async toggleBan(id: number, isBanned: boolean) {
     const [result] = await databaseClient.query<Result>(
       "update user set is_banned = ? where id = ?",

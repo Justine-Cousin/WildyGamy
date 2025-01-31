@@ -87,6 +87,7 @@ router.delete("/api/user/:username", userActions.destroy);
 router.post("/api/login", authActions.login);
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id/highscore", userActions.updateHighscore);
+router.put("/api/user/:id/points", userActions.updatePoints);
 
 router.use("/api/*", authActions.verifyToken);
 
