@@ -53,7 +53,7 @@ export default function UserSettingsModal({
     if (!user?.id) return;
 
     const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer votre compte ? Attention, cette action est irréversible. Vos données ne pourrons pas etre récupérées.",
+      "Êtes-vous sûr de vouloir supprimer votre compte ? Attention, cette action est irréversible. Vos données ne pourrons pas être récupérées.",
     );
     if (!confirmed) return;
 
