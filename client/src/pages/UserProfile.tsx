@@ -182,10 +182,11 @@ export default function UserProfile() {
             <GameCard
               key={game.id}
               game={{
-                ...game,
+                id: game.id,
                 price: game.price.toString(),
                 image: game.image || "",
                 description: game.description || "",
+                name: game.name,
               }}
             />
           ))}{" "}

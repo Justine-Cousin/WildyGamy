@@ -3,12 +3,42 @@ import { useEffect, useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import Ranking from "../components/Ranking";
 import UserStatHeader from "../components/UserStatHeader";
+import { useAuth } from "../services/authContext";
 import type { User } from "../services/types";
 
 const RankingPage = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}`,
+          {
+            credentials: "include",
+          },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentUser(data);
+        } else {
+          setCurrentUser(null);
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des utilisateurs:",
+          error,
+        );
+        setCurrentUser(null);
+      }
+    };
+
+    checkAuthStatus();
+  }, [auth]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -30,8 +60,6 @@ const RankingPage = () => {
         }
 
         const data = await response.json();
-        console.error(data);
-
         setUsers(data);
       } catch (error) {
         console.error(
@@ -56,7 +84,6 @@ const RankingPage = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="ranking-page">
@@ -70,21 +97,27 @@ const RankingPage = () => {
       <img className="ranking-logo" src={logoWG} alt="Logo" />
       <h3 className="ranking-title">Mon Classement</h3>
       <div className="ranking-bigcontainer">
-        <div className="ranking-header">
-          <UserStatHeader user={users[2]} ranking={users} />
-        </div>
-        <div className="ranking-container">
-          <div className="ranking-content">
-            {users.map((user, index) => (
-              <Ranking
-                key={user.id}
-                user={user}
-                position={index + 1}
-                isCurrentUser={user.id === users[2].id}
-              />
-            ))}
+        {auth && (
+          <div className="ranking-header">
+            <UserStatHeader ranking={users} user={currentUser} />
           </div>
-        </div>
+        )}
+        {
+          <div className="ranking-container">
+            <div className="ranking-content">
+              {users.map((user, index) => (
+                <Ranking
+                  key={user.id}
+                  user={user}
+                  position={index + 1}
+                  isCurrentUser={
+                    currentUser ? user.id === currentUser.id : false
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        }
       </div>
     </div>
   );

@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import wen from "../assets/images/wen.svg";
 import GameCard from "../components/GameCard";
 
-const Games = () => {
-  interface Game {
-    id: number;
-    image: string;
-    name: string;
-    description: string;
-    price: string;
-  }
+interface Game {
+  id: number;
+  image: string;
+  name: string;
+  description: string;
+  price: string;
+}
 
+const Games = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [valueInput, setValueInput] = useState("");
