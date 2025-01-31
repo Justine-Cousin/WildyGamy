@@ -12,6 +12,7 @@ type User = {
   profile_pic?: string | null;
   total_points: number;
   current_points: number;
+  highscore: number;
   is_banned: boolean;
   is_admin: boolean;
 };
@@ -55,7 +56,7 @@ class UserRepository {
   async readById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT id, name, firstname, email, username, phone_number, 
-       profile_pic, total_points, current_points 
+       profile_pic, total_points, current_points, highscore 
        FROM user WHERE id = ?`,
       [id],
     );
@@ -98,6 +99,22 @@ class UserRepository {
       values,
     );
 
+    return result.affectedRows > 0;
+  }
+
+  async updateHighscore(id: number, highscore: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET highscore = ? WHERE id = ?",
+      [highscore, id],
+    );
+    return result.affectedRows > 0;
+  }
+
+  async updatePoints(id: number, totalPoints: number, currentPoints: number) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET total_points = ?, current_points = ? WHERE id = ?",
+      [totalPoints, currentPoints, id],
+    );
     return result.affectedRows > 0;
   }
 
