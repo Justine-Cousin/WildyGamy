@@ -5,7 +5,7 @@ export type Prize = {
   id: number;
   name: string;
   description: string;
-  image: string;
+  image?: string | null;
   exchange_price: number;
   is_available: boolean;
 };

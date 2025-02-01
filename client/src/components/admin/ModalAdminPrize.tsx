@@ -2,7 +2,8 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { ModalProps, PrizeSaveData } from "../../services/types";
-import "../../styles/ModalAdminGame.css";
+import BlurredBackground from "../BlurredBackground";
+import "../../styles/admin/ModalAdmin.css";
 
 type Errors = {
   name?: string;
@@ -25,7 +26,6 @@ const ModalAdminPrize: React.FC<ModalProps<PrizeSaveData>> = ({
     prizeData?.exchange_price?.toString() || "",
   );
   const [errors, setErrors] = useState<Errors>({});
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   useEffect(() => {
     if (prizeData) {
@@ -82,92 +82,92 @@ const ModalAdminPrize: React.FC<ModalProps<PrizeSaveData>> = ({
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.key === "Enter" && e.stopPropagation()}
       >
-        <div className="edit-modal">
-          <h2 className="edit-modal-title">
-            {mode === "edit" ? "MODIFIER LE LOT" : "AJOUTER UN LOT"}
-          </h2>
-          <div className="edit-modal-content">
-            <div className="image-section">
-              <div className="form-group">
-                <label htmlFor="image" className="edit-modal-label">
-                  Image URL
-                </label>
-                <div className="image-input-container">
+        <BlurredBackground>
+          <div className="edit-modal">
+            <h2 className="edit-modal-title">
+              {mode === "edit" ? "MODIFIER LE LOT" : "AJOUTER UN LOT"}
+            </h2>
+            <div className="edit-modal-content">
+              <div className="image-section">
+                <div className="form-group">
+                  <label htmlFor="image" className="edit-modal-label">
+                    Télécharger une image
+                  </label>
+                  <div className="image-input-container">
+                    <input
+                      type="text"
+                      id="image"
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
+                      className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
+                    />
+                  </div>
+                  {errors.image && (
+                    <span className="error-message">{errors.image}</span>
+                  )}
+                </div>
+                <div className="image-preview">
+                  {image ? (
+                    <img
+                      src={image}
+                      className="image-prize-modal"
+                      alt="Prévisualisation"
+                    />
+                  ) : (
+                    <div className="no-image">Aperçu de l'image</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-section">
+                <div className="form-group">
+                  <label htmlFor="name" className="edit-modal-label">
+                    Nom <span className="required">*</span>
+                  </label>
                   <input
                     type="text"
-                    id="image"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
+                  />
+                  {errors.name && (
+                    <span className="error-message">{errors.name}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="description" className="edit-modal-label">
+                    Description <span className="required">*</span>
+                  </label>
+                  <textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setIsPreviewVisible(!isPreviewVisible)}
-                    className="preview-button"
-                  >
-                    {isPreviewVisible ? "Cacher" : "Prévisualiser"}
-                  </button>
-                  <div>
-                    {errors.image && (
-                      <span className="error-message">{errors.image}</span>
-                    )}
-                  </div>
+                  {errors.description && (
+                    <span className="error-message">{errors.description}</span>
+                  )}
                 </div>
-                {isPreviewVisible && (
-                  <div className="image-preview">
-                    {image ? (
-                      <img src={image} alt="Prévisualisation" />
-                    ) : (
-                      <div className="no-image">Aucune image</div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="form-section">
-              <div className="form-group">
-                <label htmlFor="name" className="edit-modal-label">
-                  Nom <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
-                />
-                {errors.name && (
-                  <span className="error-message">{errors.name}</span>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="description" className="edit-modal-label">
-                  Description <span className="required">*</span>
-                </label>
-                <textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className={`edit-modal-input ${errors.description ? "input-error" : ""}`}
-                />
-                {errors.description && (
-                  <span className="error-message">{errors.description}</span>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="exchange_price" className="edit-modal-label">
-                  Prix d'échange <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="exchange_price"
-                  value={exchange_price}
-                  onChange={(e) => setExchangePrice(e.target.value)}
-                  className={`edit-modal-input ${errors.exchange_price ? "input-error" : ""}`}
-                />
-                {errors.exchange_price && (
-                  <span className="error-message">{errors.exchange_price}</span>
-                )}
+
+                <div className="form-group">
+                  <label htmlFor="exchange_price" className="edit-modal-label">
+                    Prix d'échange <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="exchange_price"
+                    value={exchange_price}
+                    onChange={(e) => setExchangePrice(e.target.value)}
+                    className={`edit-modal-input ${errors.exchange_price ? "input-error" : ""}`}
+                  />
+                  {errors.exchange_price && (
+                    <span className="error-message">
+                      {errors.exchange_price}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -188,7 +188,7 @@ const ModalAdminPrize: React.FC<ModalProps<PrizeSaveData>> = ({
               </button>
             </div>
           </div>
-        </div>
+        </BlurredBackground>
       </div>
     </div>
   );
