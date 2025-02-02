@@ -55,7 +55,7 @@ export interface PrizeAcquired {
 export interface GameSaveData {
   name: string;
   description: string;
-  image: string;
+  image: File | string;
   price: string;
 }
 

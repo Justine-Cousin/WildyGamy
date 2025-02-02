@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { GameSaveData, ModalProps } from "../../services/types";
 import BlurredBackground from "../BlurredBackground";
 import "../../styles/admin/ModalAdmin.css";
@@ -10,6 +11,10 @@ type Errors = {
   price?: string;
 };
 
+interface FileChangeEvent extends React.ChangeEvent<HTMLInputElement> {
+  target: HTMLInputElement & { files: FileList };
+}
+
 const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
   isOpen,
   onClose,
@@ -19,18 +24,77 @@ const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
 }) => {
   const [name, setName] = useState(gameData?.name || "");
   const [description, setDescription] = useState(gameData?.description || "");
-  const [image, setImage] = useState<string>(gameData?.image || "");
+  const [imageFile, setImageFile] = useState<string | File>(
+    gameData?.image || "",
+  );
   const [price, setPrice] = useState(gameData?.price?.toString() || "");
   const [errors, setErrors] = useState<Errors>({});
+  const [previewUrl, setPreviewUrl] = useState<string>(
+    typeof gameData?.image === "string" ? gameData.image : logoWG,
+  );
+  const [isLoading] = useState(false);
 
   useEffect(() => {
     if (gameData) {
       setName(gameData.name || "");
       setDescription(gameData.description || "");
-      setImage(typeof gameData.image === "string" ? gameData.image : "");
+      setPreviewUrl(
+        gameData.image instanceof File
+          ? URL.createObjectURL(gameData.image)
+          : gameData.image || logoWG,
+      );
       setPrice(gameData.price?.toString() || "");
     }
   }, [gameData]);
+
+  useEffect(() => {
+    return () => {
+      if (
+        previewUrl &&
+        previewUrl !== logoWG &&
+        previewUrl !== gameData?.image
+      ) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl, gameData?.image]);
+
+  const handleFileChange = (e: FileChangeEvent) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({
+          ...prev,
+          image: "L'image ne doit pas dépasser 5MB",
+        }));
+        e.target.value = "";
+        return;
+      }
+
+      const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+      if (!allowedTypes.includes(file.type)) {
+        setErrors((prev) => ({
+          ...prev,
+          image: "Seuls les fichiers PNG et JPG sont autorisés",
+        }));
+        e.target.value = "";
+        return;
+      }
+
+      if (
+        previewUrl &&
+        previewUrl !== logoWG &&
+        previewUrl !== gameData?.image
+      ) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
+      const newPrevieuwUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPrevieuwUrl);
+      setImageFile(file);
+      setErrors((prev) => ({ ...prev, image: undefined }));
+    }
+  };
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
@@ -49,13 +113,22 @@ const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
       newErrors.price = "Le prix doit être un nombre";
     }
 
+    if (mode === "add" && !imageFile && previewUrl === logoWG) {
+      newErrors.image = "L'image est requise";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSave = () => {
     if (validateForm()) {
-      onSave({ name, description, image, price });
+      onSave({
+        name,
+        description,
+        image: imageFile || gameData?.image || "",
+        price,
+      });
       onClose();
     }
   };
@@ -63,16 +136,8 @@ const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={onClose}
-      onKeyUp={(e) => e.key === "Escape" && onClose()}
-    >
-      <div
-        className="modal-container"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.key === "Enter" && e.stopPropagation()}
-      >
+    <div className="modal-overlay">
+      <div className="modal-container">
         <BlurredBackground>
           <div className="edit-modal">
             <h2 className="edit-modal-title">
@@ -82,15 +147,16 @@ const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
               <div className="image-section">
                 <div className="form-group">
                   <label htmlFor="image" className="edit-modal-label">
-                    Image URL
+                    Image du jeu
                   </label>
                   <div className="image-input-container">
                     <input
-                      type="text"
+                      type="file"
                       id="image"
-                      value={image}
-                      onChange={(e) => setImage(e.target.value)}
+                      accept="image/png, image/jpeg, image/jpg"
+                      onChange={handleFileChange}
                       className={`edit-modal-input ${errors.image ? "input-error" : ""}`}
+                      disabled={isLoading}
                     />
                   </div>
                   {errors.image && (
@@ -98,8 +164,14 @@ const ModalAdminGame: React.FC<ModalProps<GameSaveData>> = ({
                   )}
                 </div>
                 <div className="image-preview">
-                  {image ? (
-                    <img src={image} alt="Prévisualisation" />
+                  {previewUrl ? (
+                    <>
+                      <img
+                        src={previewUrl}
+                        className="image-prize-modal"
+                        alt="Prévisualisation"
+                      />
+                    </>
                   ) : (
                     <div className="no-image">Aperçu de l'image</div>
                   )}

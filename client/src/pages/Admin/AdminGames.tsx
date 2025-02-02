@@ -23,9 +23,9 @@ const AdminGames = () => {
     loading,
     error,
     updateItem,
-    setData,
     deleteItem,
     addItem,
+    setData,
     updateAvailability,
   } = useAdminData<Game>({
     fetchUrl: "/api/games",
@@ -57,25 +57,31 @@ const AdminGames = () => {
   const handleSave = async (gameData: {
     name: string;
     description: string;
-    image: string;
+    image: File | string;
     price?: string;
   }) => {
     try {
-      const formattedData = {
-        name: gameData.name,
-        description: gameData.description,
-        image: gameData.image,
-        price: Number(gameData.price),
-        is_available: true,
-        is_new: selectedGame.is_new,
-      };
+      const formData = new FormData();
+      formData.append("name", gameData.name);
+      formData.append("description", gameData.description);
+      formData.append("price", gameData.price || "0");
+      formData.append("is_available", "1");
+
+      if (gameData.image instanceof File) {
+        formData.append("image", gameData.image);
+      } else if (typeof gameData.image === "string") {
+        formData.append("image", gameData.image);
+      }
 
       if (modalMode === "add") {
-        await addItem(formattedData);
+        const newGame = await addItem(formData);
+        if (newGame) {
+          setIsModalOpen(false);
+        }
       } else {
-        await updateItem(selectedGame.id, formattedData);
+        await updateItem(selectedGame.id, formData);
+        setIsModalOpen(false);
       }
-      setIsModalOpen(false);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
       setLocalError(

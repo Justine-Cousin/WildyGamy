@@ -89,7 +89,7 @@ const edit: RequestHandler = async (req, res, next) => {
       res.status(404).json({ error: "Prize not found" });
     } else {
       const updatedPrize = await prizeRepository.read(prizeId);
-      res.status(200).json(prizeData);
+      res.status(200).json(updatedPrize);
     }
   } catch (err) {
     next(err);
