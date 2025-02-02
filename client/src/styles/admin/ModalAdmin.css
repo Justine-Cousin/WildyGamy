@@ -224,3 +224,30 @@ modal-overlay {
   align-items: center;
   gap: 10px;
 }
+
+.edit-modal-input[type="file"] {
+  padding: 12px;
+  cursor: pointer;
+  color: transparent;
+  position: relative;
+}
+
+.edit-modal-input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+  display: none;
+}
+
+.edit-modal-input[type="file"]::before {
+  content: "Choisir une image";
+  color: #c3b0ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.edit-modal-input[type="file"]:hover {
+  border-color: #9001f5;
+  box-shadow: 0 0 0 2px rgba(144, 1, 245, 0.2);
+}

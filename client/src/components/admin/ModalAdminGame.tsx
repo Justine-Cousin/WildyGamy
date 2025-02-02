@@ -4,6 +4,7 @@ import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { GameSaveData, ModalProps } from "../../services/types";
 import BlurredBackground from "../BlurredBackground";
 import "../../styles/admin/ModalAdmin.css";
+
 type Errors = {
   name?: string;
   description?: string;
