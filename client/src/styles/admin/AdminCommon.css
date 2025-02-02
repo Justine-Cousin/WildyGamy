@@ -38,7 +38,6 @@
     top: 0;
     right: 0;
     padding: 20px;
-    z-index: 1000;
   }
 
   .admingames-content,
@@ -50,8 +49,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    position: relative;
-    z-index: 1;
+    padding-bottom: calc(70px + 40px + 2rem);
   }
 
   .main-content {
@@ -121,7 +119,6 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
