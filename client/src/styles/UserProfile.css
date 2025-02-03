@@ -80,10 +80,16 @@
   color: var(--font-title-color);
   padding: 8px 8px;
   border-radius: 50px;
-  border: #9001f5 2px solid;
+  border: white 2px solid;
   cursor: pointer;
   overflow-wrap: normal;
-  box-shadow: #c169ff 0px 0px 10px;
+  box-shadow: yellow 0px 0px 10px;
+}
+
+.user-profile-ranking-button:hover,
+.user-profile-exchange-button:hover {
+  background-color: var(--font-title-color);
+  color: #6403a9;
 }
 
 .user-profile-page-favorites-container {
@@ -100,7 +106,8 @@
   border-radius: 10px;
 }
 
-.user-profile-page-no-prizes-message {
+.user-profile-page-no-prizes-message,
+.user-profile-page-no-favorites-message {
   color: var(--font-title-color);
   text-align: center;
 }
@@ -118,8 +125,8 @@
   border-radius: 50%;
   margin: 0 auto;
   display: block;
-  border: #9001f5 2px solid;
-  box-shadow: #c169ff 0px 0px 10px;
+  border: white 2px solid;
+  box-shadow: yellow 0px 0px 10px;
 }
 
 .upload-icon {
