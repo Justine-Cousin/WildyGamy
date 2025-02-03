@@ -66,14 +66,14 @@ export default function NavBar() {
         <Link className="burger-menu-link" to="/play" onClick={toggleMenu}>
           Jeu en ligne
         </Link>
+        <Link className="burger-menu-link" to="/ranking" onClick={toggleMenu}>
+          Classement
+        </Link>
         <Link className="burger-menu-link" to="/games" onClick={toggleMenu}>
           Liste des jeux
         </Link>
         <Link className="burger-menu-link" to="/prizes" onClick={toggleMenu}>
           Récompenses
-        </Link>
-        <Link className="burger-menu-link" to="/ranking" onClick={toggleMenu}>
-          Classement
         </Link>
       </div>
     </nav>
