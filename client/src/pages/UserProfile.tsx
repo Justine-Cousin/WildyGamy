@@ -158,7 +158,7 @@ export default function UserProfile() {
             </div>
             <div className="user-profile-stats-rank">
               <Trophy className="user-profile-trophy-icon" />
-              <p>7</p>
+              <p>6</p>
             </div>
             <div className="user-profile-stats-actual-points">
               <Tickets className="user-profile-actual-points-icon" />
