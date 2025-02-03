@@ -17,6 +17,18 @@ import UserSettingsModal from "../components/UserSettingsModal";
 import { useAuth } from "../services/authContext";
 import type { Game, Prize, User } from "../services/types";
 
+const calculateRanking = (users: User[], currentUser: User): number => {
+  if (!Array.isArray(users) || !currentUser?.id) return 0;
+
+  const sortedUsers = [...users].sort(
+    (a, b) => b.total_points - a.total_points,
+  );
+
+  const userPosition =
+    sortedUsers.findIndex((u) => u.id === currentUser.id) + 1;
+  return userPosition;
+};
+
 export default function UserProfile() {
   const { auth } = useAuth();
   const [userProfile, setUserProfile] = useState<User | null>(null);
@@ -31,6 +43,7 @@ export default function UserProfile() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const navigation = useNavigate();
+  const [userRanking, setUserRanking] = useState<number>(0);
 
   const handleProfilePicChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -104,6 +117,29 @@ export default function UserProfile() {
         );
         const prizesData = await prizesResponse.json();
         setPrizeAcquired(prizesData);
+
+        // Fetch all users for ranking calculation
+        const usersResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/users`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+
+        if (!usersResponse.ok) {
+          throw new Error(`Erreur HTTP: ${usersResponse.status}`);
+        }
+
+        const usersData = await usersResponse.json();
+
+        // Calculate user ranking
+        const ranking = calculateRanking(usersData, userData);
+        setUserRanking(ranking);
       } catch (error) {
         console.error("Error:", error);
         setError(error instanceof Error ? error.message : "An error occurred");
@@ -160,7 +196,7 @@ export default function UserProfile() {
             </div>
             <div className="user-profile-stats-rank">
               <Trophy className="user-profile-trophy-icon" />
-              <p>7</p>
+              <p>{userRanking}</p>
             </div>
             <div className="user-profile-stats-actual-points">
               <Tickets className="user-profile-actual-points-icon" />
