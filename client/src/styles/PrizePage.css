@@ -91,16 +91,17 @@
   width: 100%;
   letter-spacing: 0.2px;
   position: absolute;
-  bottom: -23px;
+  bottom: -27px;
 }
 
 .prize-card__points {
   position: absolute;
-  bottom: 5px;
+  bottom: 8px;
   right: 5px;
   display: flex;
   align-items: center;
   gap: 4px;
+  z-index: 2;
 }
 
 .prize-card__points-value {
@@ -114,13 +115,15 @@
   align-items: center;
   justify-content: center;
   padding: 1px;
+  background-color: #1d1729;
 }
 
 .prize-coin {
   width: 2rem;
   height: 2rem;
   margin-left: -36px;
-  margin-bottom: -2.4px;
+  margin-bottom: 2px;
+  z-index: 1;
 }
 
 .prize-card__description {
