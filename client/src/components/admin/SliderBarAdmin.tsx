@@ -1,5 +1,6 @@
 import { Joystick, LogOut, Menu, Trophy, Users, View, X } from "lucide-react";
 import { useState } from "react";
+import ReactDOM from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/authContext";
 import "../../styles/admin/SliderBarAdmin.css";
@@ -42,6 +43,7 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
     message: string;
     onConfirm: () => void;
   } | null>(null);
+
   const logoutUser = () => {
     setAuth(null);
     onClose();
@@ -59,7 +61,18 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
   const handleClick = () => {
     window.open("/", "_blank", "noopener,noreferrer");
   };
-
+  const renderModal = () => {
+    return ReactDOM.createPortal(
+      <AlertModalAdmin
+        title={modalConfig?.title || ""}
+        message={modalConfig?.message || ""}
+        visible={modalConfig !== null}
+        onConfirm={modalConfig?.onConfirm || (() => {})}
+        onClose={() => setModalConfig(null)}
+      />,
+      document.body,
+    );
+  };
   return (
     <div
       className={`adminhome-sidebar ${isOpen ? "adminhome-sidebar-open" : "adminhome-sidebar-close"}`}
@@ -100,13 +113,7 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
           Déconnexion
         </span>
       </button>
-      <AlertModalAdmin
-        title={modalConfig?.title || ""}
-        message={modalConfig?.message || ""}
-        visible={modalConfig !== null}
-        onConfirm={modalConfig?.onConfirm || (() => {})}
-        onClose={() => setModalConfig(null)}
-      />
+      {modalConfig !== null && renderModal()}
     </div>
   );
 }
