@@ -9,6 +9,7 @@ import {
   UserRoundCog,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import GameCard from "../components/GameCard";
 import PrizeCard from "../components/PrizeCard";
@@ -29,6 +30,7 @@ export default function UserProfile() {
   };
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const navigation = useNavigate();
 
   const handleProfilePicChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -166,11 +168,23 @@ export default function UserProfile() {
             </div>
           </div>
           <div className="user-profile-button-container">
-            <button type="button" className="user-profile-ranking-button">
+            <button
+              onClick={() => {
+                navigation("/ranking");
+              }}
+              type="button"
+              className="user-profile-ranking-button"
+            >
               <Medal className="user-profile-medal-icon" />
               <p>Voir le classement</p>
             </button>
-            <button type="button" className="user-profile-exchange-button">
+            <button
+              onClick={() => {
+                navigation("/prizes");
+              }}
+              type="button"
+              className="user-profile-exchange-button"
+            >
               <Gift className="user-profile-gift-icon" />
               <p>Échanger mes points</p>
             </button>
