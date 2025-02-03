@@ -13,8 +13,8 @@ type User = {
   total_points: number;
   current_points: number;
   highscore: number;
-  is_banned: boolean;
-  is_admin: boolean;
+  is_banned: number;
+  is_admin: number;
 };
 
 type CreateUserInput = Omit<
@@ -30,8 +30,8 @@ class UserRepository {
       `INSERT INTO user (
         name, firstname, email, username, 
         password_hash, phone_number, profile_pic,
-        total_points, current_points
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0)`,
+        total_points, current_points, highscore, is_banned, is_admin
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0)`,
       [
         user.name,
         user.firstname,
@@ -55,9 +55,7 @@ class UserRepository {
 
   async readById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      `SELECT id, name, firstname, email, username, phone_number, 
-       profile_pic, total_points, current_points, highscore 
-       FROM user WHERE id = ?`,
+      "SELECT * FROM user WHERE id = ?",
       [id],
     );
     return rows[0] as User | undefined;
@@ -73,7 +71,7 @@ class UserRepository {
 
   async readByEmailWithPassword(email: string) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM user WHERE email = ?",
+      "SELECT id, name, firstname, email, username, password_hash, phone_number, profile_pic, total_points, current_points, highscore, is_banned, is_admin FROM user WHERE email = ?",
       [email],
     );
     return rows[0] as User | undefined;
@@ -120,17 +118,16 @@ class UserRepository {
 
   async toggleBan(id: number, isBanned: boolean) {
     const [result] = await databaseClient.query<Result>(
-      "update user set is_banned = ? where id = ?",
-      [isBanned, id],
+      "UPDATE user SET is_banned = ? WHERE id = ?",
+      [isBanned ? 1 : 0, id],
     );
-
     return result.affectedRows;
   }
 
   async toggleAdmin(id: number, isAdmin: boolean) {
     const [result] = await databaseClient.query<Result>(
-      "update user set is_admin = ? where id = ?",
-      [isAdmin, id],
+      "UPDATE user SET is_admin = ? WHERE id = ?",
+      [isAdmin ? 1 : 0, id],
     );
     return result.affectedRows;
   }
@@ -140,7 +137,6 @@ class UserRepository {
       "DELETE FROM user WHERE id = ?",
       [id],
     );
-
     return result.affectedRows > 0;
   }
 }

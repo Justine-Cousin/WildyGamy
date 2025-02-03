@@ -55,24 +55,30 @@ const AdminPrizes = () => {
   const handleSave = async (prizeData: {
     name: string;
     description: string;
-    image: string;
+    image: File | string;
     exchange_price?: string;
   }) => {
     try {
-      const formatteData = {
-        name: prizeData.name,
-        description: prizeData.description,
-        image: prizeData.image,
-        exchange_price: Number(prizeData.exchange_price),
-        is_available: true,
-      };
+      const formData = new FormData();
+      formData.append("name", prizeData.name);
+      formData.append("description", prizeData.description);
+      formData.append("exchange_price", prizeData.exchange_price || "0");
+
+      if (prizeData.image instanceof File) {
+        formData.append("image", prizeData.image);
+      } else if (typeof prizeData.image === "string") {
+        formData.append("image", prizeData.image);
+      }
 
       if (modalMode === "add") {
-        await addItem(formatteData);
+        const newPrize = await addItem(formData);
+        if (newPrize) {
+          setIsModalOpen(false);
+        }
       } else {
-        await updateItem(selectedPrize.id, formatteData);
+        await updateItem(selectedPrize.id, formData);
+        setIsModalOpen(false);
       }
-      setIsModalOpen(false);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
       setLocalError(

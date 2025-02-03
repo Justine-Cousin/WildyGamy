@@ -1,4 +1,3 @@
-import path from "node:path";
 import argon2 from "argon2";
 import type { RequestHandler } from "express";
 import type { UploadedFile } from "express-fileupload";
@@ -129,8 +128,8 @@ const add: RequestHandler = async (req, res, next) => {
       phone_number: phone_number?.trim(),
       highscore: 0,
       profile_pic: profilePicUrl,
-      is_banned: false,
-      is_admin: false,
+      is_banned: 0,
+      is_admin: 0,
     });
 
     res.status(201).json({
@@ -147,7 +146,6 @@ const edit: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
     const updates = req.body;
 
-    // Add profile_pic to allowed updates
     const allowedUpdates = [
       "name",
       "firstname",
@@ -157,7 +155,6 @@ const edit: RequestHandler = async (req, res, next) => {
       "profile_pic",
     ];
 
-    // Handle file upload if present
     if (req.files && "profile_pic" in req.files) {
       const profilePic = req.files.profile_pic as UploadedFile;
       const result = await cloudinary.uploader.upload(profilePic.tempFilePath, {
