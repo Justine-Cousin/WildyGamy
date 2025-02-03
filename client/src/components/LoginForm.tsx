@@ -1,27 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../services/api";
 import { useAuth } from "../services/authContext";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/LoginForm.css";
 
-interface LoginFormData {
-  email: string;
-  password: string;
-  is_admin: boolean;
-  stay_connected: boolean;
-}
-
 export default function LoginForm() {
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
-    is_admin: false,
     stay_connected: false,
   });
-
   const [error, setError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const { setAuth } = useAuth();
 
@@ -36,38 +27,40 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isLoading) return;
+
     setError("");
     setIsLoading(true);
 
     try {
-      if (!formData.email || !formData.password) {
-        setError("Veuillez remplir tous les champs");
-        return;
-      }
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        },
+      );
 
-      const response = await api.post("/api/login", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const data = await response.json();
 
-      if (!response) {
-        throw new Error("Erreur de connexion");
-      }
-
-      if (response.status === 200) {
-        const data = await response.json();
+      if (response.ok && data.user) {
         setAuth(data);
 
-        if (data.user && data.user.is_admin === 1) {
-          navigate("/admin");
-        } else {
-          navigate("/user_profile");
-        }
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate(data.user.is_admin === 1 ? "/admin" : "/user_profile", {
+            replace: true,
+          });
+        }, 100);
+      } else {
+        setError(data.error || "Identifiants invalides");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Erreur de connexion:", err);
       setError("Une erreur est survenue lors de la connexion");
-    } finally {
       setIsLoading(false);
     }
   };
@@ -118,6 +111,7 @@ export default function LoginForm() {
                 onChange={handleInputChange}
                 placeholder="xxxxxxx"
                 required
+                minLength={6}
                 disabled={isLoading}
                 autoComplete="current-password"
               />
@@ -139,12 +133,7 @@ export default function LoginForm() {
             </label>
           </div>
 
-          <button
-            className="login__submit"
-            type="submit"
-            disabled={isLoading}
-            aria-busy={isLoading}
-          >
+          <button className="login__submit" type="submit" disabled={isLoading}>
             {isLoading ? "Connexion en cours..." : "Se connecter"}
           </button>
 
