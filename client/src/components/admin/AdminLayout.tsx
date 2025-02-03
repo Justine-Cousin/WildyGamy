@@ -1,9 +1,9 @@
 import type React from "react";
 import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
-import AddButton from "./AddButton";
-import SliderBarAdmin from "./SliderBarAdmin";
+import SliderBarAdmin from "../admin/SliderBarAdmin";
 import "../../styles/admin/AdminCommon.css";
+import AddButton from "../admin/AddButton";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -28,7 +28,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     <div className="admin-dashboard">
       <div className={containerClassName}>
         <img src={logoWG} alt="logo" className={logoClassName} />
-        <SliderBarAdmin isOpen={isOpen} onToggle={setIsOpen} />
+        <SliderBarAdmin
+          isOpen={isOpen}
+          onToggle={setIsOpen}
+          onClose={() => setIsOpen(false)}
+        />
 
         <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
           <div className={contentClassName}>{children}</div>

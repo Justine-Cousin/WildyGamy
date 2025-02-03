@@ -17,7 +17,7 @@ import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { Game, Prize, User } from "../../services/types";
 import "../../styles/admin/AdminCommon.css";
-import AlertModalAdmin from "./AlertModalAdmin";
+import AlertModalAdmin from "../AlertModal";
 
 interface AdminItemGridProps<T> {
   id: number;
