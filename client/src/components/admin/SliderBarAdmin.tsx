@@ -1,10 +1,14 @@
 import { Joystick, LogOut, Menu, Trophy, Users, View, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../services/authContext";
 import "../../styles/admin/SliderBarAdmin.css";
+import AlertModalAdmin from "../AlertModal";
 
 interface SliderBarAdminProps {
   isOpen: boolean;
   onToggle: (open: boolean) => void;
+  onClose: () => void;
 }
 
 const menuItems = [
@@ -28,10 +32,30 @@ const menuItems = [
   },
 ];
 
-function SliderBarAdmin({ isOpen, onToggle }: SliderBarAdminProps) {
-  const handleLogout = () => {
-    alert("logout");
+function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
+  const navigate = useNavigate();
+  const { setAuth } = useAuth() as unknown as {
+    setAuth: (auth: null) => void;
   };
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
+  const logoutUser = () => {
+    setAuth(null);
+    onClose();
+    navigate("/");
+  };
+
+  const handleLogout = () => {
+    setModalConfig({
+      title: "Déconnexion",
+      message: "Êtes-vous sûr de vouloir vous déconnecter ?",
+      onConfirm: logoutUser,
+    });
+  };
+
   const handleClick = () => {
     window.open("/", "_blank", "noopener,noreferrer");
   };
@@ -76,6 +100,13 @@ function SliderBarAdmin({ isOpen, onToggle }: SliderBarAdminProps) {
           Déconnexion
         </span>
       </button>
+      <AlertModalAdmin
+        title={modalConfig?.title || ""}
+        message={modalConfig?.message || ""}
+        visible={modalConfig !== null}
+        onConfirm={modalConfig?.onConfirm || (() => {})}
+        onClose={() => setModalConfig(null)}
+      />
     </div>
   );
 }
