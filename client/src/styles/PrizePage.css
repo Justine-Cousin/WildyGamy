@@ -1,8 +1,8 @@
 .prize-logo {
-  width: 20%;
+  width: 17%;
   position: relative;
-  padding: 20px 0 0 20px;
 }
+
 .prizes-page__title {
   font-family: var(--font-title-phosphate);
   font-weight: 400;
@@ -15,11 +15,14 @@
     rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
 }
 
+.prize-page {
+  padding: 20px 20px 0px 20px;
+}
+
 .prizes-page__container {
   width: 80%;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: 150px;
 }
 
 .prizes-page__grid {
@@ -29,7 +32,7 @@
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 35px 15px 15px 15px;
+  padding: 35px 0px 150px 0px;
 }
 
 .prize-card {
@@ -88,16 +91,17 @@
   width: 100%;
   letter-spacing: 0.2px;
   position: absolute;
-  bottom: -23px;
+  bottom: -27px;
 }
 
 .prize-card__points {
   position: absolute;
-  bottom: 5px;
+  bottom: 8px;
   right: 5px;
   display: flex;
   align-items: center;
   gap: 4px;
+  z-index: 2;
 }
 
 .prize-card__points-value {
@@ -111,13 +115,15 @@
   align-items: center;
   justify-content: center;
   padding: 1px;
+  background-color: #1d1729;
 }
 
 .prize-coin {
   width: 2rem;
   height: 2rem;
   margin-left: -36px;
-  margin-bottom: -2.4px;
+  margin-bottom: 2px;
+  z-index: 1;
 }
 
 .prize-card__description {
