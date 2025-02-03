@@ -4,8 +4,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    position: relative;
-    z-index: auto;
+    z-index: 1;
+  }
+
+  .adminhome-sidebar {
+    z-index: 2;
   }
 
   .admingrid-card-user {

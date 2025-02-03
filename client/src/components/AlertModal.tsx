@@ -1,4 +1,4 @@
-import "../../styles/admin/AlertModalAdmin.css";
+import "../styles/AlertModal.css";
 
 interface AlertModalAdminProps {
   title: string;

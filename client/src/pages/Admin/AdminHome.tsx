@@ -16,7 +16,11 @@ function AdminHome() {
       <Link to="/">
         <img src={logoWG} alt="logo" className="adminhome-logo" />
       </Link>
-      <SliderBarAdmin isOpen={isOpen} onToggle={handleSidebarToggle} />
+      <SliderBarAdmin
+        isOpen={isOpen}
+        onToggle={handleSidebarToggle}
+        onClose={() => setIsOpen(false)}
+      />
       <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
         <div className="welcome-container">
           <h1 className="welcome-title">
