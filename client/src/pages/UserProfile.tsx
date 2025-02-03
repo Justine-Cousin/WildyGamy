@@ -177,20 +177,26 @@ export default function UserProfile() {
           </div>
         </div>
         <p className="user-profile-page-title">MES FAVORIS</p>
-        <div className="user-profile-page-favorites-container">
-          {favorites.map((game) => (
-            <GameCard
-              key={game.id}
-              game={{
-                id: game.id,
-                price: game.price.toString(),
-                image: game.image || "",
-                description: game.description || "",
-                name: game.name,
-              }}
-            />
-          ))}{" "}
-        </div>
+        {favorites.length > 0 ? (
+          <div className="user-profile-page-favorites-container">
+            {favorites.map((game) => (
+              <GameCard
+                key={game.id}
+                game={{
+                  id: game.id,
+                  price: game.price.toString(),
+                  image: game.image || "",
+                  description: game.description || "",
+                  name: game.name,
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="user-profile-page-no-favorites-message">
+            Aucun favori ajouté
+          </p>
+        )}
         <p className="user-profile-page-title">MES RÉCOMPENSES</p>
         {prizeAcquired.length > 0 ? (
           <div className="user-profile-page-prizes-container">

@@ -100,7 +100,8 @@
   border-radius: 10px;
 }
 
-.user-profile-page-no-prizes-message {
+.user-profile-page-no-prizes-message,
+.user-profile-page-no-favorites-message {
   color: var(--font-title-color);
   text-align: center;
 }
