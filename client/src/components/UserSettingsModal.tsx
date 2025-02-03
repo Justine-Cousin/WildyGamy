@@ -46,7 +46,10 @@ export default function UserSettingsModal({
   };
 
   const navigate = useNavigate();
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth } = useAuth() as unknown as {
+    auth: { token: string };
+    setAuth: (auth: null) => void;
+  };
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteAccount = async () => {
@@ -65,7 +68,7 @@ export default function UserSettingsModal({
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${auth?.token}`,
+            Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
         },
@@ -121,6 +124,12 @@ export default function UserSettingsModal({
   };
 
   if (!isOpen || !user) return null;
+
+  const handleLogout = () => {
+    setAuth(null);
+    onClose();
+    navigate("/login");
+  };
 
   return (
     <div className="user-modal-overlay">
@@ -340,6 +349,14 @@ export default function UserSettingsModal({
         </div>
         <h3>Gérer Mon Compte</h3>
         <div className="user-modal-buttons-container">
+          <button
+            type="button"
+            className="user-modal-action-button logout"
+            onClick={handleLogout}
+          >
+            <LogOut size={16} />
+            Me déconnecter
+          </button>
           <button type="button" className="user-modal-action-button">
             <KeyRound size={16} />
             Modifier mon mot de passe
@@ -352,10 +369,6 @@ export default function UserSettingsModal({
           >
             <UserX size={16} />
             {isDeleting ? "Suppression..." : "Supprimer mon compte"}
-          </button>
-          <button type="button" className="user-modal-action-button logout">
-            <LogOut size={16} />
-            Me déconnecter
           </button>
         </div>
       </div>
