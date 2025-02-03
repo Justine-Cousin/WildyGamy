@@ -43,24 +43,34 @@ export const useAdminData = <T extends { id: number }>({
     fetchData();
   }, [fetchData]);
 
-  const updateItem = async (id: number, updateData: Partial<T>) => {
+  const updateItem = async (id: number, updatedItem: Partial<T> | FormData) => {
     try {
+      const headers: Record<string, string> = {
+        Accept: "application/json",
+      };
+
+      let body: string | FormData;
+      if (updatedItem instanceof FormData) {
+        body = updatedItem;
+      } else {
+        headers["Content-Type"] = "application/json";
+        body = JSON.stringify(updatedItem);
+      }
+
       const response = await fetch(`${API_URL}${fetchUrl}/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: headers,
         credentials: "include",
-        body: JSON.stringify(updateData),
+        body: body,
       });
 
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-      setData(
-        data.map((item) =>
-          item.id === id ? { ...item, ...updateData } : item,
-        ),
-      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
+      }
+
+      const updated = await response.json();
+      setData(data.map((item) => (item.id === id ? updated : item)));
     } catch (error) {
       console.error("Erreur lors de la mise à jour:", error);
       throw error;
@@ -84,13 +94,16 @@ export const useAdminData = <T extends { id: number }>({
     }
   };
 
-  const addItem = async (itemData: Omit<T, "id">) => {
+  const addItem = async (item: Omit<T, "id"> | FormData) => {
     try {
       const response = await fetch(`${API_URL}${fetchUrl}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers:
+          item instanceof FormData
+            ? {}
+            : { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(itemData),
+        body: item instanceof FormData ? item : JSON.stringify(item),
       });
 
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);

@@ -55,14 +55,15 @@ export interface PrizeAcquired {
 export interface GameSaveData {
   name: string;
   description: string;
-  image: string;
+  image: File | string;
   price: string;
 }
 
 export interface PrizeSaveData {
+  id?: number;
   name: string;
   description: string;
-  image: string;
+  image: File | string;
   exchange_price: string;
 }
 

@@ -88,15 +88,26 @@
 }
 
 .room-gamecard {
-  width: 200px;
   position: relative;
 }
 
-.room-gameimage {
+.room-gameimagecontainer {
   width: 200px;
   height: 200px;
   border-radius: 10px;
   border: #c3b0ea 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.room-gameimage {
+  width: 100%;
+  padding: 15px;
+}
+
+.img.room-gameimage {
+  width: 80%;
 }
 
 .room-gametitle {
