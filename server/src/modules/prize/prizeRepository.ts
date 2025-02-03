@@ -5,7 +5,7 @@ export type Prize = {
   id: number;
   name: string;
   description: string;
-  image: string;
+  image?: string | null;
   exchange_price: number;
   is_available: boolean;
 };
@@ -44,13 +44,12 @@ class prizeRepository {
 
   async update(prize: CreatePrize & { id: number }) {
     const [result] = await databaseClient.query<Result>(
-      "update prize set name = ?, description = ?,  image = ?, exchange_price = ?, is_available = ? where id = ?",
+      "update prize set name = ?, description = ?,  image = ?, exchange_price = ? where id = ?",
       [
         prize.name,
         prize.description,
         prize.image,
         prize.exchange_price,
-        prize.is_available,
         prize.id,
       ],
     );
