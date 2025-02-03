@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 20px;
 }
 
 .ranking-bigcontainer {
@@ -31,9 +32,9 @@
 .ranking-container {
   position: relative;
   padding: 10px;
-  border: #c3b0ea 1px solid;
+  border: #694fa6 3px solid;
   border-radius: 35px;
-  background: linear-gradient(#1d1729, #1d1729);
+  background: linear-gradient(0deg, #5b4391, #1b142b);
   color: #c3b0ea;
   font-family: "Inter", sans-serif;
   display: flex;
@@ -149,9 +150,10 @@
 .ranking-header {
   position: relative;
   padding: 2px;
-  border: #c3b0ea 1px solid;
+  border: #694fa6 3px solid;
   border-radius: 50px;
-  background: linear-gradient(#1d1729, #1d1729);
+  background: linear-gradient(0deg, #5b4391, #1b142b);
+  gap: 12px;
   color: #c3b0ea;
   box-shadow: 0 0 20px rgba(100, 3, 169, 0.3);
   overflow: hidden;
@@ -161,19 +163,18 @@
 }
 
 .ranking-userpic {
-  width: 20%;
-  height: auto;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  object-fit: cover;
-  margin: 5px;
+  display: block;
   filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 3px #ffff);
-  background: #1d1729;
+  background: linear-gradient(#3a2e53, #3a2e53);
 }
 
 .ranking-profileheader {
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  gap: 15px;
   align-items: center;
   padding: 10px;
 }
@@ -181,6 +182,7 @@
 .ranking-userinfo {
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
 .ranking-userstats {
@@ -228,7 +230,7 @@
 }
 
 .ranking-text-neon {
-  color: white !important;
+  color: rgb(255, 255, 255) !important;
   text-shadow: 0 0 5px #c3b0ea, 0 0 10px #c3b0ea;
 }
 
