@@ -1,0 +1,122 @@
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Styles */
+.alert-modal-admin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 20, 43, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.alert-modal-admin-content {
+  width: 90%;
+  max-width: 500px;
+  background: rgba(21, 20, 43, 0.95);
+  border-radius: 34px;
+  border: 1px solid rgba(195, 176, 234, 0.2);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+}
+
+.alert-modal-admin-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.alert-modal-admin-title {
+  font-family: var(--font-title);
+  color: #c3b0ea;
+  font-size: 1.75rem;
+  text-align: center;
+
+  letter-spacing: 1px;
+}
+
+.alert-modal-admin-body {
+  text-align: center;
+  color: #c3b0ea;
+  padding: 0 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.alert-modal-admin-footer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 20px;
+}
+
+.btn {
+  padding: 12px 40px;
+  border-radius: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.btn-primary {
+  background: #6403a9;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #7504c6;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(34, 24, 52, 0.4);
+  color: #c3b0ea;
+  border: 1px solid rgba(195, 176, 234, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(34, 24, 52, 0.6);
+  border-color: rgba(195, 176, 234, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
