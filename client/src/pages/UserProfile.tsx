@@ -9,12 +9,25 @@ import {
   UserRoundCog,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import GameCard from "../components/GameCard";
 import PrizeCard from "../components/PrizeCard";
 import UserSettingsModal from "../components/UserSettingsModal";
 import { useAuth } from "../services/authContext";
 import type { Game, Prize, User } from "../services/types";
+
+const calculateRanking = (users: User[], currentUser: User): number => {
+  if (!Array.isArray(users) || !currentUser?.id) return 0;
+
+  const sortedUsers = [...users].sort(
+    (a, b) => b.total_points - a.total_points,
+  );
+
+  const userPosition =
+    sortedUsers.findIndex((u) => u.id === currentUser.id) + 1;
+  return userPosition;
+};
 
 export default function UserProfile() {
   const { auth } = useAuth();
@@ -29,6 +42,8 @@ export default function UserProfile() {
   };
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const navigation = useNavigate();
+  const [userRanking, setUserRanking] = useState<number>(0);
 
   const handleProfilePicChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -102,6 +117,29 @@ export default function UserProfile() {
         );
         const prizesData = await prizesResponse.json();
         setPrizeAcquired(prizesData);
+
+        // Fetch all users for ranking calculation
+        const usersResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/users`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+
+        if (!usersResponse.ok) {
+          throw new Error(`Erreur HTTP: ${usersResponse.status}`);
+        }
+
+        const usersData = await usersResponse.json();
+
+        // Calculate user ranking
+        const ranking = calculateRanking(usersData, userData);
+        setUserRanking(ranking);
       } catch (error) {
         console.error("Error:", error);
         setError(error instanceof Error ? error.message : "An error occurred");
@@ -158,7 +196,7 @@ export default function UserProfile() {
             </div>
             <div className="user-profile-stats-rank">
               <Trophy className="user-profile-trophy-icon" />
-              <p>6</p>
+              <p>{userRanking}</p>
             </div>
             <div className="user-profile-stats-actual-points">
               <Tickets className="user-profile-actual-points-icon" />
@@ -166,31 +204,49 @@ export default function UserProfile() {
             </div>
           </div>
           <div className="user-profile-button-container">
-            <button type="button" className="user-profile-ranking-button">
+            <button
+              onClick={() => {
+                navigation("/ranking");
+              }}
+              type="button"
+              className="user-profile-ranking-button"
+            >
               <Medal className="user-profile-medal-icon" />
               <p>Voir le classement</p>
             </button>
-            <button type="button" className="user-profile-exchange-button">
+            <button
+              onClick={() => {
+                navigation("/prizes");
+              }}
+              type="button"
+              className="user-profile-exchange-button"
+            >
               <Gift className="user-profile-gift-icon" />
               <p>Échanger mes points</p>
             </button>
           </div>
         </div>
         <p className="user-profile-page-title">MES FAVORIS</p>
-        <div className="user-profile-page-favorites-container">
-          {favorites.map((game) => (
-            <GameCard
-              key={game.id}
-              game={{
-                id: game.id,
-                price: game.price.toString(),
-                image: game.image || "",
-                description: game.description || "",
-                name: game.name,
-              }}
-            />
-          ))}{" "}
-        </div>
+        {favorites.length > 0 ? (
+          <div className="user-profile-page-favorites-container">
+            {favorites.map((game) => (
+              <GameCard
+                key={game.id}
+                game={{
+                  id: game.id,
+                  price: game.price.toString(),
+                  image: game.image || "",
+                  description: game.description || "",
+                  name: game.name,
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="user-profile-page-no-favorites-message">
+            Aucun favori ajouté
+          </p>
+        )}
         <p className="user-profile-page-title">MES RÉCOMPENSES</p>
         {prizeAcquired.length > 0 ? (
           <div className="user-profile-page-prizes-container">
