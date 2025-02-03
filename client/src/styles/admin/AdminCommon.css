@@ -108,10 +108,10 @@
   }
 
   .adminCard-name {
-    font-size: 1.2rem;
+    font-size: 1.4vw;
     color: #f3f4f6;
     white-space: nowrap;
-    padding-left: 20px;
+    padding: 0 20px 0 20px;
   }
 
   /* prix */

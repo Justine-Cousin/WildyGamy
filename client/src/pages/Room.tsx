@@ -69,11 +69,13 @@ function RoomCarousel() {
         <div className="room-carouselcontainer">
           {games.map((game) => (
             <article key={game.id} className="room-gamecard">
-              <img
-                src={game.image}
-                alt={game.name}
-                className="room-gameimage"
-              />
+              <div className="room-gameimagecontainer">
+                <img
+                  src={game.image}
+                  alt={game.name}
+                  className="room-gameimage"
+                />
+              </div>
               <h2 className="room-gametitle">{game.name}</h2>
             </article>
           ))}
