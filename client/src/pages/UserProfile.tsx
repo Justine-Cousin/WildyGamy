@@ -45,6 +45,10 @@ export default function UserProfile() {
   const navigation = useNavigate();
   const [userRanking, setUserRanking] = useState<number>(0);
 
+  const handleAcquiredPrizeExchange = () => {
+    return;
+  };
+
   const handleProfilePicChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -251,7 +255,11 @@ export default function UserProfile() {
         {prizeAcquired.length > 0 ? (
           <div className="user-profile-page-prizes-container">
             {prizeAcquired.map((prize) => (
-              <PrizeCard key={prize.id} prize={prize} />
+              <PrizeCard
+                key={prize.id}
+                prize={prize}
+                onExchange={handleAcquiredPrizeExchange}
+              />
             ))}
           </div>
         ) : (

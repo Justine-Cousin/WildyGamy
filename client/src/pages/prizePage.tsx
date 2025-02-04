@@ -113,6 +113,58 @@ const PrizePage = () => {
     fetchUsers();
   }, []);
 
+  const handleExchange = async (prize: Prize) => {
+    if (!currentUser) return;
+
+    if (currentUser.current_points < prize.exchange_price) {
+      alert("Vous n'avez pas assez de points pour cet échange.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/points`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth?.token}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            points: prize.exchange_price,
+            type: "subtract",
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Échec de l'échange de points");
+      }
+
+      const newPoints = currentUser.current_points - prize.exchange_price;
+      setCurrentUser({ ...currentUser, current_points: newPoints });
+
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/acquired`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth?.token}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({ prize_id: prize.id }),
+        },
+      );
+
+      alert("Échange réussi !");
+    } catch (error) {
+      console.error("Erreur lors de l'échange:", error);
+      alert("Une erreur est survenue lors de l'échange.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="prizes-page">
@@ -142,7 +194,11 @@ const PrizePage = () => {
       </div>
       <div className="prizes-page__grid">
         {prizes.map((prize) => (
-          <PrizeCard key={prize.id} prize={prize} />
+          <PrizeCard
+            key={prize.id}
+            prize={prize}
+            onExchange={() => handleExchange(prize)}
+          />
         ))}
       </div>
     </div>

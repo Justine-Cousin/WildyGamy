@@ -108,10 +108,10 @@ class UserRepository {
     return result.affectedRows > 0;
   }
 
-  async updatePoints(id: number, totalPoints: number, currentPoints: number) {
+  async updatePoints(id: number, currentPoints: number, totalPoints: number) {
     const [result] = await databaseClient.query<Result>(
-      "UPDATE user SET total_points = ?, current_points = ? WHERE id = ?",
-      [totalPoints, currentPoints, id],
+      "UPDATE user SET current_points = ?, total_points = ? WHERE id = ?",
+      [currentPoints, totalPoints, id],
     );
     return result.affectedRows > 0;
   }
