@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import room from "../assets/images/room-image.jpg";
+import AlertModalAdmin from "../components/AlertModal";
 import type { Game } from "../services/types";
 
 function RoomDescription() {
@@ -138,6 +139,11 @@ function RoomForm() {
     subject: "",
     message: "",
   });
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -147,7 +153,7 @@ function RoomForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newErrors: FormErrors = {};
@@ -170,10 +176,41 @@ function RoomForm() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/contact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (!response.ok) throw new Error("Une erreur lors de l'envoi");
+
       setErrors({});
-      alert("Formulaire envoyé avec succès !");
+      setModalConfig({
+        title: "Message envoyé",
+        message: "Formulaire envoyé avec succès !",
+        onConfirm: () => {
+          setModalConfig(null);
+        },
+      });
+
       setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (err) {
+      setModalConfig({
+        title: "Erreur",
+        message: "Une erreur est survenue",
+        onConfirm: () => {
+          setModalConfig(null);
+        },
+      });
     }
   };
 
@@ -182,11 +219,17 @@ function RoomForm() {
       <h2 className="form-title">Contactez-nous</h2>
       <form id="myForm" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Votre Nom</label>
+          <label htmlFor="name">
+            Votre Nom
+            <span className="contact-form-asterisk" aria-hidden="true">
+              *
+            </span>
+          </label>
           <input
             type="text"
             id="name"
             name="name"
+            required
             value={formData.name}
             onChange={handleChange}
             placeholder="ex : DUPONT"
@@ -194,11 +237,17 @@ function RoomForm() {
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
         <div className="form-group">
-          <label htmlFor="email">Adresse email</label>
+          <label htmlFor="email">
+            Adresse email
+            <span className="contact-form-asterisk" aria-hidden="true">
+              *
+            </span>
+          </label>
           <input
             type="email"
             id="email"
             name="email"
+            required
             value={formData.email}
             onChange={handleChange}
             placeholder="ex : lorem.ipsum@gmail.com"
@@ -206,11 +255,17 @@ function RoomForm() {
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
         <div className="form-group">
-          <label htmlFor="subject">Sujet</label>
+          <label htmlFor="subject">
+            Sujet
+            <span className="contact-form-asterisk" aria-hidden="true">
+              *
+            </span>
+          </label>
           <input
             type="text"
             id="subject"
             name="subject"
+            required
             value={formData.subject}
             onChange={handleChange}
             placeholder="ex : réservation"
@@ -218,12 +273,18 @@ function RoomForm() {
           {errors.subject && <span className="error">{errors.subject}</span>}
         </div>
         <div className="form-group">
-          <label htmlFor="message">Votre message</label>
+          <label htmlFor="message">
+            Votre message
+            <span className="contact-form-asterisk" aria-hidden="true">
+              *
+            </span>
+          </label>
           <textarea
             id="message"
             name="message"
             value={formData.message}
             onChange={handleChange}
+            required
             placeholder="ex : Bonjour"
           />
           {errors.message && <span className="error">{errors.message}</span>}
@@ -232,6 +293,14 @@ function RoomForm() {
           Envoyer
         </button>
       </form>
+      {modalConfig && (
+        <AlertModalAdmin
+          title={modalConfig.title}
+          message={modalConfig.message}
+          visible={true}
+          onConfirm={modalConfig.onConfirm}
+        />
+      )}
     </div>
   );
 }
