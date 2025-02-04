@@ -10,6 +10,34 @@
   padding: 1rem;
 }
 
+.mail-icon-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.mail-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 1;
+}
+
 .adminhome-menu {
   flex: 1;
   display: flex;
@@ -30,6 +58,7 @@
   cursor: pointer;
   border: none;
 }
+
 .button-open,
 .button-close {
   width: 35px;
@@ -54,6 +83,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  position: relative;
+  cursor: pointer;
 }
 
 .menu-item img {
@@ -69,6 +100,37 @@
   color: #f3f4f6;
 }
 
+.logout-button,
+.vueUser-button {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: none;
+  border: none;
+  color: #f3f4f6;
+  cursor: pointer;
+  font-size: 1.5rem;
+  width: 100%;
+  margin-top: auto;
+}
+
+.logout-button img {
+  width: 30px;
+  height: 30px;
+}
+
+.logout-button span,
+.vueUser-button span {
+  margin-left: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.menu-item-text-hidden {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
 .main-content.main-content-shifted {
   margin-left: 250px;
 }
@@ -78,4 +140,11 @@
   height: 30px;
   color: #e9d5ff;
   filter: drop-shadow(0 4px 6px rgba(88, 28, 135, 0.5));
+  position: relative;
+}
+
+.mailicon-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
