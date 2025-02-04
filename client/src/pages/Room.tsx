@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import room from "../assets/images/room-image.jpg";
+import AlertModalAdmin from "../components/AlertModal";
 import type { Game } from "../services/types";
 
 function RoomDescription() {
@@ -138,6 +139,11 @@ function RoomForm() {
     subject: "",
     message: "",
   });
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -147,7 +153,7 @@ function RoomForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newErrors: FormErrors = {};
@@ -170,10 +176,41 @@ function RoomForm() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/contact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (!response.ok) throw new Error("Une erreur lors de l'envoi");
+
       setErrors({});
-      alert("Formulaire envoyé avec succès !");
+      setModalConfig({
+        title: "Message envoyé",
+        message: "Formulaire envoyé avec succès !",
+        onConfirm: () => {
+          setModalConfig(null);
+        },
+      });
+
       setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (err) {
+      setModalConfig({
+        title: "Erreur",
+        message: "Une erreur est survenue",
+        onConfirm: () => {
+          setModalConfig(null);
+        },
+      });
     }
   };
 
@@ -256,6 +293,14 @@ function RoomForm() {
           Envoyer
         </button>
       </form>
+      {modalConfig && (
+        <AlertModalAdmin
+          title={modalConfig.title}
+          message={modalConfig.message}
+          visible={true}
+          onConfirm={modalConfig.onConfirm}
+        />
+      )}
     </div>
   );
 }

@@ -7,57 +7,73 @@ export class EmailRepository {
   private transporter: nodemailer.Transporter | undefined;
 
   constructor() {
-    this.oauth2CLient = new google.auth.OAuth2(
-      process.env.GMAIL_CLIENT_ID,
-      process.env.GMAIL_CLIENT_SECRET,
-      "http://localhost:3000",
-    );
+    try {
+      this.oauth2CLient = new google.auth.OAuth2(
+        process.env.GMAIL_CLIENT_ID,
+        process.env.GMAIL_CLIENT_SECRET,
+        "http://localhost:3000",
+      );
 
-    this.oauth2CLient.setCredentials({
-      refresh_token: process.env.GMAIL_REFRESH_TOKEN,
-    });
+      this.oauth2CLient.setCredentials({
+        refresh_token: process.env.GMAIL_REFRESH_TOKEN,
+      });
+    } catch (error) {
+      console.error("Erreur d'initialisation de l'EmailRepository:", error);
+    }
   }
 
   async initializeTransporter() {
-    const accessToken = await this.oauth2CLient.getAccessToken();
+    try {
+      if (!this.oauth2CLient) {
+        throw new Error("OAuth2 client is not initialized");
+      }
+      const accessToken = await this.oauth2CLient.getAccessToken();
 
-    this.transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: process.env.GMAIL_EMAIL,
-        clientId: process.env.GMAIL_CLIENT_ID,
-        clientSecret: process.env.GMAIL_CLIENT_SECRET,
-        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-      },
-    });
+      this.transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          type: "OAuth2",
+          user: process.env.GMAIL_EMAIL,
+          clientId: process.env.GMAIL_CLIENT_ID,
+          clientSecret: process.env.GMAIL_CLIENT_SECRET,
+          refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+        },
+      });
+    } catch (error) {
+      console.error("Erreur d'initialisation du transporter:", error);
+      throw error;
+    }
   }
 
-  async sendEmail(emailData: EmailData) {
-    if (!this.transporter) {
-      await this.initializeTransporter();
-    }
+  async sendEmail(emailData: EmailData): Promise<void> {
+    try {
+      if (!this.transporter) {
+        await this.initializeTransporter();
+      }
 
-    const mailOptions = {
-      from: `${emailData.name} <${emailData.email}>`,
-      to: process.env.GMAIL_EMAIL,
-      subject: emailData.subject,
-      text: `
-            Nouveau message d: ${emailData.name}
+      await this.initializeTransporter();
+
+      const mailOptions = {
+        from: `${emailData.name} <${emailData.email}>`,
+        to: process.env.GMAIL_EMAIL,
+        subject: emailData.subject,
+        text: `
+            New message from: ${emailData.name}
             Email: ${emailData.email}
 
             Message:
             ${emailData.message}`,
-    };
+      };
 
-    try {
-      if (this.transporter) {
-        return await this.transporter.sendMail(mailOptions);
+      if (!this.transporter) {
+        throw new Error("Transporter is not initialized");
       }
-      throw new Error("Transporter is not initialized");
-    } catch (error) {
-      console.error("Erreur d'envoi d'email:", error);
-      throw new Error("Échec de l'envoi de l'email");
+      const result = await this.transporter.sendMail(mailOptions);
+
+      return result;
+    } catch (error: unknown) {
+      console.error("Erreur détaillée d'envoi d'email:", error);
+      throw error;
     }
   }
 }
