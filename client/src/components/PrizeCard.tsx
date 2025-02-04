@@ -7,10 +7,20 @@ import type { Prize } from "../services/types";
 const PrizeCard = ({
   prize,
   onExchange,
-}: { prize: Prize; onExchange: () => void }) => {
+  isAcquired,
+  viewOnly = false,
+  canAfford = true,
+}: {
+  prize: Prize;
+  onExchange: () => void;
+  isAcquired: boolean;
+  viewOnly?: boolean;
+  canAfford?: boolean;
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleExchangeClick = (e: React.MouseEvent) => {
+    if (viewOnly || isAcquired || !canAfford) return;
     e.stopPropagation();
     setIsModalOpen(true);
     document.body.classList.add("modal-open");
@@ -35,9 +45,12 @@ const PrizeCard = ({
 
   return (
     <div
-      className="prize-card"
-      onKeyDown={handleKeyDown}
+      className={`prize-card 
+        ${isAcquired ? "prize-card--acquired" : ""} 
+        ${viewOnly ? "prize-card--view-only" : ""}
+        ${!canAfford ? "prize-card--unaffordable" : ""}`}
       onClick={handleExchangeClick}
+      onKeyDown={handleKeyDown}
     >
       <div className="prize-card__content">
         <div className="prize-card__image-container">
@@ -68,6 +81,16 @@ const PrizeCard = ({
           onConfirm={handleConfirm}
           onCancel={handleCancel}
         />
+      )}
+      {isAcquired && (
+        <div className="prize-card__acquired-overlay">
+          <span>Déjà acquis</span>
+        </div>
+      )}
+      {!canAfford && !isAcquired && (
+        <div className="prize-card__unaffordable-overlay">
+          <span>Points insuffisants</span>
+        </div>
       )}
     </div>
   );

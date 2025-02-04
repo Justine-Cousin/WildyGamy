@@ -45,10 +45,6 @@ export default function UserProfile() {
   const navigation = useNavigate();
   const [userRanking, setUserRanking] = useState<number>(0);
 
-  const handleAcquiredPrizeExchange = () => {
-    return;
-  };
-
   const handleProfilePicChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -258,7 +254,9 @@ export default function UserProfile() {
               <PrizeCard
                 key={prize.id}
                 prize={prize}
-                onExchange={handleAcquiredPrizeExchange}
+                onExchange={() => {}}
+                isAcquired={false}
+                viewOnly={true}
               />
             ))}
           </div>

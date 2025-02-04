@@ -14,6 +14,7 @@ const PrizePage = () => {
   const { auth } = useAuth();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
+  const [acquiredPrizes, setAcquiredPrizes] = useState<Prize[]>([]);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -41,6 +42,29 @@ const PrizePage = () => {
 
     checkAuthStatus();
   }, [auth]);
+
+  useEffect(() => {
+    const fetchAcquiredPrizes = async () => {
+      if (!auth?.user?.id) return;
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}/acquired`,
+          {
+            credentials: "include",
+          },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setAcquiredPrizes(data);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des prix acquis:", error);
+      }
+    };
+
+    fetchAcquiredPrizes();
+  }, [auth?.user?.id]);
 
   useEffect(() => {
     const fetchPrizes = async () => {
@@ -116,6 +140,12 @@ const PrizePage = () => {
   const handleExchange = async (prize: Prize) => {
     if (!currentUser) return;
 
+    // Check if already acquired
+    if (acquiredPrizes.some((acquiredPrize) => acquiredPrize.id === prize.id)) {
+      alert("Vous possédez déjà ce prix.");
+      return;
+    }
+
     if (currentUser.current_points < prize.exchange_price) {
       alert("Vous n'avez pas assez de points pour cet échange.");
       return;
@@ -142,10 +172,7 @@ const PrizePage = () => {
         throw new Error("Échec de l'échange de points");
       }
 
-      const newPoints = currentUser.current_points - prize.exchange_price;
-      setCurrentUser({ ...currentUser, current_points: newPoints });
-
-      await fetch(
+      const acquiredResponse = await fetch(
         `${import.meta.env.VITE_API_URL}/api/user/${auth?.user.id}/acquired`,
         {
           method: "POST",
@@ -157,6 +184,15 @@ const PrizePage = () => {
           body: JSON.stringify({ prize_id: prize.id }),
         },
       );
+
+      if (!acquiredResponse.ok) {
+        throw new Error("Échec de l'ajout du prix acquis");
+      }
+
+      // Update states immediately after successful exchange
+      const newPoints = currentUser.current_points - prize.exchange_price;
+      setCurrentUser({ ...currentUser, current_points: newPoints });
+      setAcquiredPrizes([...acquiredPrizes, prize]);
 
       alert("Échange réussi !");
     } catch (error) {
@@ -193,13 +229,24 @@ const PrizePage = () => {
         )}
       </div>
       <div className="prizes-page__grid">
-        {prizes.map((prize) => (
-          <PrizeCard
-            key={prize.id}
-            prize={prize}
-            onExchange={() => handleExchange(prize)}
-          />
-        ))}
+        {prizes.map((prize) => {
+          const isAcquired = acquiredPrizes.some(
+            (acquiredPrize) => acquiredPrize.id === prize.id,
+          );
+          const canAfford = currentUser
+            ? currentUser.current_points >= prize.exchange_price
+            : false;
+
+          return (
+            <PrizeCard
+              key={prize.id}
+              prize={prize}
+              onExchange={() => handleExchange(prize)}
+              isAcquired={isAcquired}
+              canAfford={canAfford}
+            />
+          );
+        })}
       </div>
     </div>
   );
