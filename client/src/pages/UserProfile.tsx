@@ -251,7 +251,13 @@ export default function UserProfile() {
         {prizeAcquired.length > 0 ? (
           <div className="user-profile-page-prizes-container">
             {prizeAcquired.map((prize) => (
-              <PrizeCard key={prize.id} prize={prize} />
+              <PrizeCard
+                key={prize.id}
+                prize={prize}
+                onExchange={() => {}}
+                isAcquired={false}
+                viewOnly={true}
+              />
             ))}
           </div>
         ) : (

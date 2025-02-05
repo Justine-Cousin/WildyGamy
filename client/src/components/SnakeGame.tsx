@@ -157,7 +157,7 @@ export default function SnakeGame() {
     }
   }, [gameOver, score, highScore, updateHighScore]);
 
-  const updatePoints = async () => {
+  const updatePoints = async (type: "add" | "subtract") => {
     if (!auth?.user?.id) return;
 
     try {
@@ -170,7 +170,7 @@ export default function SnakeGame() {
             Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
-          body: JSON.stringify({ points: score }),
+          body: JSON.stringify({ points: score, type }),
         },
       );
 
@@ -211,7 +211,7 @@ export default function SnakeGame() {
       "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
     );
     if (confirmAction) {
-      updatePoints();
+      updatePoints("add");
       const today = new Date().toISOString().split("T")[0];
       localStorage.setItem("lastClickDate", today);
       setLastClickDate(today);

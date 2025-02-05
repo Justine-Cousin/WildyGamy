@@ -1,3 +1,4 @@
+import type { ResultSetHeader } from "mysql2";
 import databaseClient from "../../../database/client";
 
 class AcquiredRepository {
@@ -9,6 +10,14 @@ class AcquiredRepository {
       [userId],
     );
     return rows;
+  }
+
+  async add(userId: number, prizeId: number) {
+    const [result] = await databaseClient.query<ResultSetHeader>(
+      "INSERT INTO prize_acquired (user_id, prize_id) VALUES (?, ?)",
+      [userId, prizeId],
+    );
+    return result.affectedRows > 0;
   }
 }
 
