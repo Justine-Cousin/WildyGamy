@@ -79,6 +79,7 @@
 
 .room-carousel {
   background-color: transparent;
+  margin-bottom: 20px;
 }
 
 .room-carouselcontainer {
@@ -114,7 +115,6 @@
   color: #c3b0ea;
   font-family: "Inter", sans-serif;
   font-size: 1.2rem;
-  margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
@@ -126,6 +126,16 @@
 .room-carouselcontainer {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.room-arrowimage {
+  cursor: pointer;
+}
+
+.room-titlecontainercarousel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /*JEUX EN LIGNE*/
