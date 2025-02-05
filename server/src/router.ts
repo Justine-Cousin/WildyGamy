@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import acquiredActions from "./modules/acquired/acquiredActions";
 import authActions from "./modules/auth/authActions";
+import { sendContact } from "./modules/email/emailActions";
 import favoritesActions from "./modules/favorites/favoritesActions";
 import gameActions from "./modules/games/gamesActions";
 import itemActions from "./modules/item/itemActions";
@@ -91,6 +92,8 @@ router.post("/api/login", authActions.login);
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id/highscore", userActions.updateHighscore);
 router.put("/api/user/:id/points", userActions.updatePoints);
+
+router.post("/api/contact", sendContact);
 
 router.use("/api/*", authActions.verifyToken);
 
