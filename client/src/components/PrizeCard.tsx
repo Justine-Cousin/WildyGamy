@@ -1,6 +1,7 @@
 import { useState } from "react";
 import coin from "../assets/images/coin.svg";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
+import PrizeAuthModal from "../components/PrizeAuthModal";
 import PrizeExchangeModal from "../components/PrizeExchangeModal";
 import type { Prize } from "../services/types";
 
@@ -10,17 +11,25 @@ const PrizeCard = ({
   isAcquired,
   viewOnly = false,
   canAfford = true,
+  requiresAuth = false,
 }: {
   prize: Prize;
   onExchange: () => void;
   isAcquired: boolean;
   viewOnly?: boolean;
   canAfford?: boolean;
+  requiresAuth?: boolean;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleExchangeClick = (e: React.MouseEvent) => {
     if (viewOnly || isAcquired || !canAfford) return;
+    if (requiresAuth) {
+      setIsAuthModalOpen(true);
+      document.body.classList.add("modal-open");
+      return;
+    }
     e.stopPropagation();
     setIsModalOpen(true);
     document.body.classList.add("modal-open");
@@ -36,6 +45,12 @@ const PrizeCard = ({
     setIsModalOpen(false);
     document.body.classList.remove("modal-open");
   };
+
+  const handleAuthModalClose = () => {
+    setIsAuthModalOpen(false);
+    document.body.classList.remove("modal-open");
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -48,7 +63,7 @@ const PrizeCard = ({
       className={`prize-card 
         ${isAcquired ? "prize-card--acquired" : ""} 
         ${viewOnly ? "prize-card--view-only" : ""}
-        ${!canAfford ? "prize-card--unaffordable" : ""}`}
+        ${!canAfford && !requiresAuth ? "prize-card--unaffordable" : ""}`}
       onClick={handleExchangeClick}
       onKeyDown={handleKeyDown}
     >
@@ -82,6 +97,7 @@ const PrizeCard = ({
           onCancel={handleCancel}
         />
       )}
+      {isAuthModalOpen && <PrizeAuthModal onClose={handleAuthModalClose} />}
       {isAcquired && (
         <div className="prize-card__acquired-overlay">
           <span>Déjà acquis</span>
