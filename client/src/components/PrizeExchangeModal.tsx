@@ -35,17 +35,17 @@ const PrizeExchangeModal = ({
         <div className="exchange-modal-buttons">
           <button
             type="button"
-            className="exchange-button confirm"
-            onClick={onConfirm}
-          >
-            Confirmer
-          </button>
-          <button
-            type="button"
             className="exchange-button cancel"
             onClick={onCancel}
           >
             Annuler
+          </button>
+          <button
+            type="button"
+            className="exchange-button confirm"
+            onClick={onConfirm}
+          >
+            Confirmer
           </button>
         </div>
       </div>
