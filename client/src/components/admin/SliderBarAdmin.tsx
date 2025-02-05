@@ -78,7 +78,9 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
-        const response = await fetch("http://localhost:3310/api/emails/unread");
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/emails/unread`,
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
