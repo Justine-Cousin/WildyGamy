@@ -218,7 +218,7 @@ const updateHighscore: RequestHandler = async (req, res, next) => {
 const updatePoints: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { points } = req.body;
+    const { points, type } = req.body;
 
     const user = await userRepository.readById(Number(id));
     if (!user) {
@@ -226,13 +226,20 @@ const updatePoints: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const newTotalPoints = user.total_points + points;
-    const newCurrentPoints = user.current_points + points;
+    let newCurrentPoints = user.current_points;
+    let newTotalPoints = user.total_points;
+
+    if (type === "add") {
+      newCurrentPoints += points;
+      newTotalPoints += points;
+    } else if (type === "subtract") {
+      newCurrentPoints -= points;
+    }
 
     const success = await userRepository.updatePoints(
       Number(id),
-      newTotalPoints,
       newCurrentPoints,
+      newTotalPoints,
     );
     if (!success) {
       res.status(404).json({ error: "Update failed" });

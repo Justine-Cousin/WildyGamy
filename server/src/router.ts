@@ -76,6 +76,7 @@ router.post("/api/user/:id/favorites", favoritesActions.add);
 router.delete("/api/user/:id/favorites", favoritesActions.destroy);
 
 router.get("/api/user/:id/acquired", acquiredActions.read);
+router.post("/api/user/:id/acquired", acquiredActions.add);
 
 // Define Your API Routes Here
 
