@@ -293,3 +293,93 @@ textarea::placeholder {
   font-size: 16px;
   font-weight: 200;
 }
+
+/* Version Desktop */
+@media (min-width: 768px) {
+  .room-logo {
+    width: 10%;
+    padding: 30px;
+  }
+
+  .room-page {
+    padding-bottom: 150px;
+  }
+
+  .room-title {
+    font-size: 3vw;
+    display: block;
+    align-items: flex-start;
+    padding-left: 20px;
+  }
+
+  .room-container {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 40px;
+    margin: 30px;
+  }
+
+  .room-text {
+    font-size: 5rem;
+  }
+
+  .room-image {
+    height: 300px;
+    margin-right: 20px;
+  }
+
+  .room-titlecarousel {
+    font-size: 2.5rem;
+    margin-left: 30px;
+  }
+
+  .room-carouselcontainer {
+    gap: 50px;
+    justify-content: space-evenly;
+  }
+
+  .room-gameimagecontainer {
+    width: 250px;
+    height: 250px;
+  }
+
+  .room-gameimage {
+    width: 100%;
+  }
+
+  .room-gameonline {
+    flex-direction: row;
+    padding: 40px;
+    margin: 30px auto;
+    max-width: 70%;
+  }
+
+  .room-gameonline .room-textgameonline {
+    align-items: center;
+    text-align: left;
+  }
+
+  .form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 70%;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  .form-group {
+    width: 48%;
+  }
+
+  .form-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .form-button {
+    width: 50%;
+    margin: 20px auto;
+  }
+}

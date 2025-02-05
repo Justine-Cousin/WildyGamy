@@ -11,24 +11,26 @@ function RoomDescription() {
   return (
     <div className="room-container">
       <img className="room-image" src={room} alt="room-image" />
-      <p>
-        Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou et
-        Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse. Ce lieu
-        unique mêle jeu en ligne et physique : gagnez des points depuis chez
-        vous et échangez-les contre des sessions sur place. Entre jeux rétro,
-        dernières nouveautés et espace lounge équipé, cet établissement est
-        devenu le repaire incontournable des gamers toulousains.
-      </p>
-      <p>
-        8 Rue de Valenciennes
-        <br />
-        31000 Toulouse
-      </p>
-      <p>
-        Mardi au Dimanche : 10:30 - 1:00
-        <br />
-        05 55 55 55 55
-      </p>
+      <div className="room-text">
+        <p>
+          Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou et
+          Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse. Ce
+          lieu unique mêle jeu en ligne et physique : gagnez des points depuis
+          chez vous et échangez-les contre des sessions sur place. Entre jeux
+          rétro, dernières nouveautés et espace lounge équipé, cet établissement
+          est devenu le repaire incontournable des gamers toulousains.
+        </p>
+        <p>
+          8 Rue de Valenciennes
+          <br />
+          31000 Toulouse
+        </p>
+        <p>
+          Mardi au Dimanche : 10:30 - 1:00
+          <br />
+          05 55 55 55 55
+        </p>
+      </div>
     </div>
   );
 }
