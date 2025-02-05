@@ -1,4 +1,3 @@
-import { Mail } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
@@ -28,7 +27,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   return (
     <div className="admin-dashboard">
       <div className={containerClassName}>
-        <Mail className="mail-icon" size={36} />
         <img src={logoWG} alt="logo" className={logoClassName} />
         <SliderBarAdmin
           isOpen={isOpen}
