@@ -20,7 +20,7 @@
   }
 }
 
-.exchange-modal-overlay {
+.auth-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -36,7 +36,7 @@
   backdrop-filter: blur(8px);
 }
 
-.exchange-modal-content {
+.auth-modal-content {
   width: 90%;
   max-width: 500px;
   background: rgba(21, 20, 43, 0.95);
@@ -51,15 +51,16 @@
   z-index: 1001;
 }
 
-.exchange-modal-content h2 {
+.auth-modal-content h2 {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   padding-bottom: 10px;
+  color: #fff;
 }
 
-.exchange-modal-content p {
+.auth-modal-content p {
   text-align: center;
   color: #c3b0ea;
   padding: 0 20px;
@@ -67,15 +68,15 @@
   line-height: 1.5;
 }
 
-.exchange-modal-buttons {
+.auth-modal-buttons {
   display: flex;
   justify-content: center;
   gap: 16px;
   padding-top: 20px;
 }
 
-.exchange-button {
-  padding: 12px 40px;
+.auth-button {
+  padding: 12px 30px;
   border-radius: 30px;
   font-size: 14px;
   cursor: pointer;
@@ -84,33 +85,33 @@
   min-width: 120px;
 }
 
-.exchange-button.confirm {
-  background: #6403a9;
-  color: #ffffff;
-  border: none;
-}
-
-.exchange-button.confirm:hover {
-  background: #7504c6;
-  transform: translateY(-1px);
-}
-
-.exchange-button.confirm:active {
-  transform: translateY(0);
-}
-
-.exchange-button.cancel {
+.auth-button.cancel {
   background: rgba(34, 24, 52, 0.4);
   color: #c3b0ea;
   border: 1px solid rgba(195, 176, 234, 0.2);
 }
 
-.exchange-button.cancel:hover {
+.auth-button.cancel:hover {
   background: rgba(34, 24, 52, 0.6);
   border-color: rgba(195, 176, 234, 0.4);
   transform: translateY(-1px);
 }
 
-.exchange-button.cancel:active {
+.auth-button.cancel:active {
+  transform: translateY(0);
+}
+
+.auth-button.login {
+  background: #6403a9;
+  color: #ffffff;
+  border: none;
+}
+
+.auth-button.login:hover {
+  background: #7504c6;
+  transform: translateY(-1px);
+}
+
+.auth-button.login:active {
   transform: translateY(0);
 }
