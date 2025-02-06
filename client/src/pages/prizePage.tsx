@@ -230,6 +230,18 @@ const PrizePage = () => {
       </div>
       <div className="prizes-page__grid">
         {prizes.map((prize) => {
+          if (!auth) {
+            return (
+              <PrizeCard
+                key={prize.id}
+                prize={prize}
+                onExchange={() => {}}
+                isAcquired={false}
+                requiresAuth={true}
+              />
+            );
+          }
+
           const isAcquired = acquiredPrizes.some(
             (acquiredPrize) => acquiredPrize.id === prize.id,
           );
