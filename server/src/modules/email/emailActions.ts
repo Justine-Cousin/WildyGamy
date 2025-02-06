@@ -6,11 +6,16 @@ import { EmailRepository } from "./emailRepository"; // Adjust the path as neces
 dotenv.config(); // Charge les variables d'environnement depuis le fichier .env
 
 // Création du transporteur SMTP
-const transporter = nodemailer.createTransport({
-  service: "gmail",
+export const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  secure: true,
+  port: 465,
   auth: {
     user: process.env.GMAIL_EMAIL, // Ton adresse Gmail
     pass: process.env.GMAIL_PASSWORD, // Le mot de passe d'application généré
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 

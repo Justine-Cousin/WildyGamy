@@ -3,6 +3,11 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import {
+  requestPasswordReset,
+  resetPassword,
+  verifyResetToken,
+} from "../src/modules/password/PasswordResetHandler";
 import acquiredActions from "./modules/acquired/acquiredActions";
 import authActions from "./modules/auth/authActions";
 import { getUnreadCount, sendContact } from "./modules/email/emailActions";
@@ -19,6 +24,7 @@ router.use((req, res, next) => {
   res.setHeader("Content-Type", "application/json");
   next();
 });
+
 const handleAsyncError = (
   handler: (req: Request, res: Response, next: NextFunction) => Promise<void>,
 ) => {
@@ -42,7 +48,6 @@ router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Define item-related routes
-
 router.get("/api/items", itemActions.browse);
 router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
@@ -78,7 +83,6 @@ router.delete("/api/user/:id/favorites", favoritesActions.destroy);
 router.get("/api/user/:id/acquired", acquiredActions.read);
 
 // Define Your API Routes Here
-
 router.get("/api/user", userActions.browse);
 router.post("/api/user", userActions.add);
 router.put("/api/user/:id", userActions.edit);
@@ -91,6 +95,11 @@ router.post("/api/login", authActions.login);
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id/highscore", userActions.updateHighscore);
 router.put("/api/user/:id/points", userActions.updatePoints);
+
+// Password reset routes
+router.post("/api/reset-password/request", requestPasswordReset);
+router.get("/api/reset-password/verify", verifyResetToken);
+router.post("/api/reset-password/reset", resetPassword);
 
 router.post("/api/contact", sendContact);
 router.get("/api/emails/unread", getUnreadCount);
