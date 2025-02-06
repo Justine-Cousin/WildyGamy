@@ -31,9 +31,7 @@ const INITIAL_SNAKE: Position[] = [{ x: 10, y: 10 }];
 const INITIAL_DIRECTION: Position = { x: 1, y: 0 };
 
 const DIFFICULTY_LEVELS = {
-  easy: { label: "Easy", speed: 200, obstacles: 5 },
   medium: { label: "Medium", speed: 150, obstacles: 10 },
-  hard: { label: "Hard", speed: 100, obstacles: 15 },
 } as const;
 
 const POWER_UPS = {
@@ -61,8 +59,7 @@ export default function SnakeGame() {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
-  const [difficulty, setDifficulty] =
-    useState<keyof typeof DIFFICULTY_LEVELS>("medium");
+  const [difficulty] = useState<keyof typeof DIFFICULTY_LEVELS>("medium");
   const [powerUp, setPowerUp] = useState<PowerUp | null>(null);
   const [activePowerUp, setActivePowerUp] = useState<PowerUpType | null>(null);
   const [obstacles, setObstacles] = useState<Position[]>([]);
@@ -535,19 +532,6 @@ export default function SnakeGame() {
 
       {!gameStarted && (
         <div className="game-controls">
-          <select
-            className="difficulty-select"
-            value={difficulty}
-            onChange={(e) =>
-              setDifficulty(e.target.value as keyof typeof DIFFICULTY_LEVELS)
-            }
-          >
-            {Object.entries(DIFFICULTY_LEVELS).map(([key, { label }]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
           <button
             type="button"
             className="button primary"
