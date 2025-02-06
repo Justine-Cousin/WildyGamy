@@ -8,6 +8,7 @@ import Prizes from "../assets/images/Prizes.svg";
 import Room from "../assets/images/Room.svg";
 import homeIcon from "../assets/images/home-icon.svg";
 import loginIcon from "../assets/images/login-icon.svg";
+import logoWG from "../assets/images/logo_wildy_gamy.png";
 
 const menuItems = [
   { id: 1, to: "/", text: "Accueil", icon: { homeIcon } },
@@ -115,16 +116,23 @@ export default function NavBar() {
       {/* Version Desktop  */}
       <nav className="desktop-nav">
         <div className="desktop-nav-container">
-          {menuItems.map((item) => (
-            <Link key={item.id} className="desktop-nav-link" to={item.to}>
-              <img
-                className="desktop-nav-icon"
-                src={Object.values(item.icon)[0]}
-                alt={item.text}
-              />
-              <span id="desktop-nav-text">{item.text}</span>
-            </Link>
-          ))}
+          <img
+            src={logoWG}
+            alt="logo Wildy Gamy"
+            className="desktop-nav-logo"
+          />
+          <div className="desktop-nav-links">
+            {menuItems.map((item) => (
+              <Link key={item.id} className="desktop-nav-link" to={item.to}>
+                <img
+                  className="desktop-nav-icon"
+                  src={Object.values(item.icon)[0]}
+                  alt={item.text}
+                />
+                <span id="desktop-nav-text">{item.text}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </nav>
     </>
