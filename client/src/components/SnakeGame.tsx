@@ -213,27 +213,58 @@ export default function SnakeGame() {
   };
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    const storedDate = localStorage.getItem("lastClickDate");
+    const fetchUserStatus = async () => {
+      if (!auth?.user?.id) return;
 
-    if (storedDate === today) {
-      setLastClickDate(today);
-    } else {
-      localStorage.removeItem("lastClickDate");
-      setLastClickDate(null);
-    }
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}`,
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          },
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch user status");
+
+        const data = await response.json();
+        setLastClickDate(
+          data.points_credited_today
+            ? new Date().toISOString().split("T")[0]
+            : null,
+        );
+      } catch (err) {
+        console.error("Error fetching user status:", err);
+      }
+    };
+
+    fetchUserStatus();
 
     const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
+    midnight.setHours(20, 0, 0, 0);
     const timeUntilMidnight = midnight.getTime() - new Date().getTime();
 
-    const timer = setTimeout(() => {
-      setLastClickDate(null);
-      localStorage.removeItem("lastClickDate");
+    const timer = setTimeout(async () => {
+      try {
+        await fetch(
+          `${import.meta.env.VITE_API_URL}/api/reset-points-credited-today`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        setLastClickDate(null);
+      } catch (err) {
+        console.error("Error resetting points credited today:", err);
+      }
     }, timeUntilMidnight);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [auth]);
 
   const handleAddScoreClick = () => {
     setModalConfig({

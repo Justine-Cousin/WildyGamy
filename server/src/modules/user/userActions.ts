@@ -226,6 +226,11 @@ const updatePoints: RequestHandler = async (req, res, next) => {
       return;
     }
 
+    if (user.points_credited_today && type === "add") {
+      res.status(400).json({ error: "Points already credited today" });
+      return;
+    }
+
     let newCurrentPoints = user.current_points;
     let newTotalPoints = user.total_points;
 
@@ -241,12 +246,32 @@ const updatePoints: RequestHandler = async (req, res, next) => {
       newCurrentPoints,
       newTotalPoints,
     );
+
+    if (type === "add") {
+      await userRepository.updatePointsCreditedToday(Number(id), true);
+    }
+
     if (!success) {
       res.status(404).json({ error: "Update failed" });
       return;
     }
 
     res.status(200).json({ message: "Points updated successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const resetPointsCreditedToday: RequestHandler = async (req, res, next) => {
+  try {
+    const success = await userRepository.resetPointsCreditedToday();
+    if (!success) {
+      res.status(500).json({ error: "Failed to reset points credited today" });
+      return;
+    }
+    res
+      .status(200)
+      .json({ message: "Points credited today reset successfully" });
   } catch (err) {
     next(err);
   }
@@ -311,4 +336,5 @@ export default {
   toggleAdmin,
   updateHighscore,
   updatePoints,
+  resetPointsCreditedToday,
 };
