@@ -11,6 +11,7 @@ CREATE TABLE user (
     total_points INT DEFAULT 0,
     current_points INT DEFAULT 0,
     highscore INT DEFAULT 0,
+    points_credited_today BOOLEAN DEFAULT FALSE NOT NULL,
     is_admin BOOLEAN DEFAULT FALSE NOT NULL,
     is_banned BOOLEAN DEFAULT FALSE NOT NULL
 );

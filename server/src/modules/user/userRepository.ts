@@ -16,6 +16,7 @@ type User = {
   is_banned: number;
   is_admin: number;
   password?: string;
+  points_credited_today?: boolean;
 };
 
 type CreateUserInput = Omit<
@@ -113,6 +114,21 @@ class UserRepository {
     const [result] = await databaseClient.query<Result>(
       "UPDATE user SET current_points = ?, total_points = ? WHERE id = ?",
       [currentPoints, totalPoints, id],
+    );
+    return result.affectedRows > 0;
+  }
+
+  async updatePointsCreditedToday(id: number, pointsCreditedToday: boolean) {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET points_credited_today = ? WHERE id = ?",
+      [pointsCreditedToday, id],
+    );
+    return result.affectedRows > 0;
+  }
+
+  async resetPointsCreditedToday() {
+    const [result] = await databaseClient.query<Result>(
+      "UPDATE user SET points_credited_today = FALSE",
     );
     return result.affectedRows > 0;
   }
