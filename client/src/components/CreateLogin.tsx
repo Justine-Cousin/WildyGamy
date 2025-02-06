@@ -184,7 +184,7 @@ export default function CreateLogin() {
       const data = (await response.json()) as ApiError;
 
       if (!response.ok) {
-        if (data.error === "Cet adresse email est déjà utilisé") {
+        if (data.error === "Cette adresse email est déjà utilisée") {
           newInvalidFields.add("email");
           setInvalidFields(newInvalidFields);
           setError(data.error);
