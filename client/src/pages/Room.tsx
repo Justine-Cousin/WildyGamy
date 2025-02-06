@@ -1,8 +1,9 @@
 import "../styles/Room.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import room from "../assets/images/room-image.jpg";
+import roomArrow from "../assets/images/room_arrow.svg";
 import InfoModal from "../components/InfoModal";
 import type { Game } from "../services/types";
 
@@ -66,7 +67,12 @@ function RoomCarousel() {
   return (
     games.length > 0 && (
       <div className="room-carousel">
-        <h1 className="room-titlecarousel">NEW GAME</h1>
+        <div className="room-titlecontainercarousel">
+          <h1 className="room-titlecarousel">NEW GAME</h1>
+          <Link to="/games">
+            <img src={roomArrow} alt="arrow" className="room-arrowimage" />
+          </Link>
+        </div>
         <div className="room-carouselcontainer">
           {games.map((game) => (
             <article key={game.id} className="room-gamecard">
