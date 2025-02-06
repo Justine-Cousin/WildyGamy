@@ -155,6 +155,20 @@ export default function SnakeGame() {
   }, [auth, score, highScore]);
 
   useEffect(() => {
+    const preventArrowKeyScroll = (e: KeyboardEvent) => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", preventArrowKeyScroll);
+
+    return () => {
+      window.removeEventListener("keydown", preventArrowKeyScroll);
+    };
+  }, []);
+
+  useEffect(() => {
     if (gameOver && score > highScore) {
       updateHighScore();
     }
