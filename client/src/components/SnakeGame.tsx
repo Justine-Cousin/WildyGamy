@@ -243,7 +243,7 @@ export default function SnakeGame() {
     fetchUserStatus();
 
     const midnight = new Date();
-    midnight.setHours(20, 0, 0, 0);
+    midnight.setHours(24, 0, 0, 0);
     const timeUntilMidnight = midnight.getTime() - new Date().getTime();
 
     const timer = setTimeout(async () => {
