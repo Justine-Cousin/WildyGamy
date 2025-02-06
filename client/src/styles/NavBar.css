@@ -1,4 +1,4 @@
-.nav-bar-container {
+.mobile-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -142,4 +142,56 @@
 .home-icon {
   width: 35px;
   height: 35px;
+}
+
+@media screen and (min-width: 768px) {
+  .mobile-nav {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+}
+
+.desktop-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.desktop-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 60px 30px 120px;
+  height: 80px;
+  gap: min(20px, 30px);
+}
+
+.desktop-nav-link {
+  color: #c3b0ea;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.desktop-nav-icon {
+  width: 20%;
+  height: 20%;
+}
+
+.desktop-nav-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#desktop-nav-text {
+  font-size: 1.2vw;
+  white-space: nowrap;
 }
