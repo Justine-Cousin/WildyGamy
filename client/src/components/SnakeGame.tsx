@@ -12,6 +12,7 @@ import {
 import "../styles/SnakeGame.css";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../services/authContext";
+import AlertModalAdmin from "./AlertModal";
 import GameLoginModal from "./GameLoginModal";
 
 type Position = {
@@ -75,6 +76,11 @@ export default function SnakeGame() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [highScore, setHighScore] = useState(0);
   const [lastClickDate, setLastClickDate] = useState<string | null>(null);
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const handleStartGame = () => {
     if (!auth) {
@@ -157,7 +163,7 @@ export default function SnakeGame() {
     }
   }, [gameOver, score, highScore, updateHighScore]);
 
-  const updatePoints = async () => {
+  const updatePoints = async (type: "add" | "subtract") => {
     if (!auth?.user?.id) return;
 
     try {
@@ -170,7 +176,7 @@ export default function SnakeGame() {
             Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
-          body: JSON.stringify({ points: score }),
+          body: JSON.stringify({ points: score, type }),
         },
       );
 
@@ -207,15 +213,16 @@ export default function SnakeGame() {
   }, []);
 
   const handleAddScoreClick = () => {
-    const confirmAction = window.confirm(
-      "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
-    );
-    if (confirmAction) {
-      updatePoints();
-      const today = new Date().toISOString().split("T")[0];
-      localStorage.setItem("lastClickDate", today);
-      setLastClickDate(today);
-    }
+    setModalConfig({
+      title: "Créditer les points",
+      message:
+        "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
+      onConfirm: () => {
+        updatePoints("add");
+        setLastClickDate(new Date().toISOString().split("T")[0]);
+        setModalConfig(null);
+      },
+    });
   };
 
   const restartGame = () => {
@@ -618,6 +625,13 @@ export default function SnakeGame() {
             >
               Créditer les points
             </button>
+            <AlertModalAdmin
+              title="Créditer les points"
+              message="Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?"
+              visible={!!modalConfig}
+              onConfirm={modalConfig?.onConfirm || (() => {})}
+              onClose={() => setModalConfig(null)}
+            />
             <p>Meilleur score: {highScore}</p>
             <button
               type="button"

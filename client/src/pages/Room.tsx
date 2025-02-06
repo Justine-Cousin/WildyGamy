@@ -1,9 +1,10 @@
 import "../styles/Room.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import room from "../assets/images/room-image.jpg";
-import AlertModalAdmin from "../components/AlertModal";
+import roomArrow from "../assets/images/room_arrow.svg";
+import InfoModal from "../components/InfoModal";
 import type { Game } from "../services/types";
 
 function RoomDescription() {
@@ -66,7 +67,12 @@ function RoomCarousel() {
   return (
     games.length > 0 && (
       <div className="room-carousel">
-        <h1 className="room-titlecarousel">NEW GAME</h1>
+        <div className="room-titlecontainercarousel">
+          <h1 className="room-titlecarousel">NEW GAME</h1>
+          <Link to="/games">
+            <img src={roomArrow} alt="arrow" className="room-arrowimage" />
+          </Link>
+        </div>
         <div className="room-carouselcontainer">
           {games.map((game) => (
             <article key={game.id} className="room-gamecard">
@@ -142,7 +148,7 @@ function RoomForm() {
   const [modalConfig, setModalConfig] = useState<{
     title: string;
     message: string;
-    onConfirm: () => void;
+    onClick: () => void;
   } | null>(null);
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -197,7 +203,7 @@ function RoomForm() {
       setModalConfig({
         title: "Message envoyé",
         message: "Formulaire envoyé avec succès !",
-        onConfirm: () => {
+        onClick: () => {
           setModalConfig(null);
         },
       });
@@ -207,7 +213,7 @@ function RoomForm() {
       setModalConfig({
         title: "Erreur",
         message: "Une erreur est survenue",
-        onConfirm: () => {
+        onClick: () => {
           setModalConfig(null);
         },
       });
@@ -294,11 +300,11 @@ function RoomForm() {
         </button>
       </form>
       {modalConfig && (
-        <AlertModalAdmin
+        <InfoModal
           title={modalConfig.title}
           message={modalConfig.message}
           visible={true}
-          onConfirm={modalConfig.onConfirm}
+          onClose={modalConfig.onClick}
         />
       )}
     </div>

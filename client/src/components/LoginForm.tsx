@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ResetPasswordModal from "../components/ResetPasswordModal";
 import { useAuth } from "../services/authContext";
 import BlurredBackground from "./BlurredBackground";
+import ContactModal from "./ContactModal";
 import "../styles/LoginForm.css";
 
 interface LoginFormProps {
@@ -17,6 +18,7 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
   });
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(!!resetToken);
 
   const navigate = useNavigate();
@@ -50,6 +52,12 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
       );
 
       const data = await response.json();
+
+      if (response.status === 403) {
+        setShowContactModal(true);
+        setIsLoading(false);
+        return;
+      }
 
       if (response.ok && data.user) {
         setAuth(data);
@@ -165,6 +173,12 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
         </span>
         <hr className="login__signup-line" />
       </div>
+      <ContactModal
+        title="Compte suspendu"
+        message="Votre compte a été suspendu. Pour plus d'informations ou pour contester cette décision, veuillez contacter l'administrateur via le formulaire de contact."
+        visible={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
 
       <ResetPasswordModal
         isOpen={isResetModalOpen}

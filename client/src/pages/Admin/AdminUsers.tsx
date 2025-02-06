@@ -1,4 +1,3 @@
-import { Search } from "lucide-react";
 import { useState } from "react";
 import AdminItemGrid from "../../components/admin/AdminItemGrid";
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -7,6 +6,8 @@ import { useAdminData } from "../../components/admin/useAdminData";
 import type { User } from "../../services/types";
 import "../../styles/admin/AdminUsers.css";
 import "../../styles/admin/AdminCommon.css";
+import { CircleX } from "lucide-react";
+import wen from "../../assets/images/wen.svg";
 
 const DEFAULT_USER: User = {
   id: 0,
@@ -188,14 +189,23 @@ const AdminUsers = () => {
           id="admin-user-search-bar"
           onSubmit={(event) => event.preventDefault()}
         >
-          <Search className="admin-user-search-img" />
+          <img src={wen} alt="loupe" id="admin-user-search-img" />
           <input
             type="text"
-            placeholder="Rechercher un joueur"
             value={valueInput}
             onChange={(event) => setValueInput(event.target.value)}
+            placeholder="Rechercher un joueur"
             id="admin-user-search-bar-input"
           />
+          {valueInput && (
+            <button
+              type="button"
+              onClick={() => setValueInput("")}
+              className="admin-search-bar-clear"
+            >
+              <CircleX size={28} />
+            </button>
+          )}
         </form>
       </div>
       <div className="admin-user-result">

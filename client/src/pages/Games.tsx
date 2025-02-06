@@ -1,5 +1,6 @@
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import "../styles/Games.css";
+import { CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import wen from "../assets/images/wen.svg";
 import GameCard from "../components/GameCard";
@@ -100,12 +101,19 @@ const Games = () => {
           <input
             type="text"
             value={valueInput}
-            onChange={(event) => {
-              setValueInput(event.target.value);
-            }}
+            onChange={(event) => setValueInput(event.target.value)}
             placeholder="Rechercher"
             id="game-search-input"
           />
+          {valueInput && (
+            <button
+              type="button"
+              onClick={() => setValueInput("")}
+              className="games-search-bar-clear"
+            >
+              <CircleX size={28} />
+            </button>
+          )}
         </form>
       </div>
       <div className="search-result">
