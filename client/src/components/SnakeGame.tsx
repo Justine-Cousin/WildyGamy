@@ -160,6 +160,18 @@ export default function SnakeGame() {
     }
   }, [gameOver, score, highScore, updateHighScore]);
 
+  const calculateCredit = (score: number): number => {
+    const result = score / 10;
+    const decimalPart = result - Math.floor(result);
+
+    if (decimalPart >= 0.5) {
+      return Math.ceil(result);
+    }
+    return Math.floor(result);
+  };
+
+  const credit = calculateCredit(score);
+
   const updatePoints = async (type: "add" | "subtract") => {
     if (!auth?.user?.id) return;
 
@@ -173,7 +185,7 @@ export default function SnakeGame() {
             Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
-          body: JSON.stringify({ points: score, type }),
+          body: JSON.stringify({ points: credit, type }),
         },
       );
 
@@ -599,6 +611,7 @@ export default function SnakeGame() {
           <div className="game-over-modal">
             <h2>Game Over</h2>
             <p>Résultat: {score}</p>
+            <p>Points: {credit}</p>
             <button
               type="button"
               className="button primary"
@@ -622,7 +635,7 @@ export default function SnakeGame() {
               className="button primary"
               onClick={resetGame}
             >
-              Rejouer
+              Fermer
             </button>
           </div>
         </div>
