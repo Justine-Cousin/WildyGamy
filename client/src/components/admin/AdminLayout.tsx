@@ -3,6 +3,7 @@ import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import SliderBarAdmin from "../admin/SliderBarAdmin";
 import "../../styles/admin/AdminCommon.css";
+import { Link } from "react-router-dom";
 import AddButton from "../admin/AddButton";
 
 interface AdminLayoutProps {
@@ -27,7 +28,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   return (
     <div className="admin-dashboard">
       <div className={containerClassName}>
-        <img src={logoWG} alt="logo" className={logoClassName} />
+        <Link to={"/admin"}>
+          <img src={logoWG} alt="logo" className={logoClassName} />
+        </Link>
         <SliderBarAdmin
           isOpen={isOpen}
           onToggle={setIsOpen}
