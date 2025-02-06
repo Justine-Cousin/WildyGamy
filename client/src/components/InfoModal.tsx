@@ -1,18 +1,13 @@
 import "../styles/AlertModal.css";
 
-interface AlertModalAdminProps {
+interface InfoModalProps {
   title: string;
   message: string;
   visible: boolean;
   onClose?: () => void;
 }
 
-const InfoModal = ({
-  title,
-  message,
-  visible,
-  onClose,
-}: AlertModalAdminProps) => {
+const InfoModal = ({ title, message, visible, onClose }: InfoModalProps) => {
   if (!visible) return null;
 
   return (
