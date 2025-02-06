@@ -144,7 +144,17 @@ const add: RequestHandler = async (req, res, next) => {
 const edit: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = { ...req.body };
+
+    // Si un nouveau mot de passe est fourni, le hasher
+    if (updates.password) {
+      updates.password_hash = await argon2.hash(
+        updates.password,
+        hashingOptions,
+      );
+      const { password, ...restUpdates } = updates;
+      Object.assign(updates, restUpdates);
+    }
 
     const allowedUpdates = [
       "name",
@@ -153,6 +163,7 @@ const edit: RequestHandler = async (req, res, next) => {
       "username",
       "phone_number",
       "profile_pic",
+      "password_hash",
     ];
 
     if (req.files && "profile_pic" in req.files) {

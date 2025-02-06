@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ResetPasswordModal from "../components/ResetPasswordModal";
 import { useAuth } from "../services/authContext";
 import BlurredBackground from "./BlurredBackground";
 import ContactModal from "./ContactModal";
 import "../styles/LoginForm.css";
 
-export default function LoginForm() {
+interface LoginFormProps {
+  resetToken?: string;
+}
+
+export default function LoginForm({ resetToken }: LoginFormProps) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,6 +19,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(!!resetToken);
 
   const navigate = useNavigate();
   const { setAuth } = useAuth();
@@ -146,9 +152,13 @@ export default function LoginForm() {
           </button>
 
           <div className="login__links">
-            <a href="/forgot-password" className="login__forgot-link">
+            <button
+              type="button"
+              onClick={() => setIsResetModalOpen(true)}
+              className="forgot-password"
+            >
               Mot de passe oublié ?
-            </a>
+            </button>
           </div>
         </form>
       </BlurredBackground>
@@ -156,10 +166,8 @@ export default function LoginForm() {
       <div className="login__signup-container">
         <hr className="login__signup-line" />
         <span className="login__signup">
-          Ou{" "}
-          <a href="/create-account" className="login__signup-link">
-            créer votre compte
-          </a>
+          {" "}
+          <p className="create-account">ou créer votre compte</p>
         </span>
         <hr className="login__signup-line" />
       </div>
@@ -168,6 +176,12 @@ export default function LoginForm() {
         message="Votre compte a été suspendu. Pour plus d'informations ou pour contester cette décision, veuillez contacter l'administrateur via le formulaire de contact."
         visible={showContactModal}
         onClose={() => setShowContactModal(false)}
+      />
+
+      <ResetPasswordModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        token={resetToken}
       />
     </div>
   );

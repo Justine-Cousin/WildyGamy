@@ -15,6 +15,7 @@ type User = {
   highscore: number;
   is_banned: number;
   is_admin: number;
+  password?: string;
   points_credited_today?: boolean;
 };
 
