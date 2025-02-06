@@ -144,11 +144,10 @@
 }
 
 .forgot-password {
-  font-size: 17px;
+  font-size: 20px;
+  all: unset;
+  text-decoration: underline;
   cursor: pointer;
-  font-family: "Inter", sans-serif;
-  background: #6403a9;
-  color: white;
 }
 
 .login__signup-container {

@@ -166,10 +166,8 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
       <div className="login__signup-container">
         <hr className="login__signup-line" />
         <span className="login__signup">
-          Ou{" "}
-          <a href="/create-account" className="login__signup-link">
-            créer votre compte
-          </a>
+          {" "}
+          <p className="create-account">ou créer votre compte</p>
         </span>
         <hr className="login__signup-line" />
       </div>

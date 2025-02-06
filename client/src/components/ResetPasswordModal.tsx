@@ -135,39 +135,41 @@ export default function ResetPasswordModal({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button type="button" className="modal-close" onClick={handleClose}>
+    <div className="reset-modal-overlay">
+      <div className="reset-modal-content">
+        <button
+          type="button"
+          className="reset-modal-close"
+          onClick={handleClose}
+        >
           ×
         </button>
 
-        <div className="modal-header">
-          <h2 className="modal-title">
-            {step === "request"
-              ? "REPRENEZ VOS ESPRITS"
-              : "Nouveau mot de passe"}
+        <div className="reset-modal-header">
+          <h2 className="reset-modal-title">
+            {step === "request" ? "REPRENEZ VOS ESPRITS" : "REINITIALISATION"}
           </h2>
-          <p className="modal-description">
+          <p className="reset-modal-description">
             {step === "request"
-              ? "Entrez votre email pour recevoir les instructions"
-              : "Entrez votre nouveau mot de passe"}
+              ? "Votre mail ici"
+              : "Gardez votre mémoire vive"}
           </p>
         </div>
 
         {message ? (
           <div>
-            <p className="success-message">{message}</p>
+            <p className="reset-success-message">{message}</p>
           </div>
         ) : step === "request" ? (
           <form onSubmit={handleRequestReset} className="reset-form">
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">
+            <div className="reset-form-group">
+              <label htmlFor="email" className="reset-form-label">
                 Email
               </label>
               <input
                 id="email"
                 type="email"
-                className="form-input"
+                className="reset-form-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="jeanotlefou@email.com"
@@ -175,12 +177,12 @@ export default function ResetPasswordModal({
               />
             </div>
 
-            {error && <p className="error-message">{error}</p>}
+            {error && <p className="reset-error-message">{error}</p>}
 
-            <div className="button-group">
+            <div className="reset-button-group">
               <button
                 type="button"
-                className="button button-secondary"
+                className="reste-button button-secondary"
                 onClick={handleClose}
                 disabled={isLoading}
               >
@@ -188,7 +190,7 @@ export default function ResetPasswordModal({
               </button>
               <button
                 type="submit"
-                className="button button-primary"
+                className="reset-button button-primary"
                 disabled={isLoading || !email}
               >
                 {isLoading ? "Envoi en cours..." : "Envoyer"}
@@ -197,14 +199,14 @@ export default function ResetPasswordModal({
           </form>
         ) : (
           <form onSubmit={handleResetPassword} className="reset-form">
-            <div className="form-group">
-              <label htmlFor="newPassword" className="form-label">
+            <div className="reset-form-group">
+              <label htmlFor="newPassword" className="reset-form-label">
                 Nouveau mot de passe
               </label>
               <input
                 id="newPassword"
                 type="password"
-                className="form-input"
+                className="reset-form-input"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Minimum 6 caractères"
@@ -213,8 +215,8 @@ export default function ResetPasswordModal({
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="confirmPassword" className="form-label">
+            <div className="reset-form-group">
+              <label htmlFor="confirmPassword" className="reset-form-label">
                 Confirmer le mot de passe
               </label>
               <input
@@ -231,10 +233,10 @@ export default function ResetPasswordModal({
 
             {error && <p className="error-message">{error}</p>}
 
-            <div className="button-group">
+            <div className="reset-button-group">
               <button
                 type="button"
-                className="button button-secondary"
+                className="reset-button button-secondary"
                 onClick={handleClose}
                 disabled={isLoading}
               >
@@ -242,7 +244,7 @@ export default function ResetPasswordModal({
               </button>
               <button
                 type="submit"
-                className="button button-primary"
+                className="reset-button button-primary"
                 disabled={isLoading || !newPassword || !confirmPassword}
               >
                 {isLoading ? "Mise à jour..." : "Valider"}
