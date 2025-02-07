@@ -12,6 +12,7 @@ import {
 import "../styles/SnakeGame.css";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../services/authContext";
+import AlertModalAdmin from "./AlertModal";
 import GameLoginModal from "./GameLoginModal";
 
 type Position = {
@@ -30,9 +31,7 @@ const INITIAL_SNAKE: Position[] = [{ x: 10, y: 10 }];
 const INITIAL_DIRECTION: Position = { x: 1, y: 0 };
 
 const DIFFICULTY_LEVELS = {
-  easy: { label: "Easy", speed: 200, obstacles: 5 },
   medium: { label: "Medium", speed: 150, obstacles: 10 },
-  hard: { label: "Hard", speed: 100, obstacles: 15 },
 } as const;
 
 const POWER_UPS = {
@@ -60,8 +59,7 @@ export default function SnakeGame() {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
-  const [difficulty, setDifficulty] =
-    useState<keyof typeof DIFFICULTY_LEVELS>("medium");
+  const [difficulty] = useState<keyof typeof DIFFICULTY_LEVELS>("medium");
   const [powerUp, setPowerUp] = useState<PowerUp | null>(null);
   const [activePowerUp, setActivePowerUp] = useState<PowerUpType | null>(null);
   const [obstacles, setObstacles] = useState<Position[]>([]);
@@ -75,6 +73,11 @@ export default function SnakeGame() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [highScore, setHighScore] = useState(0);
   const [lastClickDate, setLastClickDate] = useState<string | null>(null);
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const handleStartGame = () => {
     if (!auth) {
@@ -152,10 +155,36 @@ export default function SnakeGame() {
   }, [auth, score, highScore]);
 
   useEffect(() => {
+    const preventArrowKeyScroll = (e: KeyboardEvent) => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", preventArrowKeyScroll);
+
+    return () => {
+      window.removeEventListener("keydown", preventArrowKeyScroll);
+    };
+  }, []);
+
+  useEffect(() => {
     if (gameOver && score > highScore) {
       updateHighScore();
     }
   }, [gameOver, score, highScore, updateHighScore]);
+
+  const calculateCredit = (score: number): number => {
+    const result = score / 10;
+    const decimalPart = result - Math.floor(result);
+
+    if (decimalPart >= 0.5) {
+      return Math.ceil(result);
+    }
+    return Math.floor(result);
+  };
+
+  const credit = calculateCredit(score);
 
   const updatePoints = async (type: "add" | "subtract") => {
     if (!auth?.user?.id) return;
@@ -170,7 +199,7 @@ export default function SnakeGame() {
             Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
-          body: JSON.stringify({ points: score, type }),
+          body: JSON.stringify({ points: credit, type }),
         },
       );
 
@@ -184,38 +213,70 @@ export default function SnakeGame() {
   };
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    const storedDate = localStorage.getItem("lastClickDate");
+    const fetchUserStatus = async () => {
+      if (!auth?.user?.id) return;
 
-    if (storedDate === today) {
-      setLastClickDate(today);
-    } else {
-      localStorage.removeItem("lastClickDate");
-      setLastClickDate(null);
-    }
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}`,
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          },
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch user status");
+
+        const data = await response.json();
+        setLastClickDate(
+          data.points_credited_today
+            ? new Date().toISOString().split("T")[0]
+            : null,
+        );
+      } catch (err) {
+        console.error("Error fetching user status:", err);
+      }
+    };
+
+    fetchUserStatus();
 
     const midnight = new Date();
     midnight.setHours(24, 0, 0, 0);
     const timeUntilMidnight = midnight.getTime() - new Date().getTime();
 
-    const timer = setTimeout(() => {
-      setLastClickDate(null);
-      localStorage.removeItem("lastClickDate");
+    const timer = setTimeout(async () => {
+      try {
+        await fetch(
+          `${import.meta.env.VITE_API_URL}/api/reset-points-credited-today`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        setLastClickDate(null);
+      } catch (err) {
+        console.error("Error resetting points credited today:", err);
+      }
     }, timeUntilMidnight);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [auth]);
 
   const handleAddScoreClick = () => {
-    const confirmAction = window.confirm(
-      "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
-    );
-    if (confirmAction) {
-      updatePoints("add");
-      const today = new Date().toISOString().split("T")[0];
-      localStorage.setItem("lastClickDate", today);
-      setLastClickDate(today);
-    }
+    setModalConfig({
+      title: "Créditer les points",
+      message:
+        "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
+      onConfirm: () => {
+        updatePoints("add");
+        setLastClickDate(new Date().toISOString().split("T")[0]);
+        setModalConfig(null);
+      },
+    });
   };
 
   const restartGame = () => {
@@ -528,19 +589,6 @@ export default function SnakeGame() {
 
       {!gameStarted && (
         <div className="game-controls">
-          <select
-            className="difficulty-select"
-            value={difficulty}
-            onChange={(e) =>
-              setDifficulty(e.target.value as keyof typeof DIFFICULTY_LEVELS)
-            }
-          >
-            {Object.entries(DIFFICULTY_LEVELS).map(([key, { label }]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
           <button
             type="button"
             className="button primary"
@@ -608,6 +656,7 @@ export default function SnakeGame() {
           <div className="game-over-modal">
             <h2>Game Over</h2>
             <p>Résultat: {score}</p>
+            <p>Points: {credit}</p>
             <button
               type="button"
               className="button primary"
@@ -618,13 +667,20 @@ export default function SnakeGame() {
             >
               Créditer les points
             </button>
+            <AlertModalAdmin
+              title="Créditer les points"
+              message="Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?"
+              visible={!!modalConfig}
+              onConfirm={modalConfig?.onConfirm || (() => {})}
+              onClose={() => setModalConfig(null)}
+            />
             <p>Meilleur score: {highScore}</p>
             <button
               type="button"
               className="button primary"
               onClick={resetGame}
             >
-              Rejouer
+              Fermer
             </button>
           </div>
         </div>

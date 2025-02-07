@@ -143,12 +143,11 @@
   font-family: "Inter", sans-serif;
 }
 
-.login__forgot-link {
-  color: #c3b0ea;
+.forgot-password {
+  font-size: 20px;
+  all: unset;
   text-decoration: underline;
-  font-size: 14px;
   cursor: pointer;
-  font-family: "Inter", sans-serif;
 }
 
 .login__signup-container {
