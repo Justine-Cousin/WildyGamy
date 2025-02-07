@@ -1,3 +1,30 @@
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-icon {
+  width: 20px;
+  height: 20px;
+  color: #666;
+}
+.password-wrapper .login-input {
+  padding-right: 40px;
+}
+
 .preview-container {
   position: relative;
   margin-top: 4px;

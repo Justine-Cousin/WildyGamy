@@ -32,7 +32,7 @@ export const requestPasswordReset: RequestHandler = async (req, res) => {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-    const expiresAt = new Date(Date.now() + 3600000);
+    const expiresAt = new Date(Date.now() + 600000);
 
     resetTokens.set(token, {
       email,
@@ -40,7 +40,7 @@ export const requestPasswordReset: RequestHandler = async (req, res) => {
       expiresAt,
     });
 
-    const resetLink = `http://localhost:3000/login?token=${token}`;
+    const resetLink = `${process.env.FRONTEND_URL}/login?token=${token}`;
 
     await transporter.sendMail({
       from: process.env.GMAIL_EMAIL,
@@ -54,7 +54,7 @@ Cliquez sur le lien ci-dessous pour définir un nouveau mot de passe :
 
 ${resetLink}
 
-Ce lien expirera dans 1 heure.
+Ce lien expirera dans 10 minutes.
 
 Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email.
 
@@ -67,7 +67,7 @@ L'équipe Wildy Gamy
 <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
 <p>Cliquez sur le lien ci-dessous pour définir un nouveau mot de passe :</p>
 <p><a href="${resetLink}">Réinitialiser mon mot de passe</a></p>
-<p><small>Ce lien expirera dans 1 heure.</small></p>
+<p><small>Ce lien expirera dans 10 minutes.</small></p>
 <p>Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email.</p>
 <p>Cordialement,<br>L'équipe Wildy Gamy</p>
       `,
