@@ -2,7 +2,6 @@ import "../styles/Room.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
-import room from "../assets/images/room-image.jpg";
 import roomArrow from "../assets/images/room_arrow.svg";
 import InfoModal from "../components/InfoModal";
 import type { Game } from "../services/types";
@@ -10,7 +9,6 @@ import type { Game } from "../services/types";
 function RoomDescription() {
   return (
     <div className="room-container">
-      <img className="room-image" src={room} alt="room-image" />
       <div className="room-text">
         <p>
           Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou et
