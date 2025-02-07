@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ResetPasswordModal from "../components/ResetPasswordModal";
@@ -20,6 +21,7 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(!!resetToken);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const { setAuth } = useAuth();
@@ -79,6 +81,10 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="login-container">
       <BlurredBackground>
@@ -115,10 +121,10 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
             <label className="login__label" htmlFor="password">
               Votre mot de passe <span className="login__required">*</span>
             </label>
-            <div className="login__input-wrapper">
+            <div className="login__input-wrapper password-input-wrapper">
               <input
                 className="login__input"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={formData.password}
@@ -129,6 +135,18 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
                 disabled={isLoading}
                 autoComplete="current-password"
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="password-toggle-button"
+                aria-label={
+                  showPassword
+                    ? "Masquer le mot de passe"
+                    : "Afficher le mot de passe"
+                }
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
           </div>
 
@@ -171,6 +189,7 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
         </span>
         <hr className="login__signup-line" />
       </div>
+
       <ContactModal
         title="Compte suspendu"
         message="Votre compte a été suspendu. Pour plus d'informations ou pour contester cette décision, veuillez contacter l'administrateur via le formulaire de contact."

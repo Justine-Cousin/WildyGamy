@@ -193,8 +193,6 @@ const PrizePage = () => {
       const newPoints = currentUser.current_points - prize.exchange_price;
       setCurrentUser({ ...currentUser, current_points: newPoints });
       setAcquiredPrizes([...acquiredPrizes, prize]);
-
-      alert("Échange réussi !");
     } catch (error) {
       console.error("Erreur lors de l'échange:", error);
       alert("Une erreur est survenue lors de l'échange.");
