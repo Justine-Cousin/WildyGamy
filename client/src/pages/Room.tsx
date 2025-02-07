@@ -2,6 +2,7 @@ import "../styles/Room.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
+import roomImage from "../assets/images/room-image.jpg";
 import roomArrow from "../assets/images/room_arrow.svg";
 import InfoModal from "../components/InfoModal";
 import type { Game } from "../services/types";
@@ -9,25 +10,33 @@ import type { Game } from "../services/types";
 function RoomDescription() {
   return (
     <div className="room-container">
-      <div className="room-text">
-        <p>
-          Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou et
-          Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse. Ce
-          lieu unique mêle jeu en ligne et physique : gagnez des points depuis
-          chez vous et échangez-les contre des sessions sur place. Entre jeux
-          rétro, dernières nouveautés et espace lounge équipé, cet établissement
-          est devenu le repaire incontournable des gamers toulousains.
-        </p>
-        <p>
-          8 Rue de Valenciennes
-          <br />
-          31000 Toulouse
-        </p>
-        <p>
-          Mardi au Dimanche : 10:30 - 1:00
-          <br />
-          05 55 55 55 55
-        </p>
+      <img src={roomImage} alt="room" className="room-image" />
+      <div className="room-bigcontainer">
+        <div className="room-text">
+          <p>
+            Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou
+            et Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse.
+            Ce lieu unique mêle jeu en ligne et physique : gagnez des points
+            depuis chez vous et échangez-les contre des sessions sur place.
+            Entre jeux rétro, dernières nouveautés et espace lounge équipé, cet
+            établissement est devenu le repaire incontournable des gamers
+            toulousains.
+          </p>
+          <p>
+            <strong>
+              8 Rue de Valenciennes
+              <br />
+              31000 Toulouse
+            </strong>
+          </p>
+          <p>
+            <strong>
+              Mardi au Dimanche : 10:30 - 1:00
+              <br />
+              05 55 55 55 55
+            </strong>
+          </p>
+        </div>
       </div>
     </div>
   );
