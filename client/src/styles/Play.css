@@ -15,4 +15,6 @@
   color: var(--font-title-color);
   font-size: 8vw;
   text-align: center;
+  text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
+    rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
 }

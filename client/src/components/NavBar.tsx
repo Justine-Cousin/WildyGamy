@@ -1,23 +1,28 @@
+import {
+  CircleUserRound,
+  Gamepad2,
+  Gift,
+  Home,
+  Joystick,
+  Store,
+  Trophy,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../services/authContext";
 import "../styles/NavBar.css";
-import Games from "../assets/images/Games.svg";
-import Play from "../assets/images/Play.svg";
-import Prizes from "../assets/images/Prizes.svg";
-import Room from "../assets/images/Room.svg";
 import homeIcon from "../assets/images/home-icon.svg";
 import loginIcon from "../assets/images/login-icon.svg";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 
 const menuItems = [
-  { id: 1, to: "/", text: "Accueil", icon: { homeIcon } },
-  { id: 2, to: "/about_us", text: "Qui sommes-nous ?", icon: { Room } },
-  { id: 3, to: "/play", text: "Jeu en ligne", icon: { Play } },
-  { id: 4, to: "/ranking", text: "Classement", icon: { Room } },
-  { id: 5, to: "/games", text: "Liste des jeux", icon: { Games } },
-  { id: 6, to: "/prizes", text: "Récompenses", icon: { Prizes } },
-  { id: 7, to: "/login", text: "Se connecter", icon: { loginIcon } },
+  { id: 1, to: "/", text: "Accueil", icon: Home },
+  { id: 2, to: "/about_us", text: "Qui sommes-nous ?", icon: Store },
+  { id: 3, to: "/play", text: "Jeu en ligne", icon: Gamepad2 },
+  { id: 4, to: "/ranking", text: "Classement", icon: Trophy },
+  { id: 5, to: "/games", text: "Liste des jeux", icon: Joystick },
+  { id: 6, to: "/prizes", text: "Récompenses", icon: Gift },
+  { id: 7, to: "/login", text: "Se connecter", icon: CircleUserRound },
 ];
 
 export default function NavBar() {
@@ -124,11 +129,7 @@ export default function NavBar() {
           <div className="desktop-nav-links">
             {menuItems.map((item) => (
               <Link key={item.id} className="desktop-nav-link" to={item.to}>
-                <img
-                  className="desktop-nav-icon"
-                  src={Object.values(item.icon)[0]}
-                  alt={item.text}
-                />
+                <item.icon className="desktop-nav-icon" />{" "}
                 <span id="desktop-nav-text">{item.text}</span>
               </Link>
             ))}

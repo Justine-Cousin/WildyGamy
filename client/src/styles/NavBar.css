@@ -183,7 +183,7 @@
 
 .desktop-nav-links {
   display: flex;
-  gap: min(20px, 30px);
+  gap: min(25px, 30px);
 }
 
 .desktop-nav-link {
@@ -197,7 +197,6 @@
 
 .desktop-nav-icon {
   width: 80%;
-  height: 80%;
 }
 
 .desktop-nav-item {
