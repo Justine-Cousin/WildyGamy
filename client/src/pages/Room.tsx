@@ -2,7 +2,9 @@ import "../styles/Room.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
-import room from "../assets/images/room-image.jpg";
+import arrowGameOnline from "../assets/images/room-arrow-gameonline.svg";
+import roomImage from "../assets/images/room-image.jpg";
+import imageOnline from "../assets/images/room-snake-image.png";
 import roomArrow from "../assets/images/room_arrow.svg";
 import InfoModal from "../components/InfoModal";
 import type { Game } from "../services/types";
@@ -10,25 +12,37 @@ import type { Game } from "../services/types";
 function RoomDescription() {
   return (
     <div className="room-container">
-      <img className="room-image" src={room} alt="room-image" />
-      <p>
-        Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou et
-        Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse. Ce lieu
-        unique mêle jeu en ligne et physique : gagnez des points depuis chez
-        vous et échangez-les contre des sessions sur place. Entre jeux rétro,
-        dernières nouveautés et espace lounge équipé, cet établissement est
-        devenu le repaire incontournable des gamers toulousains.
-      </p>
-      <p>
-        8 Rue de Valenciennes
-        <br />
-        31000 Toulouse
-      </p>
-      <p>
-        Mardi au Dimanche : 10:30 - 1:00
-        <br />
-        05 55 55 55 55
-      </p>
+      <img src={roomImage} alt="room" className="room-image" />
+      <div className="room-bigcontainer">
+        <div className="room-text">
+          <p className="room-title-history">
+            <strong>Notre histoire</strong>
+          </p>
+          <p>
+            Né de l'imagination de quatre passionnés Justine, Charlotte, Abdou
+            et Florentin, Wildy Gamy redéfinit l'expérience arcade à Toulouse.
+            Ce lieu unique mêle jeu en ligne et physique : gagnez des points
+            depuis chez vous et échangez-les contre des sessions sur place.
+            Entre jeux rétro, dernières nouveautés et espace lounge équipé, cet
+            établissement est devenu le repaire incontournable des gamers
+            toulousains.
+          </p>
+          <p className="room-adress">
+            <strong>
+              8 Rue de Valenciennes
+              <br />
+              31000 Toulouse
+            </strong>
+          </p>
+          <p className="room-timetable">
+            <strong>
+              Mardi au Dimanche : 10:30 - 1:00
+              <br />
+              05 55 55 55 55
+            </strong>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -104,21 +118,37 @@ function RoomGameOnline() {
       }}
       className="room-gameonline"
     >
-      <div className="room-emptydiv"> </div>
-      <div className="room-gameonlinecontent">
-        <h1 className="room-titlegameonline">
-          Jeu en
-          <br />
-          Ligne
-        </h1>
-        <p className="room-textgameonline">
-          Jouez
-          <br />
-          Gagnez des points
-          <br />
-          Restez dans le top 10
-          <br />
-        </p>
+      <img
+        src={imageOnline}
+        alt="image-online"
+        className="room-image-gameonline"
+      />
+      <div className="room-gameonlinebigcontainer">
+        <div className="room-gameonlinecontainer">
+          <div className="room-gameonlinecontent">
+            <h1 className="room-titlegameonline">
+              Jeu en
+              <br />
+              Ligne
+            </h1>
+            <p className="room-textgameonline">
+              <strong>
+                Jouez
+                <br />
+                Gagnez des points
+                <br />
+                Restez dans le top 10
+              </strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="room-arrow-container">
+        <img
+          src={arrowGameOnline}
+          alt="arrow game online"
+          className="room-arrow-gameonline"
+        />
       </div>
     </div>
   );
@@ -296,7 +326,7 @@ function RoomForm() {
           {errors.message && <span className="error">{errors.message}</span>}
         </div>
         <button className="form-button" type="submit">
-          Envoyer
+          <strong>Envoyer</strong>
         </button>
       </form>
       {modalConfig && (
