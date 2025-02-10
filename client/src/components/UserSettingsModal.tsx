@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../services/authContext";
-import type { User } from "../services/types";
-import DeleteConfirmModal from "./DeleteAccountConfirmModal";
 import "../styles/UserSettingsModal.css";
 import { KeyRound, LogOut, Pencil, Save, UserX, X } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DeleteConfirmModal from "../components/DeleteAccountConfirmModal";
+import { useAuth } from "../services/authContext";
+import type { User } from "../services/types";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 interface UserSettingsModalProps {
   isOpen: boolean;
@@ -35,6 +36,8 @@ export default function UserSettingsModal({
     phone_number: "",
   });
 
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
   const toggleEdit = (field: keyof typeof editModes) => {
     setEditModes((prev) => ({
       ...prev,
@@ -63,7 +66,6 @@ export default function UserSettingsModal({
 
   const handleConfirmDelete = async () => {
     if (!user?.id) return;
-
     try {
       setIsDeleting(true);
 
@@ -90,7 +92,6 @@ export default function UserSettingsModal({
       alert("Erreur lors de la suppression du compte");
     } finally {
       setIsDeleting(false);
-      setIsConfirmModalOpen(false);
     }
   };
 
@@ -104,6 +105,7 @@ export default function UserSettingsModal({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
           body: JSON.stringify({ [field]: formData[field] }),
@@ -128,8 +130,6 @@ export default function UserSettingsModal({
     }
   };
 
-  if (!isOpen || !user) return null;
-
   const handleLogout = () => {
     setIsLogoutModalOpen(true);
   };
@@ -139,6 +139,8 @@ export default function UserSettingsModal({
     onClose();
     navigate("/login");
   };
+
+  if (!isOpen || !user) return null;
 
   return (
     <div className="user-modal-overlay">
@@ -366,7 +368,11 @@ export default function UserSettingsModal({
             <LogOut size={16} />
             Me déconnecter
           </button>
-          <button type="button" className="user-modal-action-button">
+          <button
+            type="button"
+            className="user-modal-action-button"
+            onClick={() => setIsPasswordModalOpen(true)}
+          >
             <KeyRound size={16} />
             Modifier mon mot de passe
           </button>
@@ -381,6 +387,11 @@ export default function UserSettingsModal({
           </button>
         </div>
       </div>
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        userId={user.id}
+      />
       <DeleteConfirmModal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}

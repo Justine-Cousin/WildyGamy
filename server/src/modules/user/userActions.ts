@@ -146,7 +146,6 @@ const edit: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
     const updates = { ...req.body };
 
-    // Si un nouveau mot de passe est fourni, le hasher
     if (updates.password) {
       updates.password_hash = await argon2.hash(
         updates.password,
@@ -192,6 +191,49 @@ const edit: RequestHandler = async (req, res, next) => {
     }
     const { password_hash, ...userWithoutPassword } = updatedUser;
     res.json(userWithoutPassword);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updatePassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({ error: "Les deux mots de passe sont requis" });
+      return;
+    }
+
+    const user = await userRepository.readById(Number(id));
+    if (!user) {
+      res.status(404).json({ error: "Utilisateur non trouvé" });
+      return;
+    }
+
+    const isValidPassword = await argon2.verify(
+      user.password_hash,
+      currentPassword,
+    );
+    if (!isValidPassword) {
+      res.status(401).json({ error: "Mot de passe actuel incorrect" });
+      return;
+    }
+
+    const hashedPassword = await argon2.hash(newPassword, hashingOptions);
+    const success = await userRepository.update(Number(id), {
+      password_hash: hashedPassword,
+    });
+
+    if (!success) {
+      res
+        .status(500)
+        .json({ error: "Échec de la mise à jour du mot de passe" });
+      return;
+    }
+
+    res.status(200).json({ message: "Mot de passe modifié avec succès" });
   } catch (err) {
     next(err);
   }
@@ -348,4 +390,5 @@ export default {
   updateHighscore,
   updatePoints,
   resetPointsCreditedToday,
+  updatePassword,
 };
