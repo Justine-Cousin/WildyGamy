@@ -96,6 +96,7 @@ router.post("/api/login", authActions.login);
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id/highscore", userActions.updateHighscore);
 router.put("/api/user/:id/points", userActions.updatePoints);
+router.put("/api/user/:id/password", userActions.updatePassword);
 router.put(
   "/api/reset-points-credited-today",
   userActions.resetPointsCreditedToday,

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/authContext";
 import type { User } from "../services/types";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 interface UserSettingsModalProps {
   isOpen: boolean;
@@ -33,6 +34,8 @@ export default function UserSettingsModal({
     username: "",
     phone_number: "",
   });
+
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   const toggleEdit = (field: keyof typeof editModes) => {
     setEditModes((prev) => ({
@@ -99,6 +102,7 @@ export default function UserSettingsModal({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
           body: JSON.stringify({ [field]: formData[field] }),
@@ -123,13 +127,13 @@ export default function UserSettingsModal({
     }
   };
 
-  if (!isOpen || !user) return null;
-
   const handleLogout = () => {
     setAuth(null);
     onClose();
     navigate("/login");
   };
+
+  if (!isOpen || !user) return null;
 
   return (
     <div className="user-modal-overlay">
@@ -357,7 +361,11 @@ export default function UserSettingsModal({
             <LogOut size={16} />
             Me déconnecter
           </button>
-          <button type="button" className="user-modal-action-button">
+          <button
+            type="button"
+            className="user-modal-action-button"
+            onClick={() => setIsPasswordModalOpen(true)}
+          >
             <KeyRound size={16} />
             Modifier mon mot de passe
           </button>
@@ -372,6 +380,11 @@ export default function UserSettingsModal({
           </button>
         </div>
       </div>
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        userId={user.id}
+      />
     </div>
   );
 }
