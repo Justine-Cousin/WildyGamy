@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import "./App.css";
+import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import { AuthProvider } from "./services/authContext";
 
@@ -18,6 +19,7 @@ function App() {
             <NavBar />
           </header>
         )}
+        {!isAdminPage && <Footer />}
       </div>
     </AuthProvider>
   );
