@@ -21,7 +21,7 @@
   }
 }
 
-.legal-notice-overlay {
+.confidentiality-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -37,7 +37,7 @@
   backdrop-filter: blur(8px);
 }
 
-.legal-notice-content {
+.confidentiality-content {
   width: 90%;
   background: rgba(21, 20, 43, 0.95);
   border-radius: 34px;
@@ -54,11 +54,11 @@
   scrollbar-width: none;
 }
 
-.legal-notice-content::-webkit-scrollbar {
+.confidentiality-content::-webkit-scrollbar {
   display: none;
 }
 
-.legal-notice-close {
+.confidentiality-close {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -67,11 +67,11 @@
   z-index: 1002;
 }
 
-.legal-notice-close:hover {
+.confidentiality-close:hover {
   filter: drop-shadow(0px 0px 7px #c3b0ea);
   transform: scale(1.1);
 }
-.legal-notice-header {
+.confidentiality-header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,7 +79,7 @@
   padding-bottom: 10px;
 }
 
-.legal-notice-title {
+.confidentiality-title {
   font-family: var(--font-title);
   color: #dad0ef;
   font-size: 1.75rem;
@@ -87,7 +87,7 @@
   letter-spacing: 1px;
 }
 
-.legal-notice-subtitle {
+.confidentiality-subtitle {
   font-family: var(--font-title);
   color: #dad0ef;
   font-size: 1.25rem;
@@ -97,7 +97,7 @@
   padding-top: 10px;
 }
 
-.legal-notice-body {
+.confidentiality-body {
   text-align: justify;
   color: #c3b0ea;
   padding: 0 20px;
@@ -105,7 +105,12 @@
   line-height: 1.2;
 }
 
-#legal-name {
-  color: #c3b0ea;
+.confidentiality-span {
   font-weight: bold;
+}
+
+.confidentiality-list {
+  list-style-type: circle;
+  margin-left: 50px;
+  padding-left: 20px;
 }

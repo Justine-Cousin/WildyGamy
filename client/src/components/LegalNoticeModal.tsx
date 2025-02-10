@@ -54,11 +54,11 @@ export default function LegalNoticeModal({
           <h6 className="legal-notice-subtitle">3. Propriété intellectuelle</h6>
           <p>
             L'ensemble du contenu du site et de l'application (textes, images,
-            vidéos, logos, etc.) est protégé par le droit d'auteur et est la
-            propriété exclusive de Wildy Gamy SAS. Toute reproduction,
-            représentation, modification, publication, adaptation ou
-            exploitation de tout ou partie des éléments du site est interdite
-            sans l'autorisation écrite préalable de Wildy Gamy SAS.
+            logos, etc.) est protégé par le droit d'auteur et est la propriété
+            exclusive de Wildy Gamy SAS. Toute reproduction, représentation,
+            modification, publication, adaptation ou exploitation de tout ou
+            partie des éléments du site est interdite sans l'autorisation écrite
+            préalable de Wildy Gamy SAS.
           </p>
           <h6 className="legal-notice-subtitle">
             4. Protection des données personnelles
@@ -69,9 +69,9 @@ export default function LegalNoticeModal({
             droit d'accès, de rectification, de suppression et d'opposition aux
             données personnelles vous concernant. Pour exercer ces droits ou
             pour toute question relative à vos données personnelles, vous pouvez
-            contacter notre Délégué à la Protection des Données (DPO) : Par
-            email : wildygamy.tlse@gmail.com Par courrier : Wildy Gamy SARL -
-            DPO, 8 Rue de Valenciennes, 31000 Toulouse
+            contacter notre Délégué à la Protection des Données (DPO) :
+            FLORENTIN Par email : wildygamy.tlse@gmail.com Par courrier : Wildy
+            Gamy SAS - DPO, 8 Rue de Valenciennes, 31000 Toulouse
           </p>
           <h6 className="legal-notice-subtitle">5. Cookies</h6>
           <p>
