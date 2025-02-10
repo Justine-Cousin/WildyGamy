@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import "../styles/ResetPasswordModal.css";
 
@@ -20,6 +21,8 @@ export default function ResetPasswordModal({
   const [message, setMessage] = useState("");
   const [step, setStep] = useState<"request" | "reset">("request");
   const [token, setToken] = useState(initialToken);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     if (initialToken) {
@@ -147,7 +150,7 @@ export default function ResetPasswordModal({
 
         <div className="reset-modal-header">
           <h2 className="reset-modal-title">
-            {step === "request" ? "REPRENEZ VOS ESPRITS" : "REINITIALISATION"}
+            {step === "request" ? "REPRENEZ VOS ESPRITS" : "RÉINITIALISATION"}
           </h2>
           <p className="reset-modal-description">
             {step === "request"
@@ -182,7 +185,7 @@ export default function ResetPasswordModal({
             <div className="reset-button-group">
               <button
                 type="button"
-                className="reste-button button-secondary"
+                className="reset-button button-secondary"
                 onClick={handleClose}
                 disabled={isLoading}
               >
@@ -203,32 +206,68 @@ export default function ResetPasswordModal({
               <label htmlFor="newPassword" className="reset-form-label">
                 Nouveau mot de passe
               </label>
-              <input
-                id="newPassword"
-                type="password"
-                className="reset-form-input"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Minimum 6 caractères"
-                required
-                minLength={6}
-              />
+              <div className="password-wrapper">
+                <input
+                  id="newPassword"
+                  type={showPassword ? "text" : "password"}
+                  className="reset-form-input"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Minimum 6 caractères"
+                  required
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={
+                    showPassword
+                      ? "Masquer le mot de passe"
+                      : "Afficher le mot de passe"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeOff className="password-icon" />
+                  ) : (
+                    <Eye className="password-icon" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="reset-form-group">
               <label htmlFor="confirmPassword" className="reset-form-label">
                 Confirmer le mot de passe
               </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                className="form-input"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirmer le mot de passe"
-                required
-                minLength={6}
-              />
+              <div className="password-wrapper">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  className="reset-form-input"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirmer le mot de passe"
+                  required
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={
+                    showConfirmPassword
+                      ? "Masquer la confirmation du mot de passe"
+                      : "Afficher la confirmation du mot de passe"
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="password-icon" />
+                  ) : (
+                    <Eye className="password-icon" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {error && <p className="error-message">{error}</p>}

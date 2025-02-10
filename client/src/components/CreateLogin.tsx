@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import bin from "../assets/images/bin.svg";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/CreateLogin.css";
+import { Eye, EyeOff } from "lucide-react";
 
 interface FormData {
   name: string;
@@ -39,6 +40,8 @@ export default function CreateLogin() {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -234,6 +237,7 @@ export default function CreateLogin() {
     });
   };
 
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
     <div className="login-form-container">
       <BlurredBackground>
@@ -423,10 +427,10 @@ export default function CreateLogin() {
                 *
               </span>
             </label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <input
                 className={`login-input ${invalidFields.has("password") ? "invalid" : ""}`}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={formData.password}
@@ -437,6 +441,22 @@ export default function CreateLogin() {
                 minLength={6}
                 disabled={isLoading}
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword
+                    ? "Masquer le mot de passe"
+                    : "Afficher le mot de passe"
+                }
+              >
+                {showPassword ? (
+                  <EyeOff className="password-icon" />
+                ) : (
+                  <Eye className="password-icon" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -447,10 +467,10 @@ export default function CreateLogin() {
                 *
               </span>
             </label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <input
                 className={`login-input ${invalidFields.has("confirm_password") ? "invalid" : ""}`}
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 id="confirm_password"
                 name="confirm_password"
                 value={formData.confirm_password}
@@ -461,6 +481,22 @@ export default function CreateLogin() {
                 minLength={6}
                 disabled={isLoading}
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={
+                  showConfirmPassword
+                    ? "Masquer la confirmation du mot de passe"
+                    : "Afficher la confirmation du mot de passe"
+                }
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="password-icon" />
+                ) : (
+                  <Eye className="password-icon" />
+                )}
+              </button>
             </div>
           </div>
 
