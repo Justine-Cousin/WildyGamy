@@ -1,14 +1,39 @@
+@keyframes modalOverlayShow {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0); /* Effet de flou progressif */
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+@keyframes modalContentShow {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-30px); /* Combine scale et translation */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 .delete-confirm-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(116, 93, 143, 0.938);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1001;
+  isolation: isolate;
+  z-index: 1000;
+  animation: modalOverlayShow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
 }
 
 .delete-confirm-modal-content {
