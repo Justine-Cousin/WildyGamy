@@ -62,6 +62,8 @@ export default function NavBar() {
           </Link>
         </div>
 
+        <div className="nav-bar-separator" />
+
         <div className="nav-bar-center">
           <button
             ref={buttonRef}
@@ -74,6 +76,8 @@ export default function NavBar() {
             <span className="burger-bar" />
           </button>
         </div>
+
+        <div className="nav-bar-separator" />
 
         <div className="nav-bar-right">
           {auth?.user?.profile_pic ? (

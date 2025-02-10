@@ -16,6 +16,20 @@
   z-index: 1000;
   box-shadow: 0px 0px 15px #c3b0ea;
 }
+
+.nav-bar-separator {
+  width: 1.5px;
+  height: 50px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #c3b0ea,
+    #c3b0ea,
+    transparent
+  );
+  margin: 0 15px;
+}
+
 .nav-profile-pic {
   width: 40px;
   height: 40px;

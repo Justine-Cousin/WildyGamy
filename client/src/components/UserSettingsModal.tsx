@@ -2,6 +2,7 @@ import "../styles/UserSettingsModal.css";
 import { KeyRound, LogOut, Pencil, Save, UserX, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DeleteConfirmModal from "../components/DeleteAccountConfirmModal";
 import { useAuth } from "../services/authContext";
 import type { User } from "../services/types";
 import ChangePasswordModal from "./ChangePasswordModal";
@@ -54,8 +55,16 @@ export default function UserSettingsModal({
     setAuth: (auth: null) => void;
   };
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleDeleteAccount = async () => {
+    if (!user?.id) return;
+
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
     if (!user?.id) return;
 
     const confirmed = window.confirm(
@@ -128,6 +137,10 @@ export default function UserSettingsModal({
   };
 
   const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleConfirmLogout = () => {
     setAuth(null);
     onClose();
     navigate("/login");
@@ -384,6 +397,20 @@ export default function UserSettingsModal({
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
         userId={user.id}
+      />
+      <DeleteConfirmModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirmer la suppression"
+        message="Êtes-vous sûr de vouloir supprimer votre compte ? Attention, cette action est irréversible. Vos données ne pourrons pas être récupérées."
+      />
+      <DeleteConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        title="Confirmer la déconnexion"
+        message="Êtes-vous sûr de vouloir vous déconnecter ?"
       />
     </div>
   );
