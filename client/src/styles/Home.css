@@ -104,8 +104,11 @@
       to top,
       rgba(221, 87, 210, 1),
       rgba(221, 87, 210, 1),
+      rgba(221, 87, 210, 1),
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0)
-    ), url("../assets/images/home_play_online.jpg");
+    ), url("../assets/images/snakegame-image.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
