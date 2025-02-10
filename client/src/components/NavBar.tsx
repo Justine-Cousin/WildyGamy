@@ -22,7 +22,6 @@ const menuItems = [
   { id: 4, to: "/ranking", text: "Classement", icon: Trophy },
   { id: 5, to: "/games", text: "Liste des jeux", icon: Joystick },
   { id: 6, to: "/prizes", text: "Récompenses", icon: Gift },
-  { id: 7, to: "/login", text: "Se connecter", icon: CircleUserRound },
 ];
 
 export default function NavBar() {
@@ -133,6 +132,20 @@ export default function NavBar() {
                 <span id="desktop-nav-text">{item.text}</span>
               </Link>
             ))}
+            {auth?.user?.profile_pic ? (
+              <Link className="desktop-nav-link" to="/user_profile">
+                <img
+                  className="nav-profile-pic"
+                  src={auth.user.profile_pic}
+                  alt="Profile"
+                />
+              </Link>
+            ) : (
+              <Link className="desktop-nav-link" to="/login">
+                <CircleUserRound className="desktop-nav-icon" />
+                <span id="desktop-nav-text">Se connecter</span>
+              </Link>
+            )}
           </div>
         </div>
       </nav>
