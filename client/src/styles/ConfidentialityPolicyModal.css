@@ -59,9 +59,9 @@
 }
 
 .confidentiality-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: fixed;
+  top: 60px;
+  right: 100px;
   cursor: pointer;
   color: #c3b0ea;
   z-index: 1002;
