@@ -170,6 +170,7 @@
     rgba(10, 10, 19, 0.2) 96%,
     transparent 100%
   );
+  z-index: 1000;
 }
 
 .desktop-nav-container {
