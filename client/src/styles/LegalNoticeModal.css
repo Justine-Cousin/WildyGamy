@@ -21,7 +21,7 @@
   }
 }
 
-.alert-modal-admin-overlay {
+.legal-notice-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -37,9 +37,8 @@
   backdrop-filter: blur(8px);
 }
 
-.alert-modal-admin-content {
+.legal-notice-content {
   width: 90%;
-  max-width: 500px;
   background: rgba(21, 20, 43, 0.95);
   border-radius: 34px;
   border: 1px solid rgba(195, 176, 234, 0.2);
@@ -52,7 +51,19 @@
   z-index: 1001;
 }
 
-.alert-modal-admin-header {
+.legal-notice-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: #c3b0ea;
+}
+
+.legal-notice-close:hover {
+  filter: drop-shadow(0px 0px 7px #c3b0ea);
+  transform: scale(1.1);
+}
+.legal-notice-header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,7 +71,7 @@
   padding-bottom: 10px;
 }
 
-.alert-modal-admin-title {
+.legal-notice-title {
   font-family: var(--font-title);
   color: #c3b0ea;
   font-size: 1.75rem;
@@ -68,58 +79,19 @@
   letter-spacing: 1px;
 }
 
-.alert-modal-admin-body {
-  text-align: center;
+.legal-notice-subtitle {
+  font-family: var(--font-title);
+  color: #c3b0ea;
+  font-size: 1.25rem;
+  text-align: left;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
+
+.legal-notice-body {
+  text-align: left;
   color: #c3b0ea;
   padding: 0 20px;
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.alert-modal-admin-footer {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  padding-top: 20px;
-}
-
-.btn {
-  padding: 12px 40px;
-  border-radius: 30px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  min-width: 120px;
-}
-
-.btn-primary {
-  background: #6403a9;
-  color: #ffffff;
-  border: none;
-}
-
-.btn-primary:hover {
-  background: #7504c6;
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-.btn-secondary {
-  background: rgba(34, 24, 52, 0.4);
-  color: #c3b0ea;
-  border: 1px solid rgba(195, 176, 234, 0.2);
-}
-
-.btn-secondary:hover {
-  background: rgba(34, 24, 52, 0.6);
-  border-color: rgba(195, 176, 234, 0.4);
-  transform: translateY(-1px);
-}
-
-.btn-secondary:active {
-  transform: translateY(0);
+  font-size: .75rem;
+  line-height: 1.2;
 }

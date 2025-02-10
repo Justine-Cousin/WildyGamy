@@ -48,6 +48,11 @@
   font-size: 12px;
 }
 
+.footer-legal-notice:hover {
+  filter: drop-shadow(0px 0px 7px #c3b0ea);
+  transform: scale(1.1);
+}
+
 @media screen and (max-width: 768px) {
   .footer-container {
     display: none;

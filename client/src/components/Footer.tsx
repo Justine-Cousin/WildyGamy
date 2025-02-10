@@ -1,8 +1,20 @@
 import { Facebook, Instagram, MessagesSquare } from "lucide-react";
-import "../styles/Footer.css";
+import { useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
+import LegalNoticeModal from "./LegalNoticeModal";
+import "../styles/Footer.css";
 
 export default function Footer() {
+  const [isLegalNoticeVisible, setLegalNoticeVisible] = useState(false);
+
+  const handleLegalNotice = () => {
+    setLegalNoticeVisible(true);
+  };
+
+  const handleCloseLegalNotice = () => {
+    setLegalNoticeVisible(false);
+  };
+
   return (
     <div className="footer-container">
       <div className="footer-content">
@@ -24,12 +36,23 @@ export default function Footer() {
             <MessagesSquare size={30} fill="#c3b0ea" color={"transparent"} />
           </div>
           <div className="footer-legal">
-            <p>Mentions légales</p>
+            <p
+              className="footer-legal-notice"
+              onClick={handleLegalNotice}
+              onKeyUp={(e) => e.key === "Enter" && handleLegalNotice()}
+              style={{ cursor: "pointer" }}
+            >
+              Mentions légales
+            </p>
             <p>Politique de confidentialité</p>
             <p>© 2025 Wildy Gamy</p>
           </div>
         </div>
       </div>
+      <LegalNoticeModal
+        visible={isLegalNoticeVisible}
+        onClose={handleCloseLegalNotice}
+      />
     </div>
   );
 }

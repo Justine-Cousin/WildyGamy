@@ -19,7 +19,7 @@ function App() {
             <NavBar />
           </header>
         )}
-        <Footer />
+        {!isAdminPage && <Footer />}
       </div>
     </AuthProvider>
   );
