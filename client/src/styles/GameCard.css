@@ -1,10 +1,18 @@
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .gamecard-content {
-  width: 100%;
-  padding: 10px;
   background: #100921;
   border-radius: 20px;
   position: relative;
-  transition: all 0.3s ease-in-out;
   border: 2px solid var(--font-title-color);
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), inset 0 0 30px
     rgba(139, 92, 246, 0.1);
@@ -12,28 +20,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-}
-
-.gamecard-content:hover {
-  transform: translateY(-2px);
-  border-color: #ff3cbd;
-  box-shadow: 0 0 25px rgba(255, 60, 189, 0.3), inset 0 0 40px
-    rgba(139, 92, 246, 0.2);
+  height: 100%;
+  min-height: 200px;
+  padding: 35px;
+  gap: 5px;
+  animation: cardEntrance 0.3s ease-out;
 }
 
 .gamecard-image {
   height: 60px;
   width: 60%;
   object-fit: contain;
-  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.4));
-  transition: transform 0.3s ease;
-  align-items: center;
-}
-
-.gamecard-content:hover .gamecard-image {
-  transform: scale(1.02);
-  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+  transform: translateY(0) perspective(1000px) rotateX(5deg);
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.6));
 }
 
 .gamecard-description {
@@ -50,21 +49,15 @@
   position: absolute;
   top: 10px;
   left: 10px;
+  min-height: 45px;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 12px;
   border: 1px solid var(--font-title-color);
   box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
   backdrop-filter: blur(8px);
   transition: all 0.3s ease;
-}
-
-.gamecard-content:hover .gamecard-price-container {
-  background: rgba(255, 60, 189, 0.15);
-  border-color: #ff3cbd;
-  box-shadow: 0 0 20px rgba(255, 60, 189, 0.3);
 }
 
 .gamecard-img-coin {
@@ -97,6 +90,9 @@
   cursor: pointer;
   color: #e5d9ff;
   transition: color 0.3s ease, fill 0.3s ease;
+  padding: 8px 16px;
+  min-width: 45px;
+  min-height: 45px;
 }
 
 .gamecard-heart-button .lucide-heart {
@@ -108,3 +104,47 @@
 .gamecard-heart-button.favorite .lucide-heart {
   filter: drop-shadow(0 0 10px #db9e2b);
 }
+
+.gamecard-heart-button:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
+
+@media screen and (min-width: 768px) {
+  .gamecard-content {
+    padding: 20px;
+  }
+
+  .gamecard-image {
+    height: 80px;
+  }
+
+  .gamecard-description {
+    font-size: 16px;
+  }
+
+  .gamecard-price-container {
+    top: 20px;
+    left: 20px;
+  }
+
+  .gamecard-price {
+    font-size: 16px;
+  }
+
+  .gamecard-heart {
+    top: 20px;
+    right: 20px;
+  }
+}
+
+/*.gamecard-content:hover .gamecard-image {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5)); 
+
+  .gamecard-content:hover .gamecard-price-container {
+  background: rgba(255, 60, 189, 0.15);
+  border-color: #ff3cbd;
+  box-shadow: 0 0 20px rgba(255, 60, 189, 0.3);
+}
+}*/

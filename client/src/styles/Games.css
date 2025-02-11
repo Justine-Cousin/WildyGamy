@@ -1,3 +1,12 @@
+.games-header {
+  position: sticky;
+  top: 0;
+  background: #100921;
+  z-index: 10;
+  padding: 10px 0;
+  backdrop-filter: blur(8px);
+}
+
 .games-logo {
   width: 20%;
   position: relative;
@@ -17,10 +26,10 @@
 }
 
 .games-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 35px 15px 15px 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 20px;
   width: 100%;
   padding-bottom: 100px;
 }
@@ -44,9 +53,6 @@
   transition: opacity 0.3s ease;
 }
 
-.gamecard-content:hover::before {
-  opacity: 1;
-}
 #game-search-input:focus {
   outline: none;
 }
@@ -128,3 +134,7 @@
   text-align: center;
   padding: 20px;
 }
+
+/*.gamecard-content:hover::before {
+  opacity: 1;
+}*/
