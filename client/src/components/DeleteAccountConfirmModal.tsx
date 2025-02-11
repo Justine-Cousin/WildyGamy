@@ -6,6 +6,7 @@ interface DeleteConfirmModalProps {
   onConfirm: () => void;
   title: string;
   message: string;
+  showCloseButton?: boolean;
 }
 
 const DeleteConfirmModal = ({
@@ -14,6 +15,7 @@ const DeleteConfirmModal = ({
   onConfirm,
   title,
   message,
+  showCloseButton = true,
 }: DeleteConfirmModalProps) => {
   if (!isOpen) return null;
 
@@ -21,27 +23,33 @@ const DeleteConfirmModal = ({
     e.stopPropagation();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <div
       className="delete-confirm-modal-overlay"
       onClick={onClose}
-      onKeyDown={onClose}
+      onKeyDown={handleKeyDown}
     >
       <div
         className="delete-confirm-modal-content"
         onClick={handleModalClick}
-        onKeyDown={(e) => e.stopPropagation()}
+        onKeyDown={handleKeyDown}
       >
         <h2>{title}</h2>
         <p>{message}</p>
         <div className="delete-confirm-modal-buttons">
-          <button
-            type="button"
-            className="delete-confirm-button cancel"
-            onClick={onClose}
-          >
-            Annuler
-          </button>
+          {showCloseButton && (
+            <button
+              type="button"
+              className="delete-confirm-button cancel"
+              onClick={onClose}
+            >
+              Annuler
+            </button>
+          )}
           <button
             type="button"
             className="delete-confirm-button confirm"

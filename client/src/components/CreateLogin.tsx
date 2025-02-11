@@ -4,6 +4,7 @@ import bin from "../assets/images/bin.svg";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/CreateLogin.css";
 import { Eye, EyeOff } from "lucide-react";
+import DeleteConfirmModal from "./DeleteAccountConfirmModal";
 
 interface FormData {
   name: string;
@@ -127,6 +128,9 @@ export default function CreateLogin() {
     if (!formData.username.trim()) {
       newInvalidFields.add("username");
       errors.push("Le pseudo est requis");
+    } else if (formData.username.length > 13) {
+      newInvalidFields.add("username");
+      errors.push("Le pseudo doit contenir 12 caractères maximum");
     }
 
     if (!formData.password) {
@@ -154,6 +158,11 @@ export default function CreateLogin() {
     if (!profilePic) {
       newInvalidFields.add("profile_pic");
       errors.push("La photo de profil est requise");
+    }
+
+    if (!formData.phone_number.trim()) {
+      newInvalidFields.add("phone_number");
+      errors.push("Le numéro de téléphone est requis");
     }
 
     setInvalidFields(newInvalidFields);
@@ -208,9 +217,6 @@ export default function CreateLogin() {
       }
 
       setSuccess(true);
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1000);
     } catch (err) {
       console.error("Erreur détaillée:", err);
       if (err instanceof Error) {
@@ -253,7 +259,7 @@ export default function CreateLogin() {
 
         {success && (
           <div className="success-message" aria-live="polite">
-            Compte créé avec succès ! Redirection vers la page de connexion...
+            Compte créé avec succès !
           </div>
         )}
 
@@ -311,7 +317,10 @@ export default function CreateLogin() {
 
           <div className="login-text">
             <label className="login-label" htmlFor="phone_number">
-              Numéro de téléphone
+              Numéro de téléphone{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
@@ -322,6 +331,8 @@ export default function CreateLogin() {
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 placeholder="ex: 06 12 34 56 78"
+                required
+                aria-required="true"
                 disabled={isLoading}
               />
             </div>
@@ -365,7 +376,7 @@ export default function CreateLogin() {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                placeholder="ex: jlassalle"
+                placeholder="Maximum 12 caractères"
                 required
                 aria-required="true"
                 disabled={isLoading}
@@ -508,6 +519,17 @@ export default function CreateLogin() {
           >
             {isLoading ? "Création en cours..." : "Créer mon compte"}
           </button>
+          <DeleteConfirmModal
+            isOpen={success}
+            onClose={() => setSuccess(false)}
+            onConfirm={() => {
+              window.scrollTo(0, 0);
+              window.location.reload();
+            }}
+            title="Bravo"
+            message="Compte créé avec succès !"
+            showCloseButton={false}
+          />
         </form>
       </BlurredBackground>
     </div>
