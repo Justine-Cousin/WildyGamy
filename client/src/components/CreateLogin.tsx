@@ -128,6 +128,9 @@ export default function CreateLogin() {
     if (!formData.username.trim()) {
       newInvalidFields.add("username");
       errors.push("Le pseudo est requis");
+    } else if (formData.username.length > 13) {
+      newInvalidFields.add("username");
+      errors.push("Le pseudo doit contenir 12 caractères maximum");
     }
 
     if (!formData.password) {
@@ -373,7 +376,7 @@ export default function CreateLogin() {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                placeholder="ex: jlassalle"
+                placeholder="Maximum 12 caractères"
                 required
                 aria-required="true"
                 disabled={isLoading}
