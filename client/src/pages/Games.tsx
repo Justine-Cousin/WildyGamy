@@ -89,11 +89,11 @@ const Games = () => {
   };
 
   return (
-    <div>
-      <div className="games-header">
-        <img className="games-logo" src={logoWG} alt="Logo" />
-        <h1 className="games-title">NOS JEUX</h1>
+    <div className="games-principal-container">
+      <img className="games-logo" src={logoWG} alt="Logo" />
+      <h1 className="games-title">NOS JEUX</h1>
 
+      <div className="games-search">
         <div className="search-bar-container">
           <form
             id="games-search-bar"
@@ -118,16 +118,15 @@ const Games = () => {
             )}
           </form>
         </div>
-        <div className="search-result">
-          <div className="games-container">
-            {gamesFiltered.length === 0 ? (
-              <div className="games-no-result">{getRandomMessage()}</div>
-            ) : (
-              gamesFiltered.map((game) => (
-                <GameCard key={game.id} game={game} />
-              ))
-            )}
-          </div>
+      </div>
+
+      <div className="search-result">
+        <div className="games-container">
+          {gamesFiltered.length === 0 ? (
+            <div className="games-no-result">{getRandomMessage()}</div>
+          ) : (
+            gamesFiltered.map((game) => <GameCard key={game.id} game={game} />)
+          )}
         </div>
       </div>
     </div>
