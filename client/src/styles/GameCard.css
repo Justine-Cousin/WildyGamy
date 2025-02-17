@@ -1,39 +1,55 @@
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .gamecard-content {
-  width: 100%;
-  padding: 10px;
   background: #100921;
   border-radius: 20px;
   position: relative;
-  transition: all 0.3s ease-in-out;
-  border: 2px solid var(--font-title-color);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), inset 0 0 30px
-    rgba(139, 92, 246, 0.1);
+  border: 1px solid var(--font-title-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  height: 100%;
+  min-height: 200px;
+  padding: 20px 35px;
+  animation: cardEntrance 0.3s ease-out;
 }
 
-.gamecard-content:hover {
-  transform: translateY(-2px);
-  border-color: #ff3cbd;
-  box-shadow: 0 0 25px rgba(255, 60, 189, 0.3), inset 0 0 40px
-    rgba(139, 92, 246, 0.2);
+.gamecard-image-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+@keyframes floatingLogo {
+  0%,
+  100% {
+    transform: translateY(0) perspective(1000px) rotateX(5deg);
+    filter: drop-shadow(0 5px 10px rgba(139, 92, 246, 0.6));
+  }
+  50% {
+    transform: translateY(-5px) perspective(1000px) rotateX(5deg);
+    filter: drop-shadow(0 10px 15px rgba(139, 92, 246, 0.8));
+  }
 }
 
 .gamecard-image {
-  height: 60px;
-  width: 60%;
+  height: 80px;
+  width: 80%;
   object-fit: contain;
-  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.4));
-  transition: transform 0.3s ease;
-  align-items: center;
-}
-
-.gamecard-content:hover .gamecard-image {
-  transform: scale(1.02);
-  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+  animation: floatingLogo 4s ease-in-out infinite;
 }
 
 .gamecard-description {
@@ -42,36 +58,26 @@
   font-size: 14px;
   line-height: 1.5;
   text-align: left;
-  letter-spacing: 0.2px;
-  text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
 }
 
 .gamecard-price-container {
   position: absolute;
   top: 10px;
   left: 10px;
+  min-height: 40px;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  padding: 6px 12px;
+  padding: 6px 10px;
+  margin: 5px;
   border-radius: 12px;
   border: 1px solid var(--font-title-color);
   box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-}
-
-.gamecard-content:hover .gamecard-price-container {
-  background: rgba(255, 60, 189, 0.15);
-  border-color: #ff3cbd;
-  box-shadow: 0 0 20px rgba(255, 60, 189, 0.3);
 }
 
 .gamecard-img-coin {
   width: 25px;
   height: 25px;
   padding-right: 6px;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.4));
 }
 
 .gamecard-price {
@@ -79,7 +85,6 @@
   font-weight: 500;
   color: #ffffff;
   font-size: 14px;
-  text-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
 }
 
 .gamecard-heart {
@@ -97,6 +102,9 @@
   cursor: pointer;
   color: #e5d9ff;
   transition: color 0.3s ease, fill 0.3s ease;
+  padding: 8px 16px;
+  min-width: 45px;
+  min-height: 45px;
 }
 
 .gamecard-heart-button .lucide-heart {
@@ -107,4 +115,131 @@
 
 .gamecard-heart-button.favorite .lucide-heart {
   filter: drop-shadow(0 0 10px #db9e2b);
+}
+
+.gamecard-heart-button:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+  .gamecard-content {
+    flex-direction: row;
+    padding: 15px;
+    height: 200px;
+    min-height: 180px;
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .gamecard-left {
+    width: 100%;
+  }
+
+  .gamecard-right {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .gamecard-description {
+    flex: 1;
+    padding-top: 25px;
+    font-size: 12px;
+    text-align: center;
+    overflow-y: auto;
+    scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+    scrollbar-width: thin;
+    scrollbar-width: none;
+  }
+
+  .gamecard-price-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    margin: 5px;
+    border-radius: 12px;
+    border: 1px solid var(--font-title-color);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+  }
+
+  .gamecard-heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media screen and (min-width: 851px) {
+  .gamecard-content {
+    flex-direction: row;
+    padding: 15px;
+    height: 200px;
+    min-height: 180px;
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .gamecard-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+    border-color: var(--font-title-color);
+  }
+
+  .gamecard-left {
+    width: 40%;
+  }
+  .gamecard-image {
+    height: auto;
+    width: 100%;
+    max-width: 200px;
+    max-height: 100px;
+  }
+
+  .gamecard-right {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 15px;
+    height: 100%;
+  }
+
+  .gamecard-description {
+    flex: 1;
+    font-size: 14px;
+    padding-top: 10px;
+    overflow-y: auto;
+    scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+    scrollbar-width: thin;
+    scrollbar-width: none;
+  }
+
+  .gamecard-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 5px 0;
+    height: auto;
+    min-height: 40px;
+  }
+
+  .gamecard-price-container {
+    position: relative;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .gamecard-heart {
+    position: relative;
+    max-width: fit-content;
+  }
 }
