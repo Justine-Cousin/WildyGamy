@@ -58,8 +58,8 @@
   }
 
   .loginpage-right {
-    width: 65%;
-    margin-left: 63%;
+    width: 33%;
+    margin-left: auto;
     min-height: 100vh;
     background-color: #15142b;
     overflow-y: auto;
@@ -72,6 +72,7 @@
     margin: 0 auto;
   }
 }
+
 @media (min-width: 1024px) {
   .loginpage-right {
     padding-left: 50px;
