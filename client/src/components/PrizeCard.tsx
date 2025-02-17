@@ -75,18 +75,22 @@ const PrizeCard = ({
             className="prize-card__image"
           />
         </div>
-        <h3 className="prize-card__title">{prize.name}</h3>
+        <div className="prize-card__info-container">
+          <div className="prize-card__info">
+            <h3 className="prize-card__title">{prize.name}</h3>
 
-        <div className="prize-card__points">
-          <span className="prize-card__points-value">
-            {prize.exchange_price}
-          </span>
-          <img src={coin} className="prize-coin" alt="coin" />
+            <div className="prize-card__points">
+              <span className="prize-card__points-value">
+                {prize.exchange_price}
+              </span>
+              <img src={coin} className="prize-coin" alt="coin" />
+            </div>
+          </div>
+
+          <div className="prize-card__description">
+            <p>{prize.description}</p>
+          </div>
         </div>
-      </div>
-
-      <div className="prize-card__description">
-        <p>{prize.description}</p>
       </div>
 
       {isModalOpen && (
