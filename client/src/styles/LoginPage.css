@@ -1,8 +1,83 @@
+.loginpage-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #15142b;
+}
+
 .loginpage-content {
   padding: 30px 30px 120px 30px;
 }
+
 .games-logo {
   width: 20%;
   position: relative;
   padding: 20px 0 0 20px;
+}
+
+.loginpage-left {
+  display: none;
+}
+
+.background-image {
+  display: none;
+}
+
+/* Media queries pour tablette et desktop */
+@media (min-width: 768px) {
+  .loginpage-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .loginpage-left {
+    display: block;
+    width: 67%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    background-color: #15142b;
+    overflow: hidden;
+  }
+
+  .background-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin-left: 20px;
+  }
+
+  .games-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    width: 120px;
+    padding: 0;
+  }
+
+  .loginpage-right {
+    width: 65%;
+    margin-left: 63%;
+    min-height: 100vh;
+    background-color: #15142b;
+    overflow-y: auto;
+    padding-left: 50px;
+  }
+
+  .loginpage-content {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 1024px) {
+  .loginpage-right {
+    padding-left: 50px;
+  }
+
+  .loginpage-content {
+    max-width: 800px;
+  }
 }

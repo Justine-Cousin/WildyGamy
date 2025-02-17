@@ -22,6 +22,7 @@
   flex-direction: column;
   font-family: "Lato", sans-serif;
   font-size: 14px;
+  z-index: 1;
 }
 
 .footer-links {
