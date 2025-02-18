@@ -1,7 +1,7 @@
 @keyframes modalOverlayShow {
   from {
     opacity: 0;
-    backdrop-filter: blur(0); /* Effet de flou progressif */
+    backdrop-filter: blur(0);
   }
   to {
     opacity: 1;
@@ -12,7 +12,7 @@
 @keyframes modalContentShow {
   0% {
     opacity: 0;
-    transform: scale(0.95) translateY(-30px); /* Combine scale et translation */
+    transform: scale(0.95) translateY(-30px);
   }
   100% {
     opacity: 1;
@@ -26,20 +26,24 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(116, 93, 143, 0.938);
+  background-color: rgba(10, 10, 19, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   isolation: isolate;
   z-index: 1000;
   animation: modalOverlayShow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(8px);
 }
 
 .auth-modal-content {
   width: 90%;
-  max-width: 500px;
-  background: rgba(21, 20, 43, 0.95);
+  max-width: 600px;
+  background-image: linear-gradient(
+      rgba(34, 24, 52, 0.8),
+      rgba(34, 24, 52, 0.8)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
   border-radius: 34px;
   border: 1px solid rgba(195, 176, 234, 0.2);
   padding: 24px;
@@ -75,6 +79,7 @@
   padding-top: 20px;
 }
 
+/* Style de base commun pour tous les boutons */
 .auth-button {
   padding: 12px 30px;
   border-radius: 30px;
@@ -83,35 +88,37 @@
   transition: all 0.2s ease;
   font-weight: 500;
   min-width: 120px;
+  max-width: 350px;
+  border: 1px solid transparent;
+  transform: translateY(0);
 }
 
+.auth-button:hover {
+  transform: translateY(-1px);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+}
+
+/* Styles spécifiques pour le bouton cancel */
 .auth-button.cancel {
   background: rgba(34, 24, 52, 0.4);
   color: #c3b0ea;
-  border: 1px solid rgba(195, 176, 234, 0.2);
+  border-color: rgba(195, 176, 234, 0.2);
 }
 
 .auth-button.cancel:hover {
   background: rgba(34, 24, 52, 0.6);
   border-color: rgba(195, 176, 234, 0.4);
-  transform: translateY(-1px);
 }
 
-.auth-button.cancel:active {
-  transform: translateY(0);
-}
-
+/* Styles spécifiques pour le bouton login */
 .auth-button.login {
   background: #6403a9;
   color: #ffffff;
-  border: none;
 }
 
 .auth-button.login:hover {
   background: #7504c6;
-  transform: translateY(-1px);
-}
-
-.auth-button.login:active {
-  transform: translateY(0);
 }

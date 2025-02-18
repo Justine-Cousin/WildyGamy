@@ -4,23 +4,35 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  z-index: 1001;
-  padding: 20px;
+  align-items: center;
+  isolation: isolate;
+  z-index: 1000;
+  animation: modalOverlayShow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: rgba(10, 10, 19, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .user-modal-content {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: #1b142b;
-  padding: 20px;
+  gap: 6px;
+  background: rgba(21, 20, 43, 0.95);
+  background-image: linear-gradient(
+      rgba(34, 24, 52, 0.8),
+      rgba(34, 24, 52, 0.8)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
+  padding: 10px;
   border-radius: 15px;
   position: relative;
   width: 90vw;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-top: 30px;
+  transition: all 0.3s ease;
 }
 
 .user-modal-close {
@@ -43,7 +55,7 @@
 .user-modal-info-value {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: white;
 }
 
@@ -79,10 +91,26 @@
 .user-modal-info-container {
   display: flex;
   flex-direction: column;
-  padding: 8px 12px;
-  gap: 10px;
+  padding: 6px 10px;
+  gap: 8px;
   border: solid 2px var(--font-title-color);
   border-radius: 10px;
+}
+
+.user-modal-title {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin: 6px 0 2px;
+}
+
+.user-modal-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .user-modal-separator {
@@ -100,20 +128,29 @@
 .user-modal-buttons-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
+  margin-top: 2px;
 }
 
 .user-modal-action-button {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
+  gap: 4px;
+  padding: 4px 10px;
   background: none;
-  border: 2px solid #694fa6;
+  border: 1px solid #694fa6;
   border-radius: 50px;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.85rem;
+  justify-content: center;
+  min-height: 28px;
+}
+
+.user-modal-action-button svg {
+  width: 14px;
+  height: 14px;
 }
 
 .user-modal-action-button:hover {
@@ -140,4 +177,60 @@
 .user-modal-action-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .user-modal-content {
+    padding: 30px;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .user-modal-info-container {
+    padding: 15px;
+    gap: 8px;
+    backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .user-modal-title {
+    font-size: 1.75rem;
+    margin-bottom: 5px;
+  }
+
+  h3 {
+    margin: 8px 0 4px;
+  }
+
+  .user-modal-info-value input {
+    padding: 8px 12px;
+    min-width: 250px;
+  }
+
+  .user-modal-buttons-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .user-modal-action-button {
+    min-width: 200px;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  .user-modal-info-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+
+  .user-modal-close {
+    top: 20px;
+    right: 20px;
+  }
 }
