@@ -115,11 +115,16 @@
 }
 
 .user-profile-page-prizes-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 30px;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
   padding: 20px;
-  border-radius: 10px;
+  margin: 0;
+  text-align: left;
+  align-content: flex-start;
 }
 
 .user-profile-page-no-prizes-message,
