@@ -440,7 +440,7 @@ export default function SnakeGame() {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (gameOver) return;
+      if (!gameStarted) return;
 
       switch (e.key) {
         case "ArrowUp":
@@ -456,14 +456,17 @@ export default function SnakeGame() {
           setDirection({ x: 1, y: 0 });
           break;
         case " ":
-          setIsPaused((prevPaused) => !prevPaused);
+          e.preventDefault(); // Empêche le défilement de la page
+          if (!gameOver) {
+            setIsPaused((prevPaused) => !prevPaused);
+          }
           break;
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [gameOver]);
+  }, [gameStarted, gameOver]);
 
   const resetGame = () => {
     setSnake(INITIAL_SNAKE);
@@ -535,82 +538,57 @@ export default function SnakeGame() {
           Règles <BookText size={16} />
         </button>
         <div className="score-container">
+          <div className="desktop-controls">
+            {!gameStarted || gameOver ? (
+              <button
+                type="button"
+                className="button primary"
+                onClick={handleStartGame}
+              >
+                Start Game
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="button secondary"
+                onClick={togglePause}
+              >
+                {isPaused ? "Resume" : "Pause"}
+              </button>
+            )}
+          </div>
           <div className="high-score">Record: {highScore}</div>
           <div className="score">Score: {score}</div>
         </div>
       </div>
+
       <div className="game-board">{renderBoard()}</div>
 
-      {showRules && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+      <div className="mobile-controls">
+        {!gameStarted || gameOver ? (
+          <div className="game-controls">
             <button
               type="button"
-              className="modal-close-button"
-              onClick={() => setShowRules(false)}
+              className="button primary"
+              onClick={handleStartGame}
             >
-              ✕
+              Start Game
             </button>
-            <h2>Règles du jeu</h2>
-            <ul>
-              <li>
-                Utilisez les flèches directionnelles pour déplacer le serpent
-              </li>
-              <li>Mangez les pommes pour grandir</li>
-              <li>Évitez les obstacles et ne vous mordez pas la queue</li>
-              <li>Collectez les power-ups pour des bonus spéciaux:</li>
-              <ul>
-                <li className="modal-text-hungry">
-                  <Star className="star-icons-modal" size={16} /> Double les
-                  points obtenus (10s)
-                </li>
-                <li className="modal-text-shrink">
-                  <Scissors className="scissors-icons-modal" size={16} /> Réduit
-                  la taille du serpent
-                </li>
-                <li className="modal-text-invincible">
-                  <Shield className="shield-icons-modal" size={16} />{" "}
-                  Invincibilité temporaire (10s)
-                </li>
-              </ul>
-              <li>
-                <TriangleAlert className="triangle-icons-modal" size={16} />{" "}
-                Manger une pomme fait disparaitre le bonus!
-              </li>
-            </ul>
           </div>
-        </div>
-      )}
-      {countdown !== null && (
-        <div className="countdown-overlay">
-          <div className="countdown">{countdown}</div>
-        </div>
-      )}
-
-      {!gameStarted && (
-        <div className="game-controls">
-          <button
-            type="button"
-            className="button primary"
-            onClick={handleStartGame}
-          >
-            Start Game
-          </button>
-          {isLoginModalOpen && (
-            <GameLoginModal onClose={() => setIsLoginModalOpen(false)} />
-          )}
-        </div>
-      )}
-
-      {gameStarted && !gameOver && (
-        <button
-          type="button"
-          className="button secondary"
-          onClick={togglePause}
-        >
-          {isPaused ? "Resume" : "Pause"}
-        </button>
-      )}
+        ) : (
+          !gameOver && (
+            <div className="game-controls">
+              <button
+                type="button"
+                className="button secondary"
+                onClick={togglePause}
+              >
+                {isPaused ? "Resume" : "Pause"}
+              </button>
+            </div>
+          )
+        )}
+      </div>
 
       <div className="direction-controls">
         <button
@@ -651,6 +629,54 @@ export default function SnakeGame() {
         </button>
       </div>
 
+      {/* Modals */}
+      {showRules && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button
+              type="button"
+              className="modal-close-button"
+              onClick={() => setShowRules(false)}
+            >
+              ✕
+            </button>
+            <h2>Règles du jeu</h2>
+            <ul>
+              <li>
+                Utilisez les flèches directionnelles pour déplacer le serpent
+              </li>
+              <li>Mangez les pommes pour grandir</li>
+              <li>Évitez les obstacles et ne vous mordez pas la queue</li>
+              <li>Collectez les power-ups pour des bonus spéciaux:</li>
+              <ul>
+                <li className="modal-text-hungry">
+                  <Star className="star-icons-modal" size={16} /> Double les
+                  points obtenus (10s)
+                </li>
+                <li className="modal-text-shrink">
+                  <Scissors className="scissors-icons-modal" size={16} /> Réduit
+                  la taille du serpent
+                </li>
+                <li className="modal-text-invincible">
+                  <Shield className="shield-icons-modal" size={16} />{" "}
+                  Invincibilité temporaire (10s)
+                </li>
+              </ul>
+              <li>
+                <TriangleAlert className="triangle-icons-modal" size={16} />{" "}
+                Manger une pomme fait disparaitre le bonus!
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {countdown !== null && (
+        <div className="countdown-overlay">
+          <div className="countdown">{countdown}</div>
+        </div>
+      )}
+
       {gameOver && (
         <div className="game-over-overlay">
           <div className="game-over-modal">
@@ -685,6 +711,38 @@ export default function SnakeGame() {
           </div>
         </div>
       )}
+
+      {isLoginModalOpen && (
+        <GameLoginModal onClose={() => setIsLoginModalOpen(false)} />
+      )}
+
+      <div className="rules-container-desktop">
+        <h2>Règles du jeu</h2>
+        <ul>
+          <li>Utilisez les flèches directionnelles pour déplacer le serpent</li>
+          <li>Mangez les pommes pour grandir</li>
+          <li>Évitez les obstacles et ne vous mordez pas la queue</li>
+          <li>Collectez les power-ups pour des bonus spéciaux:</li>
+          <ul>
+            <li className="modal-text-hungry">
+              <Star className="star-icons-modal" size={16} /> Double les points
+              obtenus (10s)
+            </li>
+            <li className="modal-text-shrink">
+              <Scissors className="scissors-icons-modal" size={16} /> Réduit la
+              taille du serpent
+            </li>
+            <li className="modal-text-invincible">
+              <Shield className="shield-icons-modal" size={16} /> Invincibilité
+              temporaire (10s)
+            </li>
+          </ul>
+          <li>
+            <TriangleAlert className="triangle-icons-modal" size={16} /> Manger
+            une pomme fait disparaitre le bonus!
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
