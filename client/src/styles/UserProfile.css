@@ -38,6 +38,16 @@
     rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
 }
 
+.user-profile-page-subtitle {
+  font-family: var(--font-title-phosphate);
+  font-weight: 300;
+  font-style: normal;
+  color: var(--font-title-color);
+  font-size: 6vw;
+  text-align: center;
+  padding: 12px;
+}
+
 .h2-welcome-message {
   text-align: center;
 }
@@ -169,4 +179,87 @@
   font-size: 12px;
   white-space: nowrap;
   text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .user-profile-page-container {
+    padding: 40px 60px 0 60px;
+  }
+
+  .play-wg-logo-user-page {
+    display: none;
+  }
+
+  .user-profile-page-title {
+    font-size: 4rem;
+    text-align: left;
+    line-height: 1.2;
+    padding-top: 150px;
+  }
+
+  .user-profile-page-subtitle {
+    font-size: 3rem;
+    text-align: left;
+    line-height: 1.2;
+    padding: 40px 0;
+  }
+
+  .user-profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .user-profile-info-card {
+    width: 100%;
+    padding: 20px 40px;
+    gap: 20px;
+  }
+
+  .user-profile-info-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .user-profile-avatar-wrapper {
+    align-items: flex-start;
+    padding: 0 20px;
+    margin: 0;
+  }
+
+  .user-profile-stats-bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    gap: 40px;
+  }
+
+  .user-profile-stats-actual-points,
+  .user-profile-stats-rank,
+  .user-profile-stats-total-points {
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .user-profile-total-points-icon,
+  .user-profile-trophy-icon,
+  .user-profile-actual-points-icon {
+    width: 50px;
+  }
+
+  .user-profile-ranking-button,
+  .user-profile-exchange-button {
+    width: 300px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
 }
