@@ -1,5 +1,6 @@
 import "../styles/Room.css";
-import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import arrowGameOnline from "../assets/images/room-arrow-gameonline.svg";
@@ -51,6 +52,7 @@ function RoomCarousel() {
   const [games, setGames] = useState<Game[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const scrollCarousel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -75,6 +77,16 @@ function RoomCarousel() {
     fetchGames();
   }, []);
 
+  const handleScroll = (direction: "left" | "right") => {
+    if (scrollCarousel.current) {
+      const scrollAmount = direction === "right" ? 300 : -300;
+      scrollCarousel.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   if (isLoading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error}</div>;
 
@@ -87,19 +99,38 @@ function RoomCarousel() {
             <img src={roomArrow} alt="arrow" className="room-arrowimage" />
           </Link>
         </div>
-        <div className="room-carouselcontainer">
-          {games.map((game) => (
-            <article key={game.id} className="room-gamecard">
-              <div className="room-gameimagecontainer">
-                <img
-                  src={game.image}
-                  alt={game.name}
-                  className="room-gameimage"
-                />
-              </div>
-              <h2 className="room-gametitle">{game.name}</h2>
-            </article>
-          ))}
+        <div className="room-carousel-wrapper">
+          <button
+            type="button"
+            className="room-button-scrollcarousel"
+            onClick={() => handleScroll("left")}
+            aria-label="Voir plus de jeux"
+          >
+            <ChevronLeft className="room-scroolleft" size={38} />
+          </button>
+          <div className="room-carouselcontainer" ref={scrollCarousel}>
+            {games.map((game) => (
+              <article key={game.id} className="room-gamecard">
+                <div className="room-gameimagecontainer">
+                  <img
+                    src={game.image}
+                    alt={game.name}
+                    className="room-gameimage"
+                  />
+                </div>
+                <h2 className="room-gametitle">{game.name}</h2>
+              </article>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="room-button-scrollcarousel"
+            onClick={() => handleScroll("right")}
+            aria-label="Voir plus de jeux"
+          >
+            <ChevronRight className="room-scroolright" size={38} />
+          </button>
         </div>
       </div>
     )
@@ -290,7 +321,7 @@ function RoomForm() {
           />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
-        <div className="form-group">
+        <div className="form-group-subject">
           <label htmlFor="subject">
             Sujet
             <span className="contact-form-asterisk" aria-hidden="true">
@@ -305,6 +336,7 @@ function RoomForm() {
             value={formData.subject}
             onChange={handleChange}
             placeholder="ex : réservation"
+            className="form-input"
           />
           {errors.subject && <span className="error">{errors.subject}</span>}
         </div>
@@ -349,8 +381,10 @@ function Room() {
       <div className="room-fullpage">
         <RoomDescription />
         <RoomCarousel />
-        <RoomGameOnline />
-        <RoomForm />
+        <div className="room-gameonline-form-container">
+          <RoomGameOnline />
+          <RoomForm />
+        </div>
       </div>
     </div>
   );
