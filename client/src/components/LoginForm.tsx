@@ -86,7 +86,7 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
   };
 
   return (
-    <div className="login-container">
+    <>
       <BlurredBackground>
         <h1 className="login__title">SE CONNECTER</h1>
 
@@ -202,6 +202,6 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
         onClose={() => setIsResetModalOpen(false)}
         token={resetToken}
       />
-    </div>
+    </>
   );
 }
