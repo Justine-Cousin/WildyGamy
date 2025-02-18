@@ -37,6 +37,9 @@
     ), linear-gradient(to bottom, #281e40, #694fa6);
   background-origin: border-box;
   background-clip: padding-box, border-box;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .login__title {
@@ -55,7 +58,7 @@
   flex-direction: column;
   width: 100%;
   gap: 10px;
-  padding: 0 1rem;
+  padding: 20px;
 }
 
 .login__field {
@@ -169,10 +172,11 @@
 }
 
 .forgot-password {
-  font-size: 20px;
+  font-size: 16px;
   all: unset;
   text-decoration: underline;
   cursor: pointer;
+  color: #c3b0ea;
 }
 
 .login__signup-container {
@@ -181,14 +185,15 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
+  margin: 20px 0;
+  padding: 0 20px;
 }
 
 .login__signup-line {
   flex: 1;
   border: none;
   border-top: 1px solid rgba(195, 176, 234, 0.3);
-  margin: 0 20px;
+  margin: 0;
 }
 
 .login__signup {
@@ -209,18 +214,57 @@
 }
 
 /* Media Queries */
-@media (min-width: 768px) {
-  .login-container {
-    width: 100%;
+/* Styles spécifiques pour tablettes */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .login {
+    max-width: 100%;
     margin: 0 auto;
   }
 
   .login__title {
-    font-size: 42px;
+    font-size: 40px;
+    padding: 15px 0;
   }
 
   .login__form {
-    padding: 30px;
+    padding: 20px 25px;
+  }
+
+  .login__field {
+    margin-bottom: 12px;
+  }
+
+  .login__input {
+    padding: 16px 18px;
+  }
+
+  .login__submit {
+    padding: 16px;
+  }
+
+  .login__signup-container {
+    margin: 20px 0;
+    padding: 0 25px;
+  }
+
+  .forgot-password {
+    font-size: 16px;
+  }
+}
+
+/* Styles pour desktop */
+@media (min-width: 1024px) {
+  .login {
+    max-width: 450px;
+  }
+
+  .login__title {
+    font-size: 38px;
+    padding: 15px 0;
+  }
+
+  .login__form {
+    padding: 25px 30px;
   }
 
   .login__field {
@@ -232,28 +276,32 @@
   }
 
   .login__submit {
-    max-width: 100%;
     padding: 18px;
   }
 
   .login__signup-container {
-    margin: 30px 0;
+    margin: 25px 0;
+    padding: 0 30px;
+  }
+
+  .forgot-password {
+    font-size: 18px;
   }
 }
 
 @media (min-width: 1024px) {
-  .login-container {
-    width: 80%;
-    max-width: 900px;
-    margin-top: 100px;
+  .login {
+    max-width: 500px;
+    margin-top: 90px;
   }
 
   .login__title {
-    font-size: 48px;
+    font-size: 42px;
+    padding: 20px 0;
   }
 
   .login__form {
-    padding: 40px;
+    padding: 30px 40px;
   }
 
   .login__field {
@@ -269,6 +317,25 @@
   }
 
   .forgot-password {
-    font-size: 22px;
+    font-size: 20px;
+  }
+
+  .login__signup-container {
+    margin: 30px 0;
+    padding: 0 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .login {
+    max-width: 550px;
+  }
+
+  .login__form {
+    padding: 35px 45px;
+  }
+
+  .login__title {
+    font-size: 48px;
   }
 }
