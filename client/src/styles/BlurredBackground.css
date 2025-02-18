@@ -8,6 +8,7 @@
 }
 .login-container {
   padding-bottom: 23px;
+  margin-bottom: -14px;
 }
 .blur-circle {
   position: absolute;
@@ -42,4 +43,36 @@
   width: 100%;
   height: 100%;
   padding: 20px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .login-container {
+    padding-top: 85px;
+    margin-bottom: -14px;
+    background: linear-gradient(
+      to bottom,
+      #0a0a13 0%,
+      #0a0a13 60%,
+      rgba(10, 10, 19, 0.95) 75%,
+      rgba(10, 10, 19, 0.85) 85%,
+      rgba(10, 10, 19, 0.6) 92%,
+      rgba(10, 10, 19, 0.2) 96%,
+      transparent 100%
+    );
+  }
+}
+
+@media (min-width: 1024px) {
+  .login-container {
+    padding-top: 10px;
+    margin-bottom: -110px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(21, 20, 43, 0.3) 20%,
+      rgba(21, 20, 43, 0.7) 50%,
+      rgba(21, 20, 43, 0.9) 80%,
+      #15142b 100%
+    );
+  }
 }

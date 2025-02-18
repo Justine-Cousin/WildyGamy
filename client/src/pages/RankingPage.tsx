@@ -95,7 +95,7 @@ const RankingPage = () => {
   return (
     <div className="ranking-page">
       <img className="ranking-logo" src={logoWG} alt="Logo" />
-      <h3 className="ranking-title">Mon Classement</h3>
+      <h3 className="ranking-title">Classement</h3>
       <div className="ranking-bigcontainer">
         {auth && (
           <div className="ranking-header">
