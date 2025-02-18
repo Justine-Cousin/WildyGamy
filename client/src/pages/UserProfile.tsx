@@ -245,6 +245,7 @@ export default function UserProfile() {
                   description: game.description || "",
                   name: game.name,
                 }}
+                isProfileCard={true}
               />
             ))}
           </div>
