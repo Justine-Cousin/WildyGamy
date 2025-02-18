@@ -247,7 +247,7 @@ export default function CreateLogin() {
   return (
     <div className="login-form-container">
       <BlurredBackground>
-        <h1 className="login-form-title">CRÉER VOTRE COMPTE</h1>
+        <div className="login-form-title">CRÉER VOTRE COMPTE</div>
 
         {error && (
           <div className="error-message" aria-live="assertive">
