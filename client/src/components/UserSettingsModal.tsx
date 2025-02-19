@@ -358,33 +358,35 @@ export default function UserSettingsModal({
             </div>
           </div>
         </div>
-        <h3>Gérer Mon Compte</h3>
-        <div className="user-modal-buttons-container">
-          <button
-            type="button"
-            className="user-modal-action-button logout"
-            onClick={handleLogout}
-          >
-            <LogOut size={16} />
-            Me déconnecter
-          </button>
-          <button
-            type="button"
-            className="user-modal-action-button"
-            onClick={() => setIsPasswordModalOpen(true)}
-          >
-            <KeyRound size={16} />
-            Modifier mon mot de passe
-          </button>
-          <button
-            type="button"
-            className="user-modal-action-button delete"
-            onClick={handleDeleteAccount}
-            disabled={isDeleting}
-          >
-            <UserX size={16} />
-            {isDeleting ? "Suppression..." : "Supprimer mon compte"}
-          </button>
+        <div className="user-modal-container-buttons">
+          <h3 className="user-modal-buttons-title">Gérer Mon Compte</h3>
+          <div className="user-modal-buttons-container">
+            <button
+              type="button"
+              className="user-modal-action-button logout"
+              onClick={handleLogout}
+            >
+              <LogOut size={16} />
+              Me déconnecter
+            </button>
+            <button
+              type="button"
+              className="user-modal-action-button"
+              onClick={() => setIsPasswordModalOpen(true)}
+            >
+              <KeyRound size={16} />
+              Modifier mon mot de passe
+            </button>
+            <button
+              type="button"
+              className="user-modal-action-button delete"
+              onClick={handleDeleteAccount}
+              disabled={isDeleting}
+            >
+              <UserX size={16} />
+              {isDeleting ? "Suppression..." : "Supprimer mon compte"}
+            </button>
+          </div>
         </div>
       </div>
       <ChangePasswordModal

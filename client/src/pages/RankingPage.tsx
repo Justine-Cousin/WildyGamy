@@ -98,8 +98,10 @@ const RankingPage = () => {
       <h3 className="ranking-title">Classement</h3>
       <div className="ranking-bigcontainer">
         {auth && (
-          <div className="ranking-header">
-            <UserStatHeader ranking={users} user={currentUser} />
+          <div className="prizes-page__ranking">
+            <div className="ranking-header">
+              <UserStatHeader ranking={users} user={currentUser} />
+            </div>
           </div>
         )}
         {

@@ -18,9 +18,13 @@ export interface Game {
 
 interface GamesCardProps {
   game: Game;
+  isProfileCard?: boolean;
 }
 
-export default function GamesCard({ game }: GamesCardProps) {
+export default function GamesCard({
+  game,
+  isProfileCard = false,
+}: GamesCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const { auth } = useAuth();
 
@@ -91,7 +95,10 @@ export default function GamesCard({ game }: GamesCardProps) {
     }
   };
   return (
-    <div key={game.id} className="gamecard-content">
+    <div
+      key={game.id}
+      className={`gamecard-content ${isProfileCard ? "profile-card" : ""}`}
+    >
       <div className="gamecard-left">
         <div className="gamecard-image-container">
           <img
