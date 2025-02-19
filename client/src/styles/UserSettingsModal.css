@@ -4,23 +4,34 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  z-index: 1001;
-  padding: 20px;
+  isolation: isolate;
+  z-index: 1000;
+  animation: modalOverlayShow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: rgba(10, 10, 19, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .user-modal-content {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: #1b142b;
-  padding: 20px;
+  gap: 6px;
+  background: rgba(21, 20, 43, 0.95);
+  background-image: linear-gradient(
+      rgba(34, 24, 52, 0.8),
+      rgba(34, 24, 52, 0.8)
+    ), linear-gradient(to bottom, #281e40, #694fa6);
+  padding: 10px;
   border-radius: 15px;
   position: relative;
   width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-top: 30px;
+  transition: all 0.3s ease;
 }
 
 .user-modal-close {
@@ -35,6 +46,8 @@
 }
 
 .user-modal-title {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
   text-align: center;
   text-shadow: 0 0 10px rgba(195, 176, 234, 0.5), 0 0 20px
     rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
@@ -43,12 +56,8 @@
 .user-modal-info-value {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: white;
-}
-
-.user-modal-info-label {
-  font-style: italic;
 }
 
 .edit-icon,
@@ -73,16 +82,39 @@
   border: 1px solid #694fa6;
   border-radius: 4px;
   color: white;
-  padding: 5px;
+  padding: 8px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .user-modal-info-container {
   display: flex;
   flex-direction: column;
-  padding: 8px 12px;
-  gap: 10px;
+  padding: 12px;
+  gap: 8px;
   border: solid 2px var(--font-title-color);
   border-radius: 10px;
+}
+
+.user-modal-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-modal-info-label {
+  font-style: italic;
+  color: white;
+}
+
+.user-modal-title {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin: 6px 0 2px;
 }
 
 .user-modal-separator {
@@ -97,23 +129,47 @@
   margin: 0 auto;
 }
 
+.user-modal-container-buttons {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.user-modal-buttons-title {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: #c3b0ea;
+}
+
 .user-modal-buttons-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
+  padding-bottom: 20px;
 }
 
 .user-modal-action-button {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
   background: none;
-  border: 2px solid #694fa6;
+  border: 1px solid #694fa6;
   border-radius: 50px;
-  color: white;
+  color: #c3b0ea;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.95rem;
+  justify-content: center;
+  min-height: 36px;
+  width: 100%;
+}
+
+.user-modal-action-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .user-modal-action-button:hover {
@@ -140,4 +196,71 @@
 .user-modal-action-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .user-modal-overlay {
+    padding-top: 150px;
+  }
+
+  .user-modal-content {
+    padding: 20px;
+    gap: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 85vh;
+    min-height: 400px;
+    overflow: hidden;
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "info-title buttons-title"
+      "info buttons";
+    grid-template-columns: 1fr 280px;
+    grid-template-rows: auto auto 1fr;
+    align-items: start;
+  }
+
+  .user-modal-title {
+    grid-area: title;
+    font-size: 1.75rem;
+  }
+  .user-modal-info-container {
+    grid-area: info;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  .user-modal-info-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+
+  .user-modal-container-buttons {
+    grid-area: buttons;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 24px;
+    gap: 16px;
+    min-width: 300px;
+  }
+
+  .user-modal-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .user-modal-buttons-title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+    width: 100%;
+  }
 }

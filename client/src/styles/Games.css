@@ -130,6 +130,7 @@
   color: #c3b0ea;
   text-align: center;
   padding: 20px;
+  grid-column: 1 / -1;
 }
 
 @media screen and (min-width: 768px) {
@@ -156,6 +157,11 @@
   .games-search {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .games-no-result {
+    grid-column: 1 / -1;
+    margin: 40px 0;
   }
 
   .games-container {
