@@ -123,10 +123,7 @@
 }
 
 .auth-button.login-prize:hover {
-  background: #7504c6;
-  transform: translateY(-1px);
-}
-
-.auth-button.login-prize:active {
-  transform: translateY(0);
+  .auth-button.login-prize:hover {
+    background: #7504c6;
+  }
 }
