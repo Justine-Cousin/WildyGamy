@@ -9,10 +9,6 @@ function AppContent() {
   const { user } = useAuth();
   const isAdminPage = location.pathname.startsWith("/admin");
 
-  if (user?.is_admin && !isAdminPage && location.pathname !== "/login") {
-    return <Navigate to="/admin" replace />;
-  }
-
   if (isAdminPage) {
     if (!user) {
       return <Navigate to="/login" state={{ from: location }} replace />;
