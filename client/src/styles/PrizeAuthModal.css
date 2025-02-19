@@ -113,12 +113,20 @@
   border-color: rgba(195, 176, 234, 0.4);
 }
 
-/* Styles spécifiques pour le bouton login */
-.auth-button.login {
+.auth-button.cancel:active {
+  transform: translateY(0);
+}
+
+.auth-button.login-prize {
   background: #6403a9;
   color: #ffffff;
 }
 
-.auth-button.login:hover {
+.auth-button.login-prize:hover {
   background: #7504c6;
+  transform: translateY(-1px);
+}
+
+.auth-button.login-prize:active {
+  transform: translateY(0);
 }

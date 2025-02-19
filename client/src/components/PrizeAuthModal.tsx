@@ -36,7 +36,7 @@ const PrizeAuthModal = ({ onClose }: AuthModalProps) => {
           </button>
           <button
             type="button"
-            className="auth-button login"
+            className="auth-button login-prize"
             onClick={handleLoginClick}
           >
             Se connecter
