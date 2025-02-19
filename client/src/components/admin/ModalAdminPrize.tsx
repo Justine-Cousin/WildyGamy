@@ -2,7 +2,6 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { ModalProps, PrizeSaveData } from "../../services/types";
-import BlurredBackground from "../BlurredBackground";
 import "../../styles/admin/ModalAdmin.css";
 
 type Errors = {
@@ -136,121 +135,117 @@ const ModalAdminPrize: React.FC<ModalProps<PrizeSaveData>> = ({
   return (
     <div className="modal-overlay">
       <div className="modal-container">
-        <BlurredBackground>
-          <div className="edit-modal">
-            <h2 className="edit-modal-title">
-              {mode === "edit" ? "MODIFIER LE LOT" : "AJOUTER UN LOT"}
-            </h2>
-            <div className="edit-modal-content">
-              <div className="image-section">
-                <div className="form-group">
-                  <label htmlFor="image" className="edit-modal-label">
-                    Image du lot
-                  </label>
-                  <div className="image-input-container">
-                    <input
-                      type="file"
-                      id="image"
-                      accept="image/jpeg,image/jpg,image/png"
-                      onChange={handleFileChange}
-                      className={`edit-modal-input ${errors.image ? "input-error" : ""}`}
-                      disabled={isLoading}
-                    />
-                  </div>
-                  {errors.image && (
-                    <span className="error-message">{errors.image}</span>
-                  )}
+        <div className="edit-modal">
+          <h2 className="edit-modal-title">
+            {mode === "edit" ? "MODIFIER LE LOT" : "AJOUTER UN LOT"}
+          </h2>
+          <div className="edit-modal-content">
+            <div className="image-section">
+              <div className="form-group">
+                <label htmlFor="image" className="edit-modal-label">
+                  Image du lot
+                </label>
+                <div className="image-input-container">
+                  <input
+                    type="file"
+                    id="image"
+                    accept="image/jpeg,image/jpg,image/png"
+                    onChange={handleFileChange}
+                    className={`edit-modal-input ${errors.image ? "input-error" : ""}`}
+                    disabled={isLoading}
+                  />
                 </div>
-                <div className="image-preview">
-                  {previewUrl ? (
-                    <>
-                      <img
-                        src={previewUrl}
-                        className="image-prize-modal"
-                        alt="Prévisualisation"
-                      />
-                    </>
-                  ) : (
-                    <div className="no-image">Aperçu de l'image</div>
-                  )}
-                </div>
+                {errors.image && (
+                  <span className="error-message">{errors.image}</span>
+                )}
               </div>
-
-              <div className="form-section">
-                <div className="form-group">
-                  <label htmlFor="name" className="edit-modal-label">
-                    Nom <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
-                    disabled={isLoading}
-                  />
-                  {errors.name && (
-                    <span className="error-message">{errors.name}</span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="description" className="edit-modal-label">
-                    Description <span className="required">*</span>
-                  </label>
-                  <textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
-                    disabled={isLoading}
-                  />
-                  {errors.description && (
-                    <span className="error-message">{errors.description}</span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="exchange_price" className="edit-modal-label">
-                    Prix d'échange <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="exchange_price"
-                    value={exchange_price}
-                    onChange={(e) => setExchangePrice(e.target.value)}
-                    className={`edit-modal-input ${errors.exchange_price ? "input-error" : ""}`}
-                    disabled={isLoading}
-                  />
-                  {errors.exchange_price && (
-                    <span className="error-message">
-                      {errors.exchange_price}
-                    </span>
-                  )}
-                </div>
+              <div className="image-preview">
+                {previewUrl ? (
+                  <>
+                    <img
+                      src={previewUrl}
+                      className="image-prize-modal"
+                      alt="Prévisualisation"
+                    />
+                  </>
+                ) : (
+                  <div className="no-image">Aperçu de l'image</div>
+                )}
               </div>
             </div>
 
-            <div className="edit-modal-buttons">
-              <button
-                type="button"
-                onClick={handleSave}
-                className="edit-modal-save"
-                disabled={isLoading}
-              >
-                {isLoading ? "Enregistrement..." : "Enregistrer"}
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                className="edit-modal-cancel"
-                disabled={isLoading}
-              >
-                Annuler
-              </button>
+            <div className="form-section">
+              <div className="form-group">
+                <label htmlFor="name" className="edit-modal-label">
+                  Nom <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className={`edit-modal-input ${errors.name ? "input-error" : ""}`}
+                  disabled={isLoading}
+                />
+                {errors.name && (
+                  <span className="error-message">{errors.name}</span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="description" className="edit-modal-label">
+                  Description <span className="required">*</span>
+                </label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className={`edit-modal-textarea ${errors.description ? "input-error" : ""}`}
+                  disabled={isLoading}
+                />
+                {errors.description && (
+                  <span className="error-message">{errors.description}</span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="exchange_price" className="edit-modal-label">
+                  Prix d'échange <span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="exchange_price"
+                  value={exchange_price}
+                  onChange={(e) => setExchangePrice(e.target.value)}
+                  className={`edit-modal-input ${errors.exchange_price ? "input-error" : ""}`}
+                  disabled={isLoading}
+                />
+                {errors.exchange_price && (
+                  <span className="error-message">{errors.exchange_price}</span>
+                )}
+              </div>
             </div>
           </div>
-        </BlurredBackground>
+
+          <div className="edit-modal-buttons">
+            <button
+              type="button"
+              onClick={handleSave}
+              className="edit-modal-save"
+              disabled={isLoading}
+            >
+              {isLoading ? "Enregistrement..." : "Enregistrer"}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="edit-modal-cancel"
+              disabled={isLoading}
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

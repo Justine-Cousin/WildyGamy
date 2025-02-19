@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import { AuthProvider } from "./services/authContext";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const location = useLocation();

@@ -22,6 +22,26 @@ body {
   font-style: normal;
   --font-title-size: 28px;
   --font-title-color: #c3b0ea;
+  --scrollbar-width: 8px;
+  --scrollbar-track-color: rgba(34, 24, 52, 0.8);
+  --scrollbar-thumb-color: #9001f5;
+  --scrollbar-thumb-hover-color: #6403a9;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
 }
 
 .phosphate-text {

@@ -7,8 +7,9 @@ import arrowGameOnline from "../assets/images/room-arrow-gameonline.svg";
 import roomImage from "../assets/images/room-image.jpg";
 import imageOnline from "../assets/images/room-snake-image.png";
 import roomArrow from "../assets/images/room_arrow.svg";
-import InfoModal from "../components/InfoModal";
 import type { Game } from "../services/types";
+import "react-toastify/dist/ReactToastify.css";
+import { toastError, toastSuccess } from "../services/toast";
 
 function RoomDescription() {
   return (
@@ -206,12 +207,6 @@ function RoomForm() {
     subject: "",
     message: "",
   });
-  const [modalConfig, setModalConfig] = useState<{
-    title: string;
-    message: string;
-    onClick: () => void;
-  } | null>(null);
-
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (
@@ -261,23 +256,10 @@ function RoomForm() {
       if (!response.ok) throw new Error("Une erreur lors de l'envoi");
 
       setErrors({});
-      setModalConfig({
-        title: "Message envoyé",
-        message: "Formulaire envoyé avec succès !",
-        onClick: () => {
-          setModalConfig(null);
-        },
-      });
-
+      toastSuccess("Formulaire envoyé avec succès !");
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
-      setModalConfig({
-        title: "Erreur",
-        message: "Une erreur est survenue",
-        onClick: () => {
-          setModalConfig(null);
-        },
-      });
+      toastError("Une erreur est survenue");
     }
   };
 
@@ -361,14 +343,6 @@ function RoomForm() {
           <strong>Envoyer</strong>
         </button>
       </form>
-      {modalConfig && (
-        <InfoModal
-          title={modalConfig.title}
-          message={modalConfig.message}
-          visible={true}
-          onClose={modalConfig.onClick}
-        />
-      )}
     </div>
   );
 }

@@ -250,6 +250,7 @@ body.modal-open .prize-card:hover {
     );
     opacity: 0;
     transition: opacity 0.3s ease;
+    cursor: pointer;
   }
 
   .prize-card:hover::before {
