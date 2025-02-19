@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteConfirmModal from "../components/DeleteAccountConfirmModal";
 import { useAuth } from "../services/authContext";
+import { toastSuccess } from "../services/toast";
 import type { User } from "../services/types";
 import ChangePasswordModal from "./ChangePasswordModal";
 
@@ -137,6 +138,7 @@ export default function UserSettingsModal({
   const handleConfirmLogout = () => {
     setAuth(null);
     onClose();
+    toastSuccess("À  bientôt !");
     navigate("/login");
   };
 
