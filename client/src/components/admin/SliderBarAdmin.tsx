@@ -182,7 +182,7 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
         <span
           className={`menu-item-text ${!isOpen && "menu-item-text-hidden"}`}
         >
-          Vue visiteur
+          Vue Utilisateur
         </span>
       </button>
 
