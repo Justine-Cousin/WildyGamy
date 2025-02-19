@@ -196,14 +196,23 @@ export default function UserProfile() {
               <div className="user-profile-stats-bar">
                 <div className="user-profile-stats-total-points">
                   <Crown className="user-profile-total-points-icon" />
+                  <span className="user-profile-point-text">
+                    Points totaux : {""}
+                  </span>
                   <p>{userProfile ? userProfile.total_points : 0}</p>
                 </div>
                 <div className="user-profile-stats-rank">
                   <Trophy className="user-profile-trophy-icon" />
+                  <span className="user-profile-point-text">
+                    Classement : {""}
+                  </span>
                   <p>{userRanking}</p>
                 </div>
                 <div className="user-profile-stats-actual-points">
                   <Tickets className="user-profile-actual-points-icon" />
+                  <span className="user-profile-point-text">
+                    Crédits : {""}
+                  </span>
                   <p>{userProfile ? userProfile.current_points : 0}</p>
                 </div>
               </div>
