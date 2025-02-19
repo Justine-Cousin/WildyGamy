@@ -122,8 +122,9 @@
   transition: transform 0.1s;
 }
 
+/* Media Query pour tablettes (768-850px) - Cartes normales */
 @media screen and (min-width: 768px) and (max-width: 850px) {
-  .gamecard-content {
+  .gamecard-content:not(.profile-card) {
     flex-direction: row;
     padding: 15px;
     height: 200px;
@@ -133,17 +134,17 @@
     overflow: hidden;
   }
 
-  .gamecard-left {
+  .gamecard-content:not(.profile-card) .gamecard-left {
     width: 100%;
   }
 
-  .gamecard-right {
+  .gamecard-content:not(.profile-card) .gamecard-right {
     width: 100%;
     padding-left: 0;
     padding-right: 0;
   }
 
-  .gamecard-description {
+  .gamecard-content:not(.profile-card) .gamecard-description {
     flex: 1;
     padding-top: 25px;
     font-size: 12px;
@@ -154,7 +155,7 @@
     scrollbar-width: none;
   }
 
-  .gamecard-price-container {
+  .gamecard-content:not(.profile-card) .gamecard-price-container {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -168,15 +169,62 @@
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
   }
 
-  .gamecard-heart {
+  .gamecard-content:not(.profile-card) .gamecard-heart {
     position: absolute;
     top: 10px;
     right: 10px;
   }
 }
 
+/* Media Query pour cartes de profil (585px et plus) */
+@media screen and (min-width: 585px) {
+  .gamecard-content.profile-card {
+    flex-direction: column;
+    padding: 20px;
+    width: 300px;
+    height: 180px;
+    min-height: unset;
+  }
+
+  .gamecard-content.profile-card .gamecard-left {
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+
+  .gamecard-content.profile-card .gamecard-image {
+    height: 40px;
+    width: auto;
+    max-width: 150px;
+  }
+
+  .gamecard-content.profile-card .gamecard-right {
+    width: 100%;
+    padding: 0;
+  }
+
+  .gamecard-content.profile-card .gamecard-description {
+    font-size: 14px;
+    line-height: 1.2;
+    margin-top: 10px;
+  }
+
+  .gamecard-content.profile-card .gamecard-price-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .gamecard-content.profile-card .gamecard-heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* Media Query pour desktop (851px et plus) - Cartes normales */
 @media screen and (min-width: 851px) {
-  .gamecard-content {
+  .gamecard-content:not(.profile-card) {
     flex-direction: row;
     padding: 15px;
     height: 200px;
@@ -186,23 +234,24 @@
     overflow: hidden;
   }
 
-  .gamecard-content:hover {
+  .gamecard-content:not(.profile-card):hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
     border-color: var(--font-title-color);
   }
 
-  .gamecard-left {
+  .gamecard-content:not(.profile-card) .gamecard-left {
     width: 40%;
   }
-  .gamecard-image {
+
+  .gamecard-content:not(.profile-card) .gamecard-image {
     height: auto;
     width: 100%;
     max-width: 200px;
     max-height: 100px;
   }
 
-  .gamecard-right {
+  .gamecard-content:not(.profile-card) .gamecard-right {
     width: 60%;
     display: flex;
     flex-direction: column;
@@ -211,7 +260,7 @@
     height: 100%;
   }
 
-  .gamecard-description {
+  .gamecard-content:not(.profile-card) .gamecard-description {
     flex: 1;
     font-size: 14px;
     padding-top: 10px;
@@ -221,7 +270,7 @@
     scrollbar-width: none;
   }
 
-  .gamecard-actions {
+  .gamecard-content:not(.profile-card) .gamecard-actions {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -231,14 +280,14 @@
     min-height: 40px;
   }
 
-  .gamecard-price-container {
+  .gamecard-content:not(.profile-card) .gamecard-price-container {
     position: relative;
     min-height: 40px;
     display: flex;
     align-items: center;
   }
 
-  .gamecard-heart {
+  .gamecard-content:not(.profile-card) .gamecard-heart {
     position: relative;
     max-width: fit-content;
   }
