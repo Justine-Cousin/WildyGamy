@@ -101,17 +101,17 @@
   transform: translateY(0);
 }
 
-.auth-button.login {
+.auth-button.login-prize {
   background: #6403a9;
   color: #ffffff;
   border: none;
 }
 
-.auth-button.login:hover {
+.auth-button.login-prize:hover {
   background: #7504c6;
   transform: translateY(-1px);
 }
 
-.auth-button.login:active {
+.auth-button.login-prize:active {
   transform: translateY(0);
 }
