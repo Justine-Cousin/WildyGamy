@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteConfirmModal from "../components/DeleteAccountConfirmModal";
 import { useAuth } from "../services/authContext";
+import { toastSuccess } from "../services/toast";
 import type { User } from "../services/types";
 import ChangePasswordModal from "./ChangePasswordModal";
 
@@ -137,6 +138,7 @@ export default function UserSettingsModal({
   const handleConfirmLogout = () => {
     setAuth(null);
     onClose();
+    toastSuccess("À  bientôt !");
     navigate("/login");
   };
 
@@ -358,33 +360,35 @@ export default function UserSettingsModal({
             </div>
           </div>
         </div>
-        <h3>Gérer Mon Compte</h3>
-        <div className="user-modal-buttons-container">
-          <button
-            type="button"
-            className="user-modal-action-button logout"
-            onClick={handleLogout}
-          >
-            <LogOut size={16} />
-            Me déconnecter
-          </button>
-          <button
-            type="button"
-            className="user-modal-action-button"
-            onClick={() => setIsPasswordModalOpen(true)}
-          >
-            <KeyRound size={16} />
-            Modifier mon mot de passe
-          </button>
-          <button
-            type="button"
-            className="user-modal-action-button delete"
-            onClick={handleDeleteAccount}
-            disabled={isDeleting}
-          >
-            <UserX size={16} />
-            {isDeleting ? "Suppression..." : "Supprimer mon compte"}
-          </button>
+        <div className="user-modal-container-buttons">
+          <h3 className="user-modal-buttons-title">Gérer Mon Compte</h3>
+          <div className="user-modal-buttons-container">
+            <button
+              type="button"
+              className="user-modal-action-button logout"
+              onClick={handleLogout}
+            >
+              <LogOut size={16} />
+              Me déconnecter
+            </button>
+            <button
+              type="button"
+              className="user-modal-action-button"
+              onClick={() => setIsPasswordModalOpen(true)}
+            >
+              <KeyRound size={16} />
+              Modifier mon mot de passe
+            </button>
+            <button
+              type="button"
+              className="user-modal-action-button delete"
+              onClick={handleDeleteAccount}
+              disabled={isDeleting}
+            >
+              <UserX size={16} />
+              {isDeleting ? "Suppression..." : "Supprimer mon compte"}
+            </button>
+          </div>
         </div>
       </div>
       <ChangePasswordModal

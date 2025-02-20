@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ResetPasswordModal from "../components/ResetPasswordModal";
 import { useAuth } from "../services/authContext";
+import { toastError } from "../services/toast";
 import BlurredBackground from "./BlurredBackground";
 import ContactModal from "./ContactModal";
 import "../styles/LoginForm.css";
@@ -71,12 +72,12 @@ export default function LoginForm({ resetToken }: LoginFormProps) {
           });
         }, 100);
       } else {
-        setError(data.error || "Identifiants invalides");
+        toastError(data.error || "Identifiants invalides");
         setIsLoading(false);
       }
     } catch (err) {
       console.error("Erreur de connexion:", err);
-      setError("Une erreur est survenue lors de la connexion");
+      toastError("Une erreur est survenue lors de la connexion");
       setIsLoading(false);
     }
   };

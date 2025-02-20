@@ -196,6 +196,10 @@
   width: 90%;
 }
 
+.user-stat-header-text-desktop {
+  display: none;
+}
+
 .ranking-userpoints {
   color: #c3b0ea;
   font-weight: 600;
@@ -300,5 +304,24 @@
 
   .footer-links {
     z-index: 0;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .user-stat-header-text-desktop {
+    display: block;
+  }
+
+  .ranking-userinfo {
+    width: 85%;
+  }
+
+  .ranking-header {
+    max-width: 800px;
+    margin-bottom: 30px;
+  }
+
+  .prizes-page__ranking {
+    max-width: 800px;
   }
 }

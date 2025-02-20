@@ -4,11 +4,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(27, 20, 43, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  background-color: rgba(10, 10, 19, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-container {
@@ -19,6 +21,7 @@
   border: 2px solid transparent;
   padding: 24px;
   overflow-y: auto;
+  background: #1b142b;
 }
 
 .modal-container::-webkit-scrollbar {

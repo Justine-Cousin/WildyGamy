@@ -165,42 +165,57 @@ export default function UserProfile() {
             className="user-profile-page-settings-icon"
             onClick={toggleModal}
           />
-          <div className="user-profile-avatar-wrapper">
-            <img
-              className="user-profile-avatar"
-              src={userProfile?.profile_pic}
-              alt="Avatar"
-            />
-            <label className="upload-icon" htmlFor="profile-pic-upload">
-              <Upload size={16} />
-              <input
-                id="profile-pic-upload"
-                type="file"
-                accept="image/jpeg,image/png,image/jpg"
-                onChange={handleProfilePicChange}
-                style={{ display: "none" }}
+          <div className="user-profile-info-card-header">
+            <div className="user-profile-avatar-wrapper">
+              <img
+                className="user-profile-avatar"
+                src={userProfile?.profile_pic}
+                alt="Avatar"
               />
-            </label>
-            {isUploading && (
-              <span className="upload-status">Chargement...</span>
-            )}
-            {uploadError && <span className="upload-error">{uploadError}</span>}
-          </div>
-          <h2 className="h2-welcome-message">
-            Bonjour {userProfile ? userProfile.username : ""}
-          </h2>
-          <div className="user-profile-stats-bar">
-            <div className="user-profile-stats-total-points">
-              <Crown className="user-profile-total-points-icon" />
-              <p>{userProfile ? userProfile.total_points : 0}</p>
+              <label className="upload-icon" htmlFor="profile-pic-upload">
+                <Upload size={16} />
+                <input
+                  id="profile-pic-upload"
+                  type="file"
+                  accept="image/jpeg,image/png,image/jpg"
+                  onChange={handleProfilePicChange}
+                  style={{ display: "none" }}
+                />
+              </label>
+              {isUploading && (
+                <span className="upload-status">Chargement...</span>
+              )}
+              {uploadError && (
+                <span className="upload-error">{uploadError}</span>
+              )}
             </div>
-            <div className="user-profile-stats-rank">
-              <Trophy className="user-profile-trophy-icon" />
-              <p>{userRanking}</p>
-            </div>
-            <div className="user-profile-stats-actual-points">
-              <Tickets className="user-profile-actual-points-icon" />
-              <p>{userProfile ? userProfile.current_points : 0}</p>
+            <div className="user-profile-info">
+              <h2 className="h2-welcome-message">
+                Bonjour {userProfile ? userProfile.username : ""} !
+              </h2>
+              <div className="user-profile-stats-bar">
+                <div className="user-profile-stats-total-points">
+                  <Crown className="user-profile-total-points-icon" />
+                  <span className="user-profile-point-text">
+                    Points totaux : {""}
+                  </span>
+                  <p>{userProfile ? userProfile.total_points : 0}</p>
+                </div>
+                <div className="user-profile-stats-rank">
+                  <Trophy className="user-profile-trophy-icon" />
+                  <span className="user-profile-point-text">
+                    Classement : {""}
+                  </span>
+                  <p>{userRanking}</p>
+                </div>
+                <div className="user-profile-stats-actual-points">
+                  <Tickets className="user-profile-actual-points-icon" />
+                  <span className="user-profile-point-text">
+                    Crédits : {""}
+                  </span>
+                  <p>{userProfile ? userProfile.current_points : 0}</p>
+                </div>
+              </div>
             </div>
           </div>
           <div className="user-profile-button-container">
@@ -226,7 +241,7 @@ export default function UserProfile() {
             </button>
           </div>
         </div>
-        <p className="user-profile-page-title">MES FAVORIS</p>
+        <p className="user-profile-page-subtitle">MES FAVORIS</p>
         {favorites.length > 0 ? (
           <div className="user-profile-page-favorites-container">
             {favorites.map((game) => (
@@ -239,6 +254,7 @@ export default function UserProfile() {
                   description: game.description || "",
                   name: game.name,
                 }}
+                isProfileCard={true}
               />
             ))}
           </div>
@@ -247,7 +263,7 @@ export default function UserProfile() {
             Aucun favori ajouté
           </p>
         )}
-        <p className="user-profile-page-title">MES RÉCOMPENSES</p>
+        <p className="user-profile-page-subtitle">MES RÉCOMPENSES</p>
         {prizeAcquired.length > 0 ? (
           <div className="user-profile-page-prizes-container">
             {prizeAcquired.map((prize) => (
