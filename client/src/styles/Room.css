@@ -197,7 +197,7 @@
 /*JEUX EN LIGNE*/
 .room-arrow-gameonline {
   height: 100%;
-  width: 14%;
+  width: 10%;
   z-index: 12;
 }
 
@@ -363,7 +363,7 @@ textarea::placeholder {
   border: none;
   cursor: pointer;
   margin-top: 20px;
-  box-shadow: 0 0 15px rgba(144, 1, 245, 0.5);
+  box-shadow: #c3b0ea 0 0 15px;
 }
 
 .error {
@@ -401,7 +401,11 @@ textarea::placeholder {
 @media (min-width: 768px) {
   .room-fullpage {
     margin: 0 auto;
-    padding: 0 60px;
+    padding: 0 100px;
+  }
+
+  .room-page {
+    padding-bottom: 0;
   }
 
   /* Header section */
@@ -413,7 +417,7 @@ textarea::placeholder {
     font-size: 4rem;
     text-align: left;
     line-height: 1.2;
-    padding-top: 150px;
+    padding-top: 190px;
     display: flex;
     align-items: flex-start;
     padding-left: 60px;
@@ -425,8 +429,18 @@ textarea::placeholder {
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    margin: 0 60px 50px 60px;
+    margin: 0 0 50px 0;
     overflow: hidden;
+    background: linear-gradient(
+      to right,
+      rgba(100, 3, 169, 1),
+      rgba(100, 3, 169, 1),
+      rgba(100, 3, 169, 1),
+      rgba(100, 3, 169, 1),
+      rgba(100, 3, 169, 1),
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0)
+    );
   }
 
   .room-image {
@@ -437,19 +451,26 @@ textarea::placeholder {
   }
 
   .room-bigcontainer {
-    width: 50%;
-    position: relative;
-    background: #6403a9;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: linear-gradient(
+      to right,
+      rgba(100, 3, 169, 1),
+      rgba(100, 3, 169, 1),
+      rgba(255, 255, 255, 0)
+    );
     border-radius: 0 15px 15px 0;
+    z-index: 100000;
   }
 
   .room-title-history {
     font-size: 1rem;
   }
   .room-text {
-    font-size: 14px;
-    padding: 30px;
-    position: relative;
+    font-size: 16px;
+    padding: 40px;
+    position: absolute;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -458,6 +479,9 @@ textarea::placeholder {
     word-wrap: break-word;
     overflow-y: auto;
     box-sizing: border-box;
+    z-index: 1100;
+    width: 50%;
+    text-align: left;
   }
 
   .room-adress {
@@ -563,7 +587,7 @@ textarea::placeholder {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    width: 50px;
+    width: 12%;
     height: auto;
   }
 
