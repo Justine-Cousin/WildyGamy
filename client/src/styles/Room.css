@@ -469,7 +469,6 @@ textarea::placeholder {
   }
   .room-text {
     font-size: 14px;
-    /*padding: 40px;*/
     position: absolute;
     height: 100%;
     display: flex;
