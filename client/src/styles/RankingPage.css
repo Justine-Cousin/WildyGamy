@@ -9,6 +9,10 @@
   padding: 20px 20px 100px 20px;
 }
 
+.ranking-background-image {
+  display: none;
+}
+
 .ranking-title {
   font-size: 8vw;
   color: #c3b0ea;
@@ -20,7 +24,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 20px;
 }
 
 .ranking-bigcontainer {
@@ -246,6 +249,62 @@
 .ranking-item-neon .ranking-totalpoints {
   color: white;
   text-shadow: 0 0 5px #c3b0ea, 0 0 10px #c3b0ea;
+}
+
+@media (min-width: 768px) {
+  .ranking-page {
+    margin: 0 auto;
+    padding: 40px 60px 0 160px;
+    position: relative;
+  }
+
+  .ranking-logo {
+    display: none;
+  }
+
+  .ranking-title {
+    font-size: 4rem;
+    line-height: 1.2;
+    padding-top: 150px;
+    width: 100%;
+    align-items: flex-start;
+    z-index: 1;
+    position: relative;
+  }
+
+  .ranking-background-image {
+    display: block;
+    width: 100%;
+    height: 200vh;
+    max-height: 110%;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    top: 120px;
+    bottom: 0;
+    z-index: 0;
+    filter: brightness(35%) blur(1px);
+  }
+
+  .ranking-bigcontainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: transparent;
+  }
+
+  .ranking-background-right {
+    width: 50%;
+  }
+
+  .ranking-header,
+  .ranking-container {
+    width: 100%;
+  }
+
+  .footer-links {
+    z-index: 0;
+  }
 }
 
 @media screen and (min-width: 768px) {
