@@ -17,6 +17,7 @@ import { useState } from "react";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import type { Game, Prize, User } from "../../services/types";
 import "../../styles/admin/AdminCommon.css";
+import AlertModalAdmin from "../AlertModal";
 
 interface AdminItemGridProps<T> {
   id: number;
@@ -70,20 +71,80 @@ const AdminItemGrid = <T extends Game | Prize | User>({
   const [isAvailable, setIsAvailable] = useState(
     (item as Game | Prize)?.is_available ?? true,
   );
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
+
   if (!item) return null;
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (
-      window.confirm(
-        `🎮 Suppression de ${
-          type === "game" ? "jeu" : "lot"
-        } - Cette action est irréversible. Confirmer ?`,
-      )
-    ) {
-      onDelete?.(id);
-    }
+    setModalConfig({
+      title: "Confirmation de suppression",
+      message: `🎮 Suppression de ${type === "game" ? "jeu" : "lot"} - Cette action est irréversible. Confirmer ?`,
+      onConfirm: () => onDelete?.(id),
+    });
+    setIsAlertVisible(true);
+  };
+
+  const handleBan = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setModalConfig({
+      title: "Confirmation de bannissement",
+      message: isBanned
+        ? "🔓 Êtes-vous sûr de vouloir débannir cet utilisateur ?"
+        : "🚫 Êtes-vous sûr de vouloir bannir cet utilisateur ?",
+      onConfirm: () => onBan?.(id),
+    });
+    setIsAlertVisible(true);
+  };
+
+  const handleAdmin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setModalConfig({
+      title: "Confirmation des droits administrateur",
+      message: isAdmin
+        ? "🔓 Êtes-vous sûr de vouloir retirer les droits d'administrateur à cet utilisateur ?"
+        : "🚫 Êtes-vous sûr de vouloir donner les droits d'administrateur à cet utilisateur ?",
+      onConfirm: () => onAdmin?.(id),
+    });
+    setIsAlertVisible(true);
+  };
+
+  const handleNew = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setModalConfig({
+      title: "Confirmation du statut nouveau",
+      message: isNew
+        ? "🎪 Le show est terminé, on retire l'étiquette nouveau ?"
+        : "✨ Hop hop hop ! On met ce jeu sous les projecteurs ?",
+      onConfirm: () => onNew?.(id),
+    });
+    setIsAlertVisible(true);
+  };
+
+  const handleAvailabilityChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const newAvailability = !isAvailable;
+    setModalConfig({
+      title: "Confirmation de visibilité",
+      message: newAvailability
+        ? "Voulez-vous rendre cet élément visible ?"
+        : "Voulez-vous masquer cet élément ?",
+      onConfirm: () => {
+        setIsAvailable(newAvailability);
+        onAvailabilityChange?.(id, newAvailability);
+      },
+    });
+    setIsAlertVisible(true);
   };
 
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,223 +155,220 @@ const AdminItemGrid = <T extends Game | Prize | User>({
     }
   };
 
-  const handleAvailabilityChange = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const newAvailability = !isAvailable;
-    setIsAvailable(newAvailability);
-    if (onAvailabilityChange) {
-      onAvailabilityChange(id, newAvailability);
-    }
+  const handleCloseModal = () => {
+    setIsAlertVisible(false);
+    setModalConfig(null);
   };
 
-  const handleBan = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const message = isBanned
-      ? "🔓 Êtes-vous sûr de vouloir débannir cet utilisateur ?"
-      : "🚫 Êtes-vous sûr de vouloir bannir cet utilisateur ?";
-    if (window.confirm(message)) {
-      onBan?.(id);
-    }
-  };
-
-  const handleAdmin = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const message = isAdmin
-      ? "🔓 Êtes-vous sûr de vouloir retirer les droits d'administrateur à cet utilisateur ?"
-      : "🚫 Êtes-vous sûr de vouloir donner les droits d'administrateur à cet utilisateur ?";
-    if (window.confirm(message)) {
-      onAdmin?.(id);
-    }
-  };
-
-  const handleNew = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const message = isNew
-      ? "🎪 Le show est terminé, on retire l'étiquette nouveau ?"
-      : "✨ Hop hop hop ! On met ce jeu sous les projecteurs ?";
-    if (window.confirm(message) && onNew) {
-      onNew(id);
-    }
-  };
-
-  if (type === "user") {
+  // Render function for User type
+  const renderUser = () => {
     return (
-      <div
-        className={`admincard-content ${
-          isBanned
-            ? "admincard-content-unavailable-user"
-            : "admincard-content-available-user"
-        } ${isAdmin ? "is-admin" : ""}`}
-      >
-        <div className="admincard-content-info-user">
-          <img
-            className="profile_pic"
-            src={(item as User).profile_pic || logoWG}
-            alt={item.name}
-          />
-          <div className="adminCard-info">
-            <h3 className="adminCard-name">
-              {(item as User).firstname} {item.name}
-            </h3>
+      <>
+        <div
+          className={`admincard-content ${
+            isBanned
+              ? "admincard-content-unavailable-user"
+              : "admincard-content-available-user"
+          } ${isAdmin ? "is-admin" : ""}`}
+        >
+          <div className="admincard-content-info-user">
+            <img
+              className="profile_pic"
+              src={(item as User).profile_pic || logoWG}
+              alt={item.name}
+            />
+            <div className="adminCard-info">
+              <h3 className="adminCard-name">
+                {(item as User).firstname} {item.name}
+              </h3>
 
-            <div className="adminCard-user-info">
-              <div className="adminCard-username">
-                <CircleUser className="username-icone" size={15} />
-                <span>{(item as User).username}</span>
-              </div>
-              <div className="adminCard-phone">
-                <Phone className="phone-icone" size={15} />
-                <span>{(item as User).phone_number || "Non renseigné"}</span>
+              <div className="adminCard-user-info">
+                <div className="adminCard-username">
+                  <CircleUser className="username-icone" size={15} />
+                  <span>{(item as User).username}</span>
+                </div>
+                <div className="adminCard-phone">
+                  <Phone className="phone-icone" size={15} />
+                  <span>{(item as User).phone_number || "Non renseigné"}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="adminCard-points">
-          <div className="adminCard-points-user">
-            <span>{(item as User).total_points}</span>
-            <Crown size={16} />
+          <div className="adminCard-points">
+            <div className="adminCard-points-user">
+              <span>{(item as User).total_points}</span>
+              <Crown size={16} />
+            </div>
+            <div className="adminCard-currentpoint-user">
+              <span>{(item as User).current_points}</span>
+              <Tickets size={16} />
+            </div>
           </div>
-          <div className="adminCard-currentpoint-user">
-            <span>{(item as User).current_points}</span>
-            <Tickets size={16} />
-          </div>
-        </div>
 
-        <div className="admincard-buttons-user">
-          {onBan && (
-            <button
-              type="button"
-              className="admincard-button"
-              onClick={handleBan}
-              title={
-                isBanned ? "Débannir l'utilisateur" : "Bannir l'utilisateur"
-              }
-            >
-              <Ban className={`admingrid-ban ${isBanned ? "banned" : ""}`} />
-            </button>
-          )}
-          {onEdit && (
-            <button
-              type="button"
-              className="admincard-button edit-button"
-              onClick={handleEdit}
-              title="Modifier"
-            >
-              <PencilLine className="admingrid-pencil" />
-            </button>
-          )}
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isAdmin}
-                  name="isAdmin"
-                  onChange={handleAdmin}
-                  color="secondary"
-                />
-              }
-              label="Admin"
-            />
-          </FormGroup>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`admincard-content ${type === "prize" ? "prizecard-content" : ""} ${
-        !isAvailable
-          ? "admincard-content-unavailable"
-          : "admincard-content-available"
-      }`}
-    >
-      <div
-        className={
-          type === "game" ? "admincard-content-info" : "admincard-content-info"
-        }
-      >
-        <img
-          className={type === "game" ? "gamecard-image" : "pricecard-img"}
-          src={"image" in item ? item.image || logoWG : logoWG}
-          alt={item.name}
-        />
-        <div className="adminCard-info">
-          <h3 className="adminCard-name">{item.name}</h3>
-        </div>
-      </div>
-
-      <div className="adminCard-prices">
-        {type === "game" ? (
-          <div className="adminCard-prices-game">
-            <span>{(item as Game).price}</span>
-            <Coins size={16} />
-          </div>
-        ) : (
-          <div className="adminCard-prices-prize">
-            <span>{(item as Prize).exchange_price}</span>
-            <Tickets size={16} />
-          </div>
-        )}
-      </div>
-
-      <div className="admincard-buttons">
-        {type === "game" && onNew && (
-          <button
-            type="button"
-            className="admincard-button"
-            onClick={handleNew}
-            title={isNew ? "Retirer le tag nouveau" : "Mettre en avant"}
-          >
-            <Sparkles
-              className={
-                isNew ? "admingrid-sparkles-new" : "admingrid-sparkles"
-              }
-            />
-          </button>
-        )}
-        {onAvailabilityChange && (
-          <button
-            type="button"
-            onClick={handleAvailabilityChange}
-            className="admincard-button"
-            title={isAvailable ? "Rendre invisible" : "Rendre visible"}
-          >
-            {isAvailable ? (
-              <Eye className="admingrid-eye" />
-            ) : (
-              <EyeClosed className="admingrid-eye" />
+          <div className="admincard-buttons-user">
+            {onBan && (
+              <button
+                type="button"
+                className="admincard-button"
+                onClick={handleBan}
+                title={
+                  isBanned ? "Débannir l'utilisateur" : "Bannir l'utilisateur"
+                }
+              >
+                <Ban className={`admingrid-ban ${isBanned ? "banned" : ""}`} />
+              </button>
             )}
-          </button>
-        )}
-        {onEdit && (
-          <button
-            type="button"
-            className="admincard-button edit-button"
-            onClick={handleEdit}
-            title="Modifier"
+            {onEdit && (
+              <button
+                type="button"
+                className="admincard-button edit-button"
+                onClick={handleEdit}
+                title="Modifier"
+              >
+                <PencilLine className="admingrid-pencil" />
+              </button>
+            )}
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isAdmin}
+                    name="isAdmin"
+                    onChange={handleAdmin}
+                    color="secondary"
+                  />
+                }
+                label="Admin"
+              />
+            </FormGroup>
+          </div>
+        </div>
+
+        <AlertModalAdmin
+          visible={isAlertVisible}
+          title={modalConfig?.title || ""}
+          message={modalConfig?.message || ""}
+          onConfirm={() => {
+            modalConfig?.onConfirm();
+            handleCloseModal();
+          }}
+          onClose={handleCloseModal}
+        />
+      </>
+    );
+  };
+
+  // Render function for Game/Prize type
+  const renderGameOrPrize = () => {
+    return (
+      <>
+        <div
+          className={`admincard-content ${type === "prize" ? "prizecard-content" : ""} ${
+            !isAvailable
+              ? "admincard-content-unavailable"
+              : "admincard-content-available"
+          }`}
+        >
+          <div
+            className={
+              type === "game"
+                ? "admincard-content-info"
+                : "admincard-content-info"
+            }
           >
-            <PencilLine className="admingrid-pencil" />
-          </button>
-        )}
-        {onDelete && (
-          <button
-            type="button"
-            className="admincard-button trash-button"
-            onClick={handleDelete}
-            title="Supprimer"
-          >
-            <Trash2 className="admingrid-trash" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
+            <img
+              className={type === "game" ? "gamecard-image" : "pricecard-img"}
+              src={"image" in item ? item.image || logoWG : logoWG}
+              alt={item.name}
+            />
+            <div className="adminCard-info">
+              <h3 className="adminCard-name">{item.name}</h3>
+            </div>
+          </div>
+
+          <div className="adminCard-prices">
+            {type === "game" ? (
+              <div className="adminCard-prices-game">
+                <span>{(item as Game).price}</span>
+                <Coins size={16} />
+              </div>
+            ) : (
+              <div className="adminCard-prices-prize">
+                <span>{(item as Prize).exchange_price}</span>
+                <Tickets size={16} />
+              </div>
+            )}
+          </div>
+
+          <div className="admincard-buttons">
+            {type === "game" && onNew && (
+              <button
+                type="button"
+                className="admincard-button"
+                onClick={handleNew}
+                title={isNew ? "Retirer le tag nouveau" : "Mettre en avant"}
+              >
+                <Sparkles
+                  className={
+                    isNew ? "admingrid-sparkles-new" : "admingrid-sparkles"
+                  }
+                />
+              </button>
+            )}
+            {onAvailabilityChange && (
+              <button
+                type="button"
+                onClick={handleAvailabilityChange}
+                className="admincard-button"
+                title={isAvailable ? "Rendre invisible" : "Rendre visible"}
+              >
+                {isAvailable ? (
+                  <Eye className="admingrid-eye" />
+                ) : (
+                  <EyeClosed className="admingrid-eye" />
+                )}
+              </button>
+            )}
+            {onEdit && (
+              <button
+                type="button"
+                className="admincard-button edit-button"
+                onClick={handleEdit}
+                title="Modifier"
+              >
+                <PencilLine className="admingrid-pencil" />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                type="button"
+                className="admincard-button trash-button"
+                onClick={handleDelete}
+                title="Supprimer"
+              >
+                <Trash2 className="admingrid-trash" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <AlertModalAdmin
+          visible={isAlertVisible}
+          title={modalConfig?.title || ""}
+          message={modalConfig?.message || ""}
+          onConfirm={() => {
+            modalConfig?.onConfirm();
+            handleCloseModal();
+          }}
+          onClose={handleCloseModal}
+        />
+      </>
+    );
+  };
+
+  // Main render
+  return type === "user" ? renderUser() : renderGameOrPrize();
 };
 
 export default AdminItemGrid;

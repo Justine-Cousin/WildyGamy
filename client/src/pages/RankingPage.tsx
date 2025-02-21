@@ -1,6 +1,7 @@
 import "../styles/RankingPage.css";
 import { useEffect, useState } from "react";
 import logoWG from "../assets/images/logo_wildy_gamy.png";
+import rankBackground from "../assets/images/rankingimgage.jpg";
 import Ranking from "../components/Ranking";
 import UserStatHeader from "../components/UserStatHeader";
 import { useAuth } from "../services/authContext";
@@ -95,29 +96,38 @@ const RankingPage = () => {
   return (
     <div className="ranking-page">
       <img className="ranking-logo" src={logoWG} alt="Logo" />
-      <h3 className="ranking-title">Mon Classement</h3>
-      <div className="ranking-bigcontainer">
-        {auth && (
-          <div className="ranking-header">
-            <UserStatHeader ranking={users} user={currentUser} />
-          </div>
-        )}
-        {
-          <div className="ranking-container">
-            <div className="ranking-content">
-              {users.map((user, index) => (
-                <Ranking
-                  key={user.id}
-                  user={user}
-                  position={index + 1}
-                  isCurrentUser={
-                    currentUser ? user.id === currentUser.id : false
-                  }
-                />
-              ))}
+      <h3 className="ranking-title">Classement</h3>
+      <div className="ranking-background-left">
+        <img
+          className="ranking-background-image"
+          src={rankBackground}
+          alt="Background"
+        />
+      </div>
+      <div className="ranking-background-right">
+        <div className="ranking-bigcontainer">
+          {auth && (
+            <div className="ranking-header">
+              <UserStatHeader ranking={users} user={currentUser} />
             </div>
-          </div>
-        }
+          )}
+          {
+            <div className="ranking-container">
+              <div className="ranking-content">
+                {users.map((user, index) => (
+                  <Ranking
+                    key={user.id}
+                    user={user}
+                    position={index + 1}
+                    isCurrentUser={
+                      currentUser ? user.id === currentUser.id : false
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
   );

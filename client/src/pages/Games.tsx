@@ -1,5 +1,6 @@
 import logoWG from "../assets/images/logo_wildy_gamy.png";
 import "../styles/Games.css";
+import { CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import wen from "../assets/images/wen.svg";
 import GameCard from "../components/GameCard";
@@ -88,26 +89,37 @@ const Games = () => {
   };
 
   return (
-    <div>
+    <div className="games-principal-container">
       <img className="games-logo" src={logoWG} alt="Logo" />
       <h1 className="games-title">NOS JEUX</h1>
-      <div className="search-bar-container">
-        <form
-          id="games-search-bar"
-          onSubmit={(event) => event.preventDefault()}
-        >
-          <img src={wen} alt="loupe" id="games-search-bar-img" />
-          <input
-            type="text"
-            value={valueInput}
-            onChange={(event) => {
-              setValueInput(event.target.value);
-            }}
-            placeholder="Rechercher"
-            id="game-search-input"
-          />
-        </form>
+
+      <div className="games-search">
+        <div className="search-bar-container">
+          <form
+            id="games-search-bar"
+            onSubmit={(event) => event.preventDefault()}
+          >
+            <img src={wen} alt="loupe" id="games-search-bar-img" />
+            <input
+              type="text"
+              value={valueInput}
+              onChange={(event) => setValueInput(event.target.value)}
+              placeholder="Rechercher"
+              id="game-search-input"
+            />
+            {valueInput && (
+              <button
+                type="button"
+                onClick={() => setValueInput("")}
+                className="games-search-bar-clear"
+              >
+                <CircleX size={28} />
+              </button>
+            )}
+          </form>
+        </div>
       </div>
+
       <div className="search-result">
         <div className="games-container">
           {gamesFiltered.length === 0 ? (

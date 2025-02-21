@@ -1,8 +1,24 @@
-.prize-logo {
-  width: 20%;
-  position: relative;
-  padding: 20px 0 0 20px;
+body.modal-open .prize-card:hover .prize-card__description {
+  opacity: 0;
+  pointer-events: none;
 }
+
+body.modal-open .prize-card:hover {
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
+  cursor: default !important;
+}
+
+.prize-page {
+  padding: 20px 20px 0px 20px;
+}
+
+.prize-logo {
+  width: 17%;
+  position: relative;
+}
+
 .prizes-page__title {
   font-family: var(--font-title-phosphate);
   font-weight: 400;
@@ -15,21 +31,14 @@
     rgba(195, 176, 234, 0.3), 0 0 30px rgba(195, 176, 234, 0.1);
 }
 
-.prizes-page__container {
-  width: 80%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-bottom: 150px;
-}
-
 .prizes-page__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 35px 15px 15px 15px;
+  padding: 35px 0px 150px 0px;
 }
 
 .prize-card {
@@ -47,36 +56,38 @@
     );
   background-origin: border-box;
   background-clip: content-box, border-box;
-}
-
-.prize-card:hover {
-  transform: scale(1.05);
-  border-color: rgba(142, 91, 245, 0.5);
-  box-shadow: 0 0 15px rgba(142, 91, 245, 0.3);
-  cursor: pointer !important;
-  box-shadow: 0 0 25px rgba(255, 60, 189, 0.3), inset 0 0 40px
-    rgba(139, 92, 246, 0.2);
+  width: 150px;
+  margin: 0;
 }
 
 .prize-card__content {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 0.5rem;
   width: 100%;
   height: 100%;
+  max-width: 180px;
+  max-height: 180px;
 }
 
 .prize-card__image-container {
   width: 50%;
   height: 50%;
-  display: grid;
-  place-items: center;
 }
 
 .prize-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.prize-card__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .prize-card__title {
@@ -88,16 +99,17 @@
   width: 100%;
   letter-spacing: 0.2px;
   position: absolute;
-  bottom: -23px;
+  bottom: -27px;
 }
 
 .prize-card__points {
   position: absolute;
-  bottom: 5px;
+  bottom: 8px;
   right: 5px;
   display: flex;
   align-items: center;
   gap: 4px;
+  z-index: 2;
 }
 
 .prize-card__points-value {
@@ -111,13 +123,15 @@
   align-items: center;
   justify-content: center;
   padding: 1px;
+  background-color: #1d1729;
 }
 
 .prize-coin {
   width: 2rem;
   height: 2rem;
   margin-left: -36px;
-  margin-bottom: -2.4px;
+  margin-bottom: 2px;
+  z-index: 1;
 }
 
 .prize-card__description {
@@ -145,24 +159,181 @@
   cursor: pointer !important;
 }
 
-@media (max-width: 768px) {
+.prize-card--acquired,
+.prize-card--unaffordable {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.prize-card__acquired-overlay,
+.prize-card__unaffordable-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(29, 23, 41, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 440px) and (max-width: 767px) {
   .prizes-page__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
   }
 
-  .prize-card__title {
-    font-size: 0.875rem;
-  }
-
-  .prize-card__points-value {
-    font-size: 0.75rem;
+  .prize-card {
+    width: 100%;
+    max-width: 180px;
   }
 }
 
-@media (min-width: 1024px) {
+@media screen and (min-width: 768px) {
+  .prize-page {
+    padding: 40px 60px 0 60px;
+  }
+
+  .prize-logo {
+    display: none;
+  }
+
+  .prizes-page__title {
+    font-size: 4rem;
+    text-align: left;
+    line-height: 1.2;
+    padding-top: 150px;
+  }
+
   .prizes-page__grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 20px 0 0 0;
+    max-width: 1400px;
+  }
+
+  .prize-card:not(.prize-card--view-only) {
+    aspect-ratio: auto;
+    border-radius: 20px;
+    border: none;
+    background: none;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+    width: 95%;
+    margin: 0;
+    max-width: none;
+    max-height: none;
+    padding: 20px 40px;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: none;
+    max-height: none;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .prize-card:not(.prize-card--view-only)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(172, 91, 245, 0.1) 0%,
+      rgba(255, 182, 255, 0.05) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+
+  .prize-card:not(.prize-card--view-only):hover::before {
+    opacity: 1;
+  }
+
+  .prize-card:not(.prize-card--view-only):hover .prize-card__image-container {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(172, 91, 245, 0.3);
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__image-container {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    background: #1d1729;
+    border-radius: 50%;
+    border: 1px solid rgba(172, 91, 245, 0.3);
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__info-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding-right: 20px;
+    gap: 20px;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__title {
+    position: static;
+    text-align: left;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__description {
+    position: static;
+    opacity: 1;
+    background: none;
+    padding: 0;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__description p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__points {
+    position: static;
+    background: none;
+    padding: 0;
+    border: none;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__points-value {
+    font-size: 1rem;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-coin {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: -2.5rem;
+  }
+
+  .prize-card:not(.prize-card--view-only) .prize-card__acquired-overlay,
+  .prize-card:not(.prize-card--view-only) .prize-card__unaffordable-overlay {
+    border-radius: 20px;
   }
 }

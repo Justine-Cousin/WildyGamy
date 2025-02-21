@@ -4,6 +4,18 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    z-index: 1;
+  }
+
+  .mail-icon {
+    position: fixed;
+    top: 180px;
+    right: 75px;
+    z-index: 2;
+  }
+
+  .adminhome-sidebar {
+    z-index: 2;
   }
 
   .admingrid-card-user {
@@ -36,7 +48,6 @@
     top: 0;
     right: 0;
     padding: 20px;
-    z-index: 1000;
   }
 
   .admingames-content,
@@ -48,8 +59,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    position: relative;
-    z-index: 1;
+    padding-bottom: calc(70px + 40px + 2rem);
   }
 
   .main-content {
@@ -108,10 +118,10 @@
   }
 
   .adminCard-name {
-    font-size: 1.2rem;
+    font-size: 1.4vw;
     color: #f3f4f6;
     white-space: nowrap;
-    padding-left: 20px;
+    padding: 0 20px 0 20px;
   }
 
   /* prix */
@@ -119,7 +129,6 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;

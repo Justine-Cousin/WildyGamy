@@ -2,8 +2,11 @@ import "../styles/UserSettingsModal.css";
 import { KeyRound, LogOut, Pencil, Save, UserX, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DeleteConfirmModal from "../components/DeleteAccountConfirmModal";
 import { useAuth } from "../services/authContext";
+import { toastSuccess } from "../services/toast";
 import type { User } from "../services/types";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 interface UserSettingsModalProps {
   isOpen: boolean;
@@ -34,6 +37,8 @@ export default function UserSettingsModal({
     phone_number: "",
   });
 
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
   const toggleEdit = (field: keyof typeof editModes) => {
     setEditModes((prev) => ({
       ...prev,
@@ -46,17 +51,22 @@ export default function UserSettingsModal({
   };
 
   const navigate = useNavigate();
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth } = useAuth() as unknown as {
+    auth: { token: string };
+    setAuth: (auth: null) => void;
+  };
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleDeleteAccount = async () => {
     if (!user?.id) return;
 
-    const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer votre compte ? Attention, cette action est irréversible. Vos données ne pourrons pas être récupérées.",
-    );
-    if (!confirmed) return;
+    setIsConfirmModalOpen(true);
+  };
 
+  const handleConfirmDelete = async () => {
+    if (!user?.id) return;
     try {
       setIsDeleting(true);
 
@@ -65,7 +75,7 @@ export default function UserSettingsModal({
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${auth?.token}`,
+            Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
         },
@@ -96,6 +106,7 @@ export default function UserSettingsModal({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
           },
           credentials: "include",
           body: JSON.stringify({ [field]: formData[field] }),
@@ -118,6 +129,17 @@ export default function UserSettingsModal({
     } catch (error) {
       console.error("Error updating user:", error);
     }
+  };
+
+  const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setAuth(null);
+    onClose();
+    toastSuccess("À  bientôt !");
+    navigate("/login");
   };
 
   if (!isOpen || !user) return null;
@@ -338,27 +360,56 @@ export default function UserSettingsModal({
             </div>
           </div>
         </div>
-        <h3>Gérer Mon Compte</h3>
-        <div className="user-modal-buttons-container">
-          <button type="button" className="user-modal-action-button">
-            <KeyRound size={16} />
-            Modifier mon mot de passe
-          </button>
-          <button
-            type="button"
-            className="user-modal-action-button delete"
-            onClick={handleDeleteAccount}
-            disabled={isDeleting}
-          >
-            <UserX size={16} />
-            {isDeleting ? "Suppression..." : "Supprimer mon compte"}
-          </button>
-          <button type="button" className="user-modal-action-button logout">
-            <LogOut size={16} />
-            Me déconnecter
-          </button>
+        <div className="user-modal-container-buttons">
+          <h3 className="user-modal-buttons-title">Gérer Mon Compte</h3>
+          <div className="user-modal-buttons-container">
+            <button
+              type="button"
+              className="user-modal-action-button logout"
+              onClick={handleLogout}
+            >
+              <LogOut size={16} />
+              Me déconnecter
+            </button>
+            <button
+              type="button"
+              className="user-modal-action-button"
+              onClick={() => setIsPasswordModalOpen(true)}
+            >
+              <KeyRound size={16} />
+              Modifier mon mot de passe
+            </button>
+            <button
+              type="button"
+              className="user-modal-action-button delete"
+              onClick={handleDeleteAccount}
+              disabled={isDeleting}
+            >
+              <UserX size={16} />
+              {isDeleting ? "Suppression..." : "Supprimer mon compte"}
+            </button>
+          </div>
         </div>
       </div>
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        userId={user.id}
+      />
+      <DeleteConfirmModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirmer la suppression"
+        message="Êtes-vous sûr de vouloir supprimer votre compte ? Attention, cette action est irréversible. Vos données ne pourrons pas être récupérées."
+      />
+      <DeleteConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        title="Confirmer la déconnexion"
+        message="Êtes-vous sûr de vouloir vous déconnecter ?"
+      />
     </div>
   );
 }

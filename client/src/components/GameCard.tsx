@@ -18,9 +18,13 @@ export interface Game {
 
 interface GamesCardProps {
   game: Game;
+  isProfileCard?: boolean;
 }
 
-export default function GamesCard({ game }: GamesCardProps) {
+export default function GamesCard({
+  game,
+  isProfileCard = false,
+}: GamesCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const { auth } = useAuth();
 
@@ -91,31 +95,42 @@ export default function GamesCard({ game }: GamesCardProps) {
     }
   };
   return (
-    <div key={game.id} className="gamecard-content">
-      <img
-        className="gamecard-image"
-        src={game.image || logoWG}
-        alt={game.name}
-      />
-      <p className="gamecard-description">{game.description}</p>
-      <div className="gamecard-price-container">
-        <Coins className="gamecard-img-coin" />
-        <p className="gamecard-price">{game.price}</p>
-      </div>
-      {auth && (
-        <div className="gamecard-heart">
-          <button
-            type="button"
-            className={`gamecard-heart-button ${isFavorite ? "favorite" : ""}`}
-            onClick={toggleFavorite}
-          >
-            <Heart
-              fill={isFavorite ? "#db9e2b" : "none"}
-              stroke="currentColor"
-            />
-          </button>
+    <div
+      key={game.id}
+      className={`gamecard-content ${isProfileCard ? "profile-card" : ""}`}
+    >
+      <div className="gamecard-left">
+        <div className="gamecard-image-container">
+          <img
+            className="gamecard-image"
+            src={game.image || logoWG}
+            alt={game.name}
+          />
         </div>
-      )}
+      </div>
+      <div className="gamecard-right">
+        <p className="gamecard-description">{game.description}</p>
+        <div className="gamecard-actions">
+          <div className="gamecard-price-container">
+            <Coins className="gamecard-img-coin" />
+            <p className="gamecard-price">{game.price}</p>
+          </div>
+          {auth && (
+            <div className="gamecard-heart">
+              <button
+                type="button"
+                className={`gamecard-heart-button ${isFavorite ? "favorite" : ""}`}
+                onClick={toggleFavorite}
+              >
+                <Heart
+                  fill={isFavorite ? "#db9e2b" : "none"}
+                  stroke="currentColor"
+                />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

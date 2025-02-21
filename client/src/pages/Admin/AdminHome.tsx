@@ -2,6 +2,7 @@ import "../../styles/admin/AdminHome.css";
 import { Joystick, Trophy, Users } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logoWG from "../../assets/images/logo_wildy_gamy.png";
 import SliderBarAdmin from "../../components/admin/SliderBarAdmin";
 
@@ -10,13 +11,18 @@ function AdminHome() {
   const handleSidebarToggle = (open: boolean) => {
     setIsOpen(open);
   };
+  const navigation = useNavigate();
 
   return (
     <div className="adminhome-container">
       <Link to="/">
         <img src={logoWG} alt="logo" className="adminhome-logo" />
       </Link>
-      <SliderBarAdmin isOpen={isOpen} onToggle={handleSidebarToggle} />
+      <SliderBarAdmin
+        isOpen={isOpen}
+        onToggle={handleSidebarToggle}
+        onClose={() => setIsOpen(false)}
+      />
       <div className={`main-content ${isOpen ? "main-content-shifted" : ""}`}>
         <div className="welcome-container">
           <h1 className="welcome-title">
@@ -25,7 +31,15 @@ function AdminHome() {
 
           <div className="welcome-content">
             <div className="features-list">
-              <div className="feature-item">
+              <div
+                onClick={() => {
+                  navigation("/admin/users");
+                }}
+                onKeyDown={() => {
+                  navigation("/admin/users");
+                }}
+                className="feature-item"
+              >
                 <Users className="feature-icon" />
                 <h2>Utilisateurs</h2>
                 <p>Gérez les comptes utilisateurs :</p>
@@ -36,7 +50,15 @@ function AdminHome() {
                 </ul>
               </div>
 
-              <div className="feature-item">
+              <div
+                onClick={() => {
+                  navigation("/admin/games");
+                }}
+                onKeyDown={() => {
+                  navigation("/admin/games");
+                }}
+                className="feature-item"
+              >
                 <Joystick className="feature-icon" />
                 <h2>Jeux</h2>
                 <p>Administration des jeux :</p>
@@ -47,7 +69,15 @@ function AdminHome() {
                 </ul>
               </div>
 
-              <div className="feature-item">
+              <div
+                onClick={() => {
+                  navigation("/admin/prizes");
+                }}
+                onKeyDown={() => {
+                  navigation("/admin/prizes");
+                }}
+                className="feature-item"
+              >
                 <Trophy className="feature-icon" />
                 <h2>Lots</h2>
                 <p>Gestion des lots à gagner :</p>
