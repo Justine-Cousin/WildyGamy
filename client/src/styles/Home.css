@@ -27,7 +27,7 @@
     "play-online game-list"
     "play-online prizes";
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 25vh 20vh 20vh;
+  grid-template-rows: 180px 160px 160px;
   gap: 1rem;
 }
 
@@ -79,20 +79,20 @@
 
 .home-wildy-gamy-text {
   font-family: "Inter", sans-serif;
-  font-size: 3vw;
+  font-size: 12px;
   text-align: start;
 }
 
 .home-play-online-text {
   font-family: "Inter", sans-serif;
-  font-size: 3vw;
+  font-size: 12px;
   text-align: start;
   color: black;
 }
 
 .home-game-list-text {
   font-family: "Inter", sans-serif;
-  font-size: 3vw;
+  font-size: 12px;
   text-align: start;
 }
 
@@ -104,8 +104,11 @@
       to top,
       rgba(221, 87, 210, 1),
       rgba(221, 87, 210, 1),
+      rgba(221, 87, 210, 1),
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0)
-    ), url("../assets/images/home_play_online.jpg");
+    ), url("../assets/images/snakegame-image.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -214,7 +217,7 @@
   font-weight: 400;
   font-style: normal;
   color: var(--font-title-color);
-  font-size: 6vw;
+  font-size: 24px;
 }
 
 .play-online-home-container {
@@ -227,4 +230,248 @@
   position: absolute;
   bottom: 0px;
   right: 0px;
+}
+
+@media screen and (min-width: 768px) {
+  .home-logo {
+    display: none;
+  }
+  .home-container {
+    padding: 130px 60px 0px 60px;
+  }
+
+  .home-welcome-text {
+    padding-bottom: 18px;
+  }
+
+  .wildy-gamy-home-container,
+  .play-online-home-container,
+  .game-list-home-container,
+  .prizes-home-container {
+    cursor: pointer;
+  }
+  .wildy-gamy-home-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(100, 3, 169, 1);
+    transition: all 0.3s ease;
+  }
+  .play-online-home-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(221, 87, 210, 1);
+    transition: all 0.3s ease;
+  }
+  .game-list-home-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(37, 36, 158, 1);
+    transition: all 0.3s ease;
+  }
+  .prizes-home-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(203, 39, 116, 1);
+    transition: all 0.3s ease;
+  }
+
+  @-moz-keyframes fade {
+    40% {
+      opacity: 0.8;
+    }
+    42% {
+      opacity: 0.1;
+    }
+    43% {
+      opacity: 0.8;
+    }
+    45% {
+      opacity: 0.1;
+    }
+    46% {
+      opacity: 0.8;
+    }
+  }
+  @-webkit-keyframes fade {
+    40% {
+      opacity: 0.8;
+    }
+    42% {
+      opacity: 0.1;
+    }
+    43% {
+      opacity: 0.8;
+    }
+    45% {
+      opacity: 0.1;
+    }
+    46% {
+      opacity: 0.8;
+    }
+  }
+  @-o-keyframes fade {
+    40% {
+      opacity: 0.8;
+    }
+    42% {
+      opacity: 0.1;
+    }
+    43% {
+      opacity: 0.8;
+    }
+    45% {
+      opacity: 0.1;
+    }
+    46% {
+      opacity: 0.8;
+    }
+  }
+  @keyframes fade {
+    40% {
+      opacity: 0.8;
+    }
+    42% {
+      opacity: 0.1;
+    }
+    43% {
+      opacity: 0.8;
+    }
+    45% {
+      opacity: 0.1;
+    }
+    46% {
+      opacity: 0.8;
+    }
+  }
+
+  .home-welcome-text {
+    font-size: 1.5rem;
+    color: #ebffff;
+    text-shadow: 0 0px 15px #fff, 0 0 10px #c3b0ea, 0 0 50px #c3b0ea;
+    -webkit-animation: fade 3s infinite alternate;
+    -moz-animation: fade 3s infinite alternate;
+    -o-animation: fade 3s infinite alternate;
+    animation: fade 3s infinite alternate;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1176px) {
+  .home-main {
+    display: grid;
+    grid-template-areas:
+      "wildy-gamy wildy-gamy wildy-gamy"
+      "play-online game-list prizes";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 180px 200px;
+    gap: 1.5rem;
+  }
+  .wildy-gamy-home-container {
+    font-size: 1.5rem;
+    background-image: linear-gradient(
+        to right,
+        rgba(100, 3, 169, 1),
+        rgba(100, 3, 169, 1),
+        rgba(100, 3, 169, 1),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ), url("../assets/images/home_wildy_gamy.jpg");
+  }
+  .home-wildy-gamy-text {
+    font-size: 0.8rem;
+  }
+  .play-online-home-container {
+    font-size: 1.5rem;
+  }
+  .home-play-online-text {
+    font-size: 0.8rem;
+  }
+  .game-list-home-container {
+    font-size: 1.5rem;
+    background-image: linear-gradient(
+        to top,
+        rgba(37, 36, 158, 1),
+        rgba(37, 36, 158, 1),
+        rgba(37, 36, 158, 1),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ), url("../assets/images/home_game_list.png");
+  }
+  .prizes-home-container {
+    font-size: 1.5rem;
+    background-image: linear-gradient(
+        to top,
+        rgba(203, 39, 116, 1),
+        rgba(203, 39, 116, 1),
+        rgba(203, 39, 116, 1),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ), url("../assets/images/home_prizes.jpeg");
+  }
+  .home-game-list-text {
+    font-size: 0.8rem;
+  }
+  .home-play-online-text-mobile {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1176px) {
+  .home-main {
+    display: grid;
+    grid-template-areas: "wildy-gamy play-online game-list prizes";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 400px;
+    gap: 1.5rem;
+  }
+  .wildy-gamy-home-container {
+    font-size: 2rem;
+
+    background-image: linear-gradient(
+        to top,
+        rgba(100, 3, 169, 1),
+        rgba(100, 3, 169, 1),
+        rgba(100, 3, 169, 1),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ), url("../assets/images/home_wildy_gamy.jpg");
+  }
+  .home-wildy-gamy-text {
+    font-size: 1rem;
+  }
+  .play-online-home-container {
+    font-size: 2rem;
+  }
+  .home-play-online-text {
+    font-size: 1rem;
+  }
+  .game-list-home-container {
+    font-size: 2rem;
+    background-image: linear-gradient(
+        to top,
+        rgba(37, 36, 158, 1),
+        rgba(37, 36, 158, 1),
+        rgba(37, 36, 158, 1),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ), url("../assets/images/home_game_list.png");
+  }
+  .prizes-home-container {
+    font-size: 2rem;
+    background-image: linear-gradient(
+        to top,
+        rgba(203, 39, 116, 1),
+        rgba(203, 39, 116, 1),
+        rgba(203, 39, 116, 1),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0)
+      ), url("../assets/images/home_prizes.jpeg");
+  }
+  .home-game-list-text {
+    font-size: 1rem;
+  }
+  .home-play-online-text-mobile {
+    display: none;
+  }
 }

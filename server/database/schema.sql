@@ -4,13 +4,14 @@ CREATE TABLE user (
     name VARCHAR(100) NOT NULL,
     firstname VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
+    username VARCHAR(12) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
-    profile_pic VARCHAR(255),
+    phone_number VARCHAR(20) NOT NULL,
+    profile_pic VARCHAR(255) NOT NULL,
     total_points INT DEFAULT 0,
     current_points INT DEFAULT 0,
     highscore INT DEFAULT 0,
+    points_credited_today BOOLEAN DEFAULT FALSE NOT NULL,
     is_admin BOOLEAN DEFAULT FALSE NOT NULL,
     is_banned BOOLEAN DEFAULT FALSE NOT NULL
 );

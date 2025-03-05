@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import bin from "../assets/images/bin.svg";
 import BlurredBackground from "./BlurredBackground";
 import "../styles/CreateLogin.css";
+import { Eye, EyeOff } from "lucide-react";
+import DeleteConfirmModal from "./DeleteAccountConfirmModal";
 
 interface FormData {
   name: string;
@@ -33,12 +35,14 @@ export default function CreateLogin() {
     password: "",
     confirm_password: "",
   });
-
+  const [invalidFields, setInvalidFields] = useState<Set<string>>(new Set());
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -47,15 +51,6 @@ export default function CreateLogin() {
       }
     };
   }, [previewUrl]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    setError("");
-  };
 
   const handleFileChange = (e: FileChangeEvent) => {
     const file = e.target.files[0];
@@ -96,45 +91,91 @@ export default function CreateLogin() {
     if (fileInput) fileInput.value = "";
   };
 
+  const scrollToTop = () => {
+    const titleElement = document.querySelector(".login-form-title");
+    if (titleElement) {
+      titleElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    try {
-      if (
-        !formData.name.trim() ||
-        !formData.firstname.trim() ||
-        !formData.email.trim() ||
-        !formData.username.trim() ||
-        !formData.password ||
-        !formData.confirm_password ||
-        !profilePic
-      ) {
-        setError("Veuillez remplir tous les champs obligatoires");
-        setIsLoading(false);
-        return;
-      }
+    const newInvalidFields = new Set<string>();
+    const errors: string[] = [];
 
-      if (formData.password !== formData.confirm_password) {
-        setError("Les mots de passe ne correspondent pas");
-        setIsLoading(false);
-        return;
-      }
-
-      if (formData.password.length < 6) {
-        setError("Le mot de passe doit contenir au moins 6 caractères");
-        setIsLoading(false);
-        return;
-      }
-
+    if (!formData.name.trim()) {
+      newInvalidFields.add("name");
+      errors.push("Le nom est requis");
+    }
+    if (!formData.firstname.trim()) {
+      newInvalidFields.add("firstname");
+      errors.push("Le prénom est requis");
+    }
+    if (!formData.email.trim()) {
+      newInvalidFields.add("email");
+      errors.push("L'adresse e-mail est requise");
+    } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        setError("Format d'email invalide");
-        setIsLoading(false);
-        return;
+        newInvalidFields.add("email");
+        errors.push("L'adresse e-mail n'est pas valide");
       }
+    }
 
+    if (!formData.username.trim()) {
+      newInvalidFields.add("username");
+      errors.push("Le pseudo est requis");
+    } else if (formData.username.length > 13) {
+      newInvalidFields.add("username");
+      errors.push("Le pseudo doit contenir 12 caractères maximum");
+    }
+
+    if (!formData.password) {
+      newInvalidFields.add("password");
+      errors.push("Le mot de passe est requis");
+    } else if (formData.password.length < 6) {
+      newInvalidFields.add("password");
+      errors.push("Le mot de passe doit contenir au moins 6 caractères");
+    }
+
+    if (!formData.confirm_password) {
+      newInvalidFields.add("confirm_password");
+      errors.push("La confirmation du mot de passe est requise");
+    }
+    if (
+      formData.password &&
+      formData.confirm_password &&
+      formData.password !== formData.confirm_password
+    ) {
+      newInvalidFields.add("password");
+      newInvalidFields.add("confirm_password");
+      errors.push("Les mots de passe ne correspondent pas");
+    }
+
+    if (!profilePic) {
+      newInvalidFields.add("profile_pic");
+      errors.push("La photo de profil est requise");
+    }
+
+    if (!formData.phone_number.trim()) {
+      newInvalidFields.add("phone_number");
+      errors.push("Le numéro de téléphone est requis");
+    }
+
+    setInvalidFields(newInvalidFields);
+
+    scrollToTop();
+
+    if (errors.length > 0) {
+      setError(errors.join("\n"));
+      setIsLoading(false);
+      return;
+    }
+
+    try {
       const submitData = new FormData();
       for (const key of Object.keys(formData) as Array<keyof FormData>) {
         if (key !== "confirm_password") {
@@ -155,17 +196,27 @@ export default function CreateLogin() {
       const data = (await response.json()) as ApiError;
 
       if (!response.ok) {
-        throw new Error(
-          data.error ||
-            data.details ||
-            "Une erreur est survenue lors de la création du compte",
-        );
+        if (data.error === "Cette adresse email est déjà utilisée") {
+          newInvalidFields.add("email");
+          setInvalidFields(newInvalidFields);
+          setError(data.error);
+        } else if (data.error === "Ce pseudo n'est pas disponible") {
+          newInvalidFields.add("username");
+          setInvalidFields(newInvalidFields);
+          setError(data.error);
+        } else {
+          throw new Error(
+            data.error ||
+              data.details ||
+              "Une erreur est survenue lors de la création du compte",
+          );
+        }
+        scrollToTop();
+        setIsLoading(false);
+        return;
       }
 
       setSuccess(true);
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 2000);
     } catch (err) {
       console.error("Erreur détaillée:", err);
       if (err instanceof Error) {
@@ -178,20 +229,37 @@ export default function CreateLogin() {
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError("");
+    setInvalidFields((prev: Set<string>) => {
+      const newInvalidFields = new Set(prev);
+      newInvalidFields.delete(name);
+      return newInvalidFields;
+    });
+  };
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
     <div className="login-form-container">
       <BlurredBackground>
-        <h1 className="login-form-title">CRÉER VOTRE COMPTE</h1>
+        <div className="login-form-title">CRÉER VOTRE COMPTE</div>
 
         {error && (
           <div className="error-message" aria-live="assertive">
-            {error}
+            {error.split("\n").map((err) => (
+              <div key={err}>{err}</div>
+            ))}
           </div>
         )}
 
         {success && (
           <div className="success-message" aria-live="polite">
-            Compte créé avec succès ! Redirection vers la page de connexion...
+            Compte créé avec succès !
           </div>
         )}
 
@@ -210,7 +278,7 @@ export default function CreateLogin() {
             </label>
             <div className="input-wrapper">
               <input
-                className="login-input"
+                className={`login-input ${invalidFields.has("name") ? "invalid" : ""}`}
                 type="text"
                 id="name"
                 name="name"
@@ -233,7 +301,7 @@ export default function CreateLogin() {
             </label>
             <div className="input-wrapper">
               <input
-                className="login-input"
+                className={`login-input ${invalidFields.has("firstname") ? "invalid" : ""}`}
                 type="text"
                 id="firstname"
                 name="firstname"
@@ -249,17 +317,22 @@ export default function CreateLogin() {
 
           <div className="login-text">
             <label className="login-label" htmlFor="phone_number">
-              Numéro de téléphone
+              Numéro de téléphone{" "}
+              <span className="login-asterisk" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="input-wrapper">
               <input
-                className="login-input"
+                className={`login-input ${invalidFields.has("phone_number") ? "invalid" : ""}`}
                 type="tel"
                 id="phone_number"
                 name="phone_number"
                 value={formData.phone_number}
                 onChange={handleInputChange}
                 placeholder="ex: 06 12 34 56 78"
+                required
+                aria-required="true"
                 disabled={isLoading}
               />
             </div>
@@ -274,7 +347,7 @@ export default function CreateLogin() {
             </label>
             <div className="input-wrapper">
               <input
-                className="login-input"
+                className={`login-input ${invalidFields.has("email") ? "invalid" : ""}`}
                 type="email"
                 id="email"
                 name="email"
@@ -297,13 +370,13 @@ export default function CreateLogin() {
             </label>
             <div className="input-wrapper">
               <input
-                className="login-input"
+                className={`login-input ${invalidFields.has("username") ? "invalid" : ""}`}
                 type="text"
                 id="username"
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                placeholder="ex: jlassalle"
+                placeholder="Maximum 12 caractères"
                 required
                 aria-required="true"
                 disabled={isLoading}
@@ -319,9 +392,17 @@ export default function CreateLogin() {
               </span>
             </label>
             <div className="login-picture-wrapper">
-              <div className="login-picture-input">
+              <div
+                className={`login-picture-input ${previewUrl ? "has-image" : ""} ${invalidFields.has("profile_pic") ? "invalid" : ""}`}
+              >
+                {previewUrl && (
+                  <img
+                    src={previewUrl}
+                    alt="Prévisualisation du profil"
+                    className="profile-preview"
+                  />
+                )}
                 <input
-                  className="login-input"
                   type="file"
                   id="profile_pic"
                   name="profile_pic"
@@ -334,28 +415,19 @@ export default function CreateLogin() {
                 />
               </div>
               {previewUrl && (
-                <div className="preview-container">
-                  <img
-                    src={previewUrl}
-                    alt="Prévisualisation du profil"
-                    className="profile-preview"
-                  />
-                  <button
-                    type="button"
-                    className="login-bin-button"
-                    onClick={clearProfilePic}
-                    aria-label="Supprimer la photo de profil"
-                  >
-                    ×
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="login-bin"
+                  onClick={clearProfilePic}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      clearProfilePic();
+                    }
+                  }}
+                >
+                  <img src={bin} alt="icône supprimer" />
+                </button>
               )}
-              <img
-                src={bin}
-                alt="icône supprimer"
-                className="login-bin"
-                aria-hidden="true"
-              />
             </div>
           </div>
 
@@ -366,10 +438,10 @@ export default function CreateLogin() {
                 *
               </span>
             </label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <input
-                className="login-input"
-                type="password"
+                className={`login-input ${invalidFields.has("password") ? "invalid" : ""}`}
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={formData.password}
@@ -380,6 +452,22 @@ export default function CreateLogin() {
                 minLength={6}
                 disabled={isLoading}
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword
+                    ? "Masquer le mot de passe"
+                    : "Afficher le mot de passe"
+                }
+              >
+                {showPassword ? (
+                  <EyeOff className="password-icon" />
+                ) : (
+                  <Eye className="password-icon" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -390,10 +478,10 @@ export default function CreateLogin() {
                 *
               </span>
             </label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <input
-                className="login-input"
-                type="password"
+                className={`login-input ${invalidFields.has("confirm_password") ? "invalid" : ""}`}
+                type={showConfirmPassword ? "text" : "password"}
                 id="confirm_password"
                 name="confirm_password"
                 value={formData.confirm_password}
@@ -404,6 +492,22 @@ export default function CreateLogin() {
                 minLength={6}
                 disabled={isLoading}
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={
+                  showConfirmPassword
+                    ? "Masquer la confirmation du mot de passe"
+                    : "Afficher la confirmation du mot de passe"
+                }
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="password-icon" />
+                ) : (
+                  <Eye className="password-icon" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -415,6 +519,17 @@ export default function CreateLogin() {
           >
             {isLoading ? "Création en cours..." : "Créer mon compte"}
           </button>
+          <DeleteConfirmModal
+            isOpen={success}
+            onClose={() => setSuccess(false)}
+            onConfirm={() => {
+              window.scrollTo(0, 0);
+              window.location.reload();
+            }}
+            title="Bravo"
+            message="Compte créé avec succès !"
+            showCloseButton={false}
+          />
         </form>
       </BlurredBackground>
     </div>

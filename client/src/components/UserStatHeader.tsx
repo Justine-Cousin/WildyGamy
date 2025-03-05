@@ -41,14 +41,19 @@ const UserStatHeader = ({ user, ranking = [] }: RankingUser) => {
         <div className="ranking-userstats">
           <div className="ranking-userpoints">
             <Crown className="ranking-image" />
+            <span className="user-stat-header-text-desktop">
+              Points totaux :
+            </span>
             <p>{user.total_points || 0}</p>
           </div>
           <div className="ranking-userpoints">
             <Trophy className="ranking-image" />
+            <span className="user-stat-header-text-desktop">Classement :</span>
             <p>{userRanking}</p>
           </div>
           <div className="ranking-userpoints">
             <Tickets className="ranking-image" />
+            <span className="user-stat-header-text-desktop">Crédits :</span>
             <p>{user.current_points || 0}</p>
           </div>
         </div>

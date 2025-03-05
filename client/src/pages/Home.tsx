@@ -13,9 +13,8 @@ export default function Home() {
         <header className="home-header">
           <img src={logo} alt="logo" className="home-logo" />
           <p className="home-welcome-text">
-            Votre salle arcade incontournable à Toulouse
-            <br />
-            Le RDV de tous les passionnés de retro gaming
+            Votre salle arcade incontournable à Toulouse. Le RDV de tous les
+            passionnés de retro gaming !
           </p>
         </header>
         <main className="home-main">
@@ -32,7 +31,7 @@ export default function Home() {
             <p className="home-wildy-gamy-text">
               Besoin d'info, des questions?
               <br />
-              Venez découvrir qui nous sommes!
+              Découvrez qui nous sommes
             </p>
             <img src={purpleArrow} alt="" className="purple-arrow-icon" />
           </div>
@@ -53,7 +52,9 @@ export default function Home() {
                 <br />
                 Gagnez des points
                 <br />
-                Restez dans le top 10
+                <span className="home-play-online-text-mobile">
+                  Restez dans le top 10
+                </span>
               </p>
               <img src={pinkArrow} alt="" className="pink-arrow-icon" />
             </div>
