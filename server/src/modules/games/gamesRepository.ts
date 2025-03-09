@@ -39,7 +39,7 @@ class gamesRepository {
     return rows as Game[];
   }
 
-  async readallNew() {
+  async readAllNew() {
     const [rows] = await databaseClient.query<Rows>(
       "select * from game where is_new = 1 AND is_available = 1",
     );

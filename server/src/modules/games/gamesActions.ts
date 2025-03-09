@@ -26,7 +26,7 @@ const browseAvailable: RequestHandler = async (req, res, next) => {
 
 const browseNew: RequestHandler = async (req, res, next) => {
   try {
-    const games = await gamesRepository.readallNew();
+    const games = await gamesRepository.readAllNew();
 
     res.json(games);
   } catch (err) {
