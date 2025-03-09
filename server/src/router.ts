@@ -48,33 +48,44 @@ router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Define item-related routes
-router.get("/api/items", itemActions.browse);
-router.get("/api/items/:id", itemActions.read);
-router.post("/api/items", itemActions.add);
+router.post("/api/login", authActions.login);
+router.post("/api/reset-password/request", requestPasswordReset);
+router.get("/api/reset-password/verify", verifyResetToken);
+router.post("/api/reset-password/reset", resetPassword);
 
-router.get("/api/prizes/available", prizeActions.browseAvailable);
-router.get("/api/prizes", prizeActions.browse);
-router.get("/api/prizes/:id", prizeActions.read);
-router.post("/api/prizes", prizeActions.add);
-router.patch("/api/prizes/:id/availability", prizeActions.updateAvailability);
-router.put("/api/prizes/:id", prizeActions.edit);
-router.delete("/api/prizes/:id", prizeActions.destroy);
+router.post("/api/contact", sendContact);
+router.get("/api/emails/unread", getUnreadCount);
 
 router.get("/api/games/available", gameActions.browseAvailable);
 router.get("/api/games/new", gameActions.browseNew);
 router.get("/api/games", gameActions.browse);
 router.get("/api/games/:id", gameActions.read);
-router.post("/api/games", gameActions.add);
-router.patch("/api/games/:id/availability", gameActions.updateAvailability);
-router.put("/api/games/:id/new", gameActions.toggleNew);
-router.put("/api/games/:id", gameActions.edit);
-router.delete("/api/games/:id", gameActions.destroy);
 
-router.get("/api/users", usersActions.browse);
-router.get("/api/users/:id", usersActions.read);
-router.post("/api/users", usersActions.add);
-router.put("/api/users/:id", usersActions.edit);
-router.delete("/api/users/:id", usersActions.destroy);
+router.get("/api/prizes/available", prizeActions.browseAvailable);
+router.get("/api/prizes", prizeActions.browse);
+router.get("/api/prizes/:id", prizeActions.read);
+
+router.put(
+  "/api/reset-points-credited-today",
+  userActions.resetPointsCreditedToday,
+);
+
+// Define token-protected routes//
+router.use("/api/*", authActions.verifyToken);
+
+// Define routes with token protection//
+router.get("/api/user", userActions.browse);
+router.post("/api/user", userActions.add);
+router.get("/api/user/:id", userActions.read);
+router.put("/api/user/:id", userActions.edit);
+router.put("/api/user/:username", userActions.edit);
+router.put("/api/user/:id/ban", usersActions.toggleBan);
+router.put("/api/user/:id/admin", usersActions.toggleAdmin);
+router.delete("/api/user/:id", userActions.destroy);
+router.delete("/api/user/:username", userActions.destroy);
+router.put("/api/user/:id/highscore", userActions.updateHighscore);
+router.put("/api/user/:id/points", userActions.updatePoints);
+router.put("/api/user/:id/password", userActions.updatePassword);
 
 router.get("/api/user/:id/favorites", favoritesActions.read);
 router.post("/api/user/:id/favorites", favoritesActions.add);
@@ -83,33 +94,21 @@ router.delete("/api/user/:id/favorites", favoritesActions.destroy);
 router.get("/api/user/:id/acquired", acquiredActions.read);
 router.post("/api/user/:id/acquired", acquiredActions.add);
 
-// Define Your API Routes Here
-router.get("/api/user", userActions.browse);
-router.post("/api/user", userActions.add);
-router.put("/api/user/:id", userActions.edit);
-router.put("/api/user/:username", userActions.edit);
-router.put("/api/user/:id/ban", usersActions.toggleBan);
-router.put("/api/user/:id/admin", usersActions.toggleAdmin);
-router.delete("/api/user/:id", userActions.destroy);
-router.delete("/api/user/:username", userActions.destroy);
-router.post("/api/login", authActions.login);
-router.get("/api/user/:id", userActions.read);
-router.put("/api/user/:id/highscore", userActions.updateHighscore);
-router.put("/api/user/:id/points", userActions.updatePoints);
-router.put("/api/user/:id/password", userActions.updatePassword);
-router.put(
-  "/api/reset-points-credited-today",
-  userActions.resetPointsCreditedToday,
-);
+router.get("/api/users", usersActions.browse);
+router.get("/api/users/:id", usersActions.read);
+router.post("/api/users", usersActions.add);
+router.put("/api/users/:id", usersActions.edit);
+router.delete("/api/users/:id", usersActions.destroy);
 
-// Password reset routes
-router.post("/api/reset-password/request", requestPasswordReset);
-router.get("/api/reset-password/verify", verifyResetToken);
-router.post("/api/reset-password/reset", resetPassword);
+router.post("/api/games", gameActions.add);
+router.patch("/api/games/:id/availability", gameActions.updateAvailability);
+router.put("/api/games/:id/new", gameActions.toggleNew);
+router.put("/api/games/:id", gameActions.edit);
+router.delete("/api/games/:id", gameActions.destroy);
 
-router.post("/api/contact", sendContact);
-router.get("/api/emails/unread", getUnreadCount);
-
-router.use("/api/*", authActions.verifyToken);
+router.post("/api/prizes", prizeActions.add);
+router.patch("/api/prizes/:id/availability", prizeActions.updateAvailability);
+router.put("/api/prizes/:id", prizeActions.edit);
+router.delete("/api/prizes/:id", prizeActions.destroy);
 
 export default router;
