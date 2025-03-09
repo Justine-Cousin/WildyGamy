@@ -39,9 +39,19 @@ describe("Installation", () => {
   // Test: Check if the database migration scripts have been executed
   test("You have executed the db:migrate scripts", async () => {
     // Query the 'item' table to check if any data has been inserted
-    const [rows] = await databaseClient.query<Rows>("select * from item");
+    const [gameRows] = await databaseClient.query<Rows>(
+      "SHOW TABLES LIKE 'game'",
+    );
+    const [userRows] = await databaseClient.query<Rows>(
+      "SHOW TABLES LIKE 'user'",
+    );
+    const [prizeRows] = await databaseClient.query<Rows>(
+      "SHOW TABLES LIKE 'prize'",
+    );
 
     // Expecting rows to be returned, indicating successful migration
-    expect(rows.length).toBeGreaterThanOrEqual(0);
+    expect(gameRows.length).toBeGreaterThan(0);
+    expect(userRows.length).toBeGreaterThan(0);
+    expect(prizeRows.length).toBeGreaterThan(0);
   });
 });
