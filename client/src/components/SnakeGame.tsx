@@ -12,7 +12,6 @@ import {
 import "../styles/SnakeGame.css";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../services/authContext";
-import AlertModalAdmin from "./AlertModal";
 import GameLoginModal from "./GameLoginModal";
 
 type Position = {
@@ -72,12 +71,6 @@ export default function SnakeGame() {
   const { auth } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [highScore, setHighScore] = useState(0);
-  const [lastClickDate, setLastClickDate] = useState<string | null>(null);
-  const [modalConfig, setModalConfig] = useState<{
-    title: string;
-    message: string;
-    onConfirm: () => void;
-  } | null>(null);
 
   const handleStartGame = () => {
     if (!auth) {
@@ -169,8 +162,13 @@ export default function SnakeGame() {
   }, []);
 
   useEffect(() => {
-    if (gameOver && score > highScore) {
-      updateHighScore();
+    if (gameOver) {
+      if (score > 0) {
+        updatePoints("add");
+      }
+      if (score > highScore) {
+        updateHighScore();
+      }
     }
   }, [gameOver, score, highScore, updateHighScore]);
 
@@ -206,77 +204,9 @@ export default function SnakeGame() {
       if (!response.ok) {
         throw new Error("Failed to update points");
       }
-      setLastClickDate(new Date().toISOString().split("T")[0]);
     } catch (err) {
       console.error("Error updating points:", err);
     }
-  };
-
-  useEffect(() => {
-    const fetchUserStatus = async () => {
-      if (!auth?.user?.id) return;
-
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/${auth.user.id}`,
-          {
-            credentials: "include",
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-            },
-          },
-        );
-
-        if (!response.ok) throw new Error("Failed to fetch user status");
-
-        const data = await response.json();
-        setLastClickDate(
-          data.points_credited_today
-            ? new Date().toISOString().split("T")[0]
-            : null,
-        );
-      } catch (err) {
-        console.error("Error fetching user status:", err);
-      }
-    };
-
-    fetchUserStatus();
-
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    const timeUntilMidnight = midnight.getTime() - new Date().getTime();
-
-    const timer = setTimeout(async () => {
-      try {
-        await fetch(
-          `${import.meta.env.VITE_API_URL}/api/reset-points-credited-today`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        setLastClickDate(null);
-      } catch (err) {
-        console.error("Error resetting points credited today:", err);
-      }
-    }, timeUntilMidnight);
-
-    return () => clearTimeout(timer);
-  }, [auth]);
-
-  const handleAddScoreClick = () => {
-    setModalConfig({
-      title: "Créditer les points",
-      message:
-        "Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?",
-      onConfirm: () => {
-        updatePoints("add");
-        setLastClickDate(new Date().toISOString().split("T")[0]);
-        setModalConfig(null);
-      },
-    });
   };
 
   const restartGame = () => {
@@ -682,25 +612,7 @@ export default function SnakeGame() {
           <div className="game-over-modal">
             <h2>Game Over</h2>
             <p>Résultat: {score}</p>
-            <p>Points: {credit}</p>
-            <button
-              type="button"
-              className="button primary"
-              onClick={handleAddScoreClick}
-              disabled={
-                lastClickDate === new Date().toISOString().split("T")[0]
-              }
-            >
-              Créditer les points
-            </button>
-            <AlertModalAdmin
-              title="Créditer les points"
-              message="Cette action n'est possible qu'une fois par jour. Voulez-vous continuer?"
-              visible={!!modalConfig}
-              onConfirm={modalConfig?.onConfirm || (() => {})}
-              onClose={() => setModalConfig(null)}
-            />
-            <p>Meilleur score: {highScore}</p>
+            <p>Points crédités: {credit}</p>
             <button
               type="button"
               className="button primary"

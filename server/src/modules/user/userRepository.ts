@@ -126,13 +126,6 @@ class UserRepository {
     return result.affectedRows > 0;
   }
 
-  async resetPointsCreditedToday() {
-    const [result] = await databaseClient.query<Result>(
-      "UPDATE user SET points_credited_today = FALSE",
-    );
-    return result.affectedRows > 0;
-  }
-
   async toggleBan(id: number, isBanned: boolean) {
     const [result] = await databaseClient.query<Result>(
       "UPDATE user SET is_banned = ? WHERE id = ?",

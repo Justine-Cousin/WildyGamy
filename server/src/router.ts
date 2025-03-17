@@ -65,13 +65,7 @@ router.get("/api/prizes/available", prizeActions.browseAvailable);
 router.get("/api/prizes", prizeActions.browse);
 router.get("/api/prizes/:id", prizeActions.read);
 
-router.put(
-  "/api/reset-points-credited-today",
-  userActions.resetPointsCreditedToday,
-);
-
 // Define token-protected routes//
-router.use("/api/*", authActions.verifyToken);
 
 // Define routes with token protection//
 router.get("/api/user", userActions.browse);
@@ -110,5 +104,5 @@ router.post("/api/prizes", prizeActions.add);
 router.patch("/api/prizes/:id/availability", prizeActions.updateAvailability);
 router.put("/api/prizes/:id", prizeActions.edit);
 router.delete("/api/prizes/:id", prizeActions.destroy);
-
+router.use("/api/*", authActions.verifyToken);
 export default router;
