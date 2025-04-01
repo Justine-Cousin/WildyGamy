@@ -8,7 +8,7 @@ import {
   View,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactDOM from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/authContext";
@@ -40,18 +40,12 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
     onClick?: () => void;
     onConfirm: () => void;
   } | null>(null);
-  const [unreadCount, setUnreadCount] = useState(0);
 
   const menuItems: MenuItem[] = [
     {
       id: 1,
       title: "Emails",
-      icon: (
-        <div className="icon-wrapper">
-          <Mail className="iconItem" />
-          {unreadCount > 0 && <div className="mail-badge">{unreadCount}</div>}
-        </div>
-      ),
+      icon: <Mail className="iconItem" />,
       onClick: () =>
         window.open("https://mail.google.com/mail/u/0/#inbox", "_blank"),
     },
@@ -74,27 +68,6 @@ function SliderBarAdmin({ isOpen, onToggle, onClose }: SliderBarAdminProps) {
       link: "/admin/prizes",
     },
   ];
-
-  useEffect(() => {
-    const fetchUnreadCount = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/emails/unread`,
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setUnreadCount(data.count);
-      } catch (error) {
-        console.error("Erreur fetch:", error);
-      }
-    };
-
-    fetchUnreadCount();
-    const interval = setInterval(fetchUnreadCount, 300000);
-    return () => clearInterval(interval);
-  }, []);
 
   const logoutUser = () => {
     setAuth(null);

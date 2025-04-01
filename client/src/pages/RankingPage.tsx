@@ -45,7 +45,7 @@ const RankingPage = () => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/users`,
+          `${import.meta.env.VITE_API_URL}/api/user`,
           {
             method: "GET",
             headers: {

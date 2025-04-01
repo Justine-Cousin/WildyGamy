@@ -10,10 +10,9 @@ import {
 } from "../src/modules/password/PasswordResetHandler";
 import acquiredActions from "./modules/acquired/acquiredActions";
 import authActions from "./modules/auth/authActions";
-import { getUnreadCount, sendContact } from "./modules/email/emailActions";
+import { sendContact } from "./modules/email/emailActions";
 import favoritesActions from "./modules/favorites/favoritesActions";
 import gameActions from "./modules/games/gamesActions";
-import itemActions from "./modules/item/itemActions";
 import prizeActions from "./modules/prize/prizeActions";
 import userActions from "./modules/user/userActions";
 import usersActions from "./modules/users/usersActions";
@@ -53,7 +52,6 @@ router.post("/api/reset-password/request", requestPasswordReset);
 router.get("/api/reset-password/verify", verifyResetToken);
 router.post("/api/reset-password/reset", resetPassword);
 router.post("/api/contact", sendContact);
-router.get("/api/emails/unread", getUnreadCount);
 
 // Routes publiques pour les jeux et prix disponibles
 router.get("/api/games/available", gameActions.browseAvailable);
@@ -63,13 +61,13 @@ router.get("/api/games/:id", gameActions.read);
 router.get("/api/prizes/available", prizeActions.browseAvailable);
 router.get("/api/prizes", prizeActions.browse);
 router.get("/api/prizes/:id", prizeActions.read);
+router.get("/api/user", userActions.browse);
 
 // Middleware de vérification du token pour toutes les routes suivantes
 router.use("/api/*", authActions.verifyToken);
-
 // Routes protégées (nécessitant authentification)
 // Routes utilisateur
-router.get("/api/user", userActions.browse);
+
 router.post("/api/user", userActions.add);
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id", userActions.edit);

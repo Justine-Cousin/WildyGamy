@@ -45,25 +45,6 @@ export class EmailRepository {
     }
   }
 
-  async getUnreadCount(): Promise<number> {
-    try {
-      if (!this.oauth2CLient) {
-        throw new Error("OAuth2 client is not initialized");
-      }
-
-      const gmail = google.gmail({ version: "v1", auth: this.oauth2CLient });
-      const response = await gmail.users.messages.list({
-        userId: "me", // Utilisez "me" au lieu de l'email
-        q: "in:inbox is:unread",
-      });
-
-      return response.data.messages?.length || 0;
-    } catch (error) {
-      console.error("Error fetching unread count:", error);
-      throw error;
-    }
-  }
-
   async sendEmail(emailData: EmailData): Promise<void> {
     try {
       if (!this.transporter) {
